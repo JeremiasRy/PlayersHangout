@@ -34,8 +34,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.HasPostgresEnum<Instrument.SkillLevel>();
         modelBuilder.AddUserConfig();
         modelBuilder.AddTimestampConfig();
-        
     }
-
     public DbSet<Instrument> Instruments { get; set; } = null!;
 }
