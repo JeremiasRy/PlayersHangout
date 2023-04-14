@@ -1,4 +1,4 @@
-namespace Backend.src.Models;
+namespace Backend.Src.Models;
 
 public class Instrument : BaseModel
 {

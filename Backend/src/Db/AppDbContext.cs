@@ -1,6 +1,6 @@
-namespace Backend.src.Db;
+namespace Backend.Src.Db;
 
-using Backend.src.Models;
+using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Npgsql;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
-    private readonly IConfiguration _config;
+    private readonly IConfiguration _configuration;
 
     static AppDbContext()
     {
@@ -17,19 +17,22 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration config) : base(options) => _config = config;
+    public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration confirguration) : base(options) => _configuration = confirguration;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var configString = _config.GetConnectionString("DefaultConnection");
+        var connectionString = _configuration.GetConnectionString("DefaultConnection");
         optionsBuilder
-            .UseNpgsql(configString)        
+            .UseNpgsql(connectionString)        
             .UseSnakeCaseNamingConvention();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);    
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.AddUserConfig();
+        modelBuilder.AddTimestampConfig();
     }
 
     public DbSet<Instrument> Instruments { get; set; } = null!;

@@ -1,5 +1,5 @@
-using Backend.src.Db;
-using Backend.src.Models;
+using Backend.Src.Db;
+using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
