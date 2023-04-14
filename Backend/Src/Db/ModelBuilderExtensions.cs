@@ -25,14 +25,30 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<User>()
             .HasIndex(user => new { user.FirstName, user.LastName })
             .IsUnique();
+        
+        modelBuilder.Entity<User>()
+            .HasOne(user => user.Location)
+            .WithOne();
+
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Wanteds)
+            .WithOne();
+
+        modelBuilder.Entity<User>()
+            .HasOne(user => user.MainInstrument)
+            .WithMany();
 
         modelBuilder.Entity<User>()
             .Navigation(user => user.Instruments)
             .AutoInclude();
 
         modelBuilder.Entity<User>()
-            .HasOne(user => user.MainInstrument)
-            .WithMany();
+            .Navigation(user => user.MainInstrument)
+            .AutoInclude();
+
+        modelBuilder.Entity<User>()
+            .Navigation(user => user.Location)
+            .AutoInclude();
     }
     public static void AddTimestampConfig(this ModelBuilder modelBuilder)
     {
