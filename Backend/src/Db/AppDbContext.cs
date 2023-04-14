@@ -9,7 +9,6 @@ using Npgsql;
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     private readonly IConfiguration _configuration;
-
     static AppDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Instrument.SkillLevel>();
@@ -23,16 +22,19 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
         optionsBuilder
-            .UseNpgsql(connectionString)        
+            .UseNpgsql(connectionString)
+            .AddInterceptors(new AppDbContextSaveChangesInterceptor())
             .UseSnakeCaseNamingConvention();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
+        modelBuilder.HasPostgresEnum<Instrument.SkillLevel>();
         modelBuilder.AddUserConfig();
         modelBuilder.AddTimestampConfig();
+        
     }
 
     public DbSet<Instrument> Instruments { get; set; } = null!;

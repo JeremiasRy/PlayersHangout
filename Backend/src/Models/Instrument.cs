@@ -3,8 +3,7 @@ namespace Backend.Src.Models;
 public class Instrument : BaseModel
 {
     public string Name { get; set; } = null!;
-    public SkillLevel Skill { get; set; } = SkillLevel.Beginner;
-
+    public SkillLevel Skill { get; set; }
     public enum SkillLevel
     {
         // 0 < x < 5
