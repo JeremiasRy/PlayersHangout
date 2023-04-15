@@ -1,4 +1,5 @@
-﻿using Backend.Src.Models;
+﻿using Backend.src.Models;
+using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -36,6 +37,10 @@ public static class ModelBuilderExtensions
             .WithOne();
 
         modelBuilder.Entity<User>()
+            .HasMany(user => user.Genres)
+            .WithOne();
+
+        modelBuilder.Entity<User>()
             .HasOne(user => user.MainInstrument)
             .WithMany();
 
@@ -49,6 +54,10 @@ public static class ModelBuilderExtensions
 
         modelBuilder.Entity<User>()
             .Navigation(user => user.Location)
+            .AutoInclude();
+
+        modelBuilder.Entity<User>()
+            .Navigation(user => user.Genres)
             .AutoInclude();
     }
     public static void AddTimestampConfig(this ModelBuilder modelBuilder)
@@ -74,5 +83,12 @@ public static class ModelBuilderExtensions
             .WithMany();
         modelBuilder.Entity<UserInstrument>()
             .HasKey(userInstrument => new { userInstrument.InstrumentId, userInstrument.UserId });
+    }
+
+    public static void AddGenresConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Genres>()
+            .HasIndex(genre => genre.Name)
+            .IsUnique();                     
     }
 }

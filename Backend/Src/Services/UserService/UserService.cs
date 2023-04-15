@@ -1,10 +1,9 @@
-﻿using Backend.Src.Db;
+﻿namespace Backend.Src.Services.Implementation;
+
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-namespace Backend.Src.Services.Implementation;
 
 public class UserService : IUserService
 {
@@ -15,6 +14,7 @@ public class UserService : IUserService
         _jwtTokenService = jwtTokenService;
         _userManager = userManager;
     }
+
     public async Task<ICollection<UserDTO>> GetAllUsersAsync(int page, int pageSize)
     {
         return await _userManager.Users

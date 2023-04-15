@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using Backend.src.Repositories.WantedRepo;
+using Backend.Src.Services;
+using Backend.src.Services.WantedService;
+using Backend.src.Converter.Wanted;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +61,10 @@ builder.Services.AddDbContext<AppDbContext>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddScoped<IWantedConverter, WantedConverter>();
+builder.Services.AddScoped<IWantedRepo, WantedRepo>().AddScoped<IWantedService, WantedService>();
 
 var app = builder.Build();
 
