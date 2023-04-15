@@ -1,6 +1,7 @@
 namespace Backend.Src.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Backend.src.Models;
 using Microsoft.AspNetCore.Identity;
 
 public class User : IdentityUser<Guid>
@@ -13,5 +14,6 @@ public class User : IdentityUser<Guid>
     public Guid LocationId { get; set; }
     public ICollection<Wanted> Wanteds { get; set; } = null!;
     public ICollection<Instrument> Instruments { get; set; } = null!;
+    public ICollection<Genres>? Genres { get; set; }
     public Instrument MainInstrument { get; set; } = null!;
 }
