@@ -1,65 +1,67 @@
 namespace Backend.Src.Services.Implementation;
 
+using Backend.src.Converter;
+using Backend.src.Repositories.BaseRepo;
 using Backend.src.Services.BaseService;
-using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Microsoft.EntityFrameworkCore;
 
-public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto, TUpdateDto> 
-    where T : BaseModel, new()      
-    where TCreateDto : BaseDTO<T>
-    where TUpdateDto : BaseDTO<T>
+public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
+    where T : BaseModel, new()    
+    where TCreateDTO : BaseDTO<T>
+    where TUpdateDTO : BaseDTO<T>
 {
-    protected readonly AppDbContext _dbContext;
-    public BaseService(AppDbContext dbContext) => _dbContext = dbContext; 
-    
-    public async Task<T> CreateAsync(TCreateDto request)
+    protected readonly IBaseRepo<T> _repo;
+    protected readonly IConvertReadDTO<T, TReadDTO> _converter;
+
+    public BaseService(IBaseRepo<T> repo, IConvertReadDTO<T, TReadDTO> converter)
+    {
+        _repo = repo;
+        _converter = converter;
+    }
+
+    public virtual async Task<TReadDTO> CreateAsync(TCreateDTO request)
     {
         var item = new T();
         request.UpdateModel(item);
-        _dbContext.Add(item);        
-        await _dbContext.SaveChangesAsync();
-        return item;
+        var result = await _repo.CreateOneAsync(item);
+        if (result is null)
+        {
+            throw new Exception();
+        }   
+        return _converter.ConvertReadDTO(item);
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var item = _dbContext.Set<T>().SingleOrDefault(model => model.Id == id);
-        if (item != null)
+        return await _repo.DeleteOneAsync(id);        
+    }
+
+    public async Task<IEnumerable<TReadDTO>> GetAllAsync(int page, int pageSize)
+    {
+        var items = await _repo.GetAllAsync(page, pageSize);        
+        return items.Select(i => _converter.ConvertReadDTO(i)).ToArray();;
+    }
+
+    public async Task<TReadDTO> GetByIdAsync(Guid id)
+    {
+        var entity = await _repo.GetByIdAsync(id);
+        if (entity is null)
         {
-            _dbContext.Remove(item);
-            await _dbContext.SaveChangesAsync();
-            return true;
+           throw new ArgumentException("Did not find item with id");
         }
-        return false;        
+        return _converter.ConvertReadDTO(entity);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync(int page, int pageSize)
+    public async Task<TReadDTO> UpdateAsync(Guid id, TUpdateDTO request)
     {
-        return await _dbContext
-            .Set<T>()
-            .AsNoTracking()
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-    }
-
-    public async Task<T> GetByIdAsync(Guid id)
-    {
-        var item = await _dbContext
-            .Set<T>()
-            .AsNoTracking()
-            .SingleOrDefaultAsync(model => model.Id == id);
-
-        return item is null ? throw new ArgumentException("Did not find item with id") : item;
-    }
-
-    public async Task<T> UpdateAsync(Guid id, TUpdateDto request)
-    {
-        var item = await GetByIdAsync(id);
-        request.UpdateModel(item);
-        await _dbContext.SaveChangesAsync();
-        return item;
+        var entity = await _repo.GetByIdAsync(id);
+        if(entity is null)
+        {
+            throw new ArgumentException("Did not find item with id");
+        }
+        request.UpdateModel(entity);
+        var item = await _repo.UpdateOneAsync(entity);
+        return _converter.ConvertReadDTO(item);
     }
 }

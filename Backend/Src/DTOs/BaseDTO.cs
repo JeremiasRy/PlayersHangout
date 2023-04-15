@@ -2,5 +2,5 @@
 
 public abstract class BaseDTO<T>
 {
-    public abstract void UpdateModel(T model);    
+    public abstract void UpdateModel(T model);     
 }

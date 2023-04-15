@@ -18,6 +18,7 @@ public class JwtTokenService : IJwtTokenService
         _configuration = configuration;
         _userManager = userManager;
     }
+    
     public async Task<SignInResponseDTO> GenerateToken(User user)
     {
         List<Claim> claims = new()

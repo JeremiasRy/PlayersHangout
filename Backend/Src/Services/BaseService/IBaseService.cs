@@ -1,10 +1,10 @@
 namespace Backend.src.Services.BaseService;
 
-public interface IBaseService<T, TCreateDto, TUpdateDto>
+public interface IBaseService<T,TReadDTO, TCreateDto, TUpdateDto>
 {    
-    Task<IEnumerable<T>> GetAllAsync(int page, int pageSize);
-    Task<T> CreateAsync (TCreateDto create);
-    Task<T?> GetByIdAsync(Guid id);
-    Task<T> UpdateAsync(Guid id, TUpdateDto update);
+    Task<IEnumerable<TReadDTO>> GetAllAsync(int page, int pageSize);
+    Task<TReadDTO> CreateAsync (TCreateDto create);
+    Task<TReadDTO> GetByIdAsync(Guid id);
+    Task<TReadDTO> UpdateAsync(Guid id, TUpdateDto update);
     Task<bool> DeleteAsync(Guid id);
 }
