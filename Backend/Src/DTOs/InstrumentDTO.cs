@@ -1,5 +1,4 @@
 ﻿using Backend.Src.Models;
-using static Backend.Src.Models.Instrument;
 
 namespace Backend.Src.DTOs;
 
