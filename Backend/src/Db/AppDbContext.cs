@@ -11,7 +11,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     private readonly IConfiguration _configuration;
     static AppDbContext()
     {
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<Instrument.SkillLevel>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<UserInstrument.SkillLevel>();
         // Not use time zone in EF.
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
@@ -31,8 +31,9 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasPostgresEnum<Instrument.SkillLevel>();
+        modelBuilder.HasPostgresEnum<UserInstrument.SkillLevel>();
         modelBuilder.AddUserConfig();
+        modelBuilder.AddUserInstrumentConfig();
         modelBuilder.AddTimestampConfig();
     }
     public DbSet<Instrument> Instruments { get; set; } = null!;

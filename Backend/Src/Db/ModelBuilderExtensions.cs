@@ -1,6 +1,7 @@
 ﻿using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Backend.Src.Db;
 
@@ -61,5 +62,17 @@ public static class ModelBuilderExtensions
                 .Property<DateTime>("UpdatedAt")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
+    }
+
+    public static void AddUserInstrumentConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserInstrument>()
+            .HasOne(userInstrument => userInstrument.Instrument)
+            .WithMany();
+        modelBuilder.Entity<UserInstrument>()
+            .HasOne(userInstrument => userInstrument.User)
+            .WithMany();
+        modelBuilder.Entity<UserInstrument>()
+            .HasKey(userInstrument => new { userInstrument.InstrumentId, userInstrument.UserId });
     }
 }

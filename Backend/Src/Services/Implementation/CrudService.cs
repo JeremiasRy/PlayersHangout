@@ -32,11 +32,13 @@ public class CrudService<TModel, TDto> : ICrudService<TModel, TDto>
         throw new ArgumentException("Did not find item with id");
     }
 
-    public async Task<ICollection<TModel>> GetAllAsync()
+    public async Task<ICollection<TModel>> GetAllAsync(int page, int pageSize)
     {
         return await _dbContext
             .Set<TModel>()
             .AsNoTracking()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 
