@@ -1,5 +1,6 @@
 namespace Backend.Src.Db;
 
+using Backend.src.Models;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -36,6 +37,13 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddUserInstrumentConfig();
         modelBuilder.AddTimestampConfig();
         modelBuilder.AddGenresConfig();
+
+        modelBuilder.Entity<Instrument>()
+            .HasMany(instrument => instrument.Users)
+            .WithOne()
+            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
     }
     public DbSet<Instrument> Instruments { get; set; } = null!;
+    public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<Wanted> Wanteds { get; set; } = null!;
 }

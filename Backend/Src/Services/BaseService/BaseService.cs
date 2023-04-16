@@ -37,10 +37,10 @@ public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TR
         return await _repo.DeleteOneAsync(id);        
     }
 
-    public async Task<IEnumerable<TReadDTO>> GetAllAsync(int page, int pageSize)
+    public virtual async Task<IEnumerable<TReadDTO>> GetAllAsync(IFilterOptions? filter)
     {
-        var items = await _repo.GetAllAsync(page, pageSize);        
-        return items.Select(i => _converter.ConvertReadDTO(i)).ToArray();;
+        var items = await _repo.GetAllAsync(filter);        
+        return items.Select(i => _converter.ConvertReadDTO(i)).ToArray();
     }
 
     public async Task<TReadDTO> GetByIdAsync(Guid id)

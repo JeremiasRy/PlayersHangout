@@ -33,14 +33,18 @@ public class BaseRepo<T> : IBaseRepo<T>
         return false;        
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync(int page, int pageSize)
+    public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {
-        return await _context
-            .Set<T>()
-            .AsNoTracking()
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();        
+        var query = _context.Set<T>().AsNoTracking().Where(c => true);
+
+        if (request is BaseQueryOptions filter)
+        {
+            return await query
+                .Skip(filter.Skip)
+                .Take(filter.Limit)
+                .ToListAsync();
+        }
+        return await query.ToListAsync();      
     }
 
     public virtual async Task<T?> GetByIdAsync(Guid id)

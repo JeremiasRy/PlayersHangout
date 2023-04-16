@@ -1,6 +1,8 @@
-﻿namespace Backend.Src.Services.Implementation;
+﻿namespace Backend.Src.Services.UserService;
 
+using Backend.src.Repositories.BaseRepo;
 using Backend.Src.DTOs;
+using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +17,35 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
-    public async Task<ICollection<UserDTO>> GetAllUsersAsync(int page, int pageSize)
+    public async Task<ICollection<UserDTO>> GetAllUsersAsync(IFilterOptions? filter)
     {
+        if (filter is BaseQueryOptions optionsFilter)
+        {
+            return await _userManager.Users
+                .Skip(optionsFilter.Skip)
+                .Take(optionsFilter.Limit)
+                .Select(user => UserDTO.FromUser(user))
+                .ToListAsync();
+        }
+        if (filter is MatchDTO matchDTO)
+        {
+            var query = _userManager.Users.Where(user => true);
+            if (matchDTO.Instruments is not null)
+            {
+                query = query.Where(user => user.Instruments
+                    .Any(instrument => matchDTO.Instruments.Any(matchInstrument => matchInstrument.Id == instrument.InstrumentId)));
+            }
+            if (matchDTO.Genres is not null)
+            {
+                query = query.Where(user => user.Genres == null || user.Genres.Any(genre => matchDTO.Genres.Any(matchGenre => genre.Id == matchGenre.Id)));
+            }
+            return await query.Where(user => user.Location.City == matchDTO.City)
+                .Select(user => UserDTO.FromUser(user))
+                .ToListAsync();
+        }
         return await _userManager.Users
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+            .Skip(0)
+            .Take(30)
             .Select(user => UserDTO.FromUser(user))
             .ToListAsync();
     }

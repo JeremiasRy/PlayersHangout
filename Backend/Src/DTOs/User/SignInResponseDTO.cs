@@ -7,7 +7,7 @@ public class SignInResponseDTO
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public ICollection<Instrument> Instruments { get; set; } = null!;
+    public ICollection<UserInstrument> Instruments { get; set; } = null!;
     public Instrument MainInstrument { get; set; } = null!;
     public string[] Roles { get; set; } = null!;
     public string Token { get; set; } = null!;

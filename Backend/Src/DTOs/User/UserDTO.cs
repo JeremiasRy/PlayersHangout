@@ -8,9 +8,8 @@ public class UserDTO
     public string LastName { get; set;} = null!;
     public string FullName { get => $"{FirstName} ${LastName}"; }
     public string? City { get; set; }
-    public ICollection<Instrument> Instruments { get; set; } = null!;
+    public ICollection<UserInstrument> Instruments { get; set; } = null!;
     public Instrument MainInstrument { get; set; } = null!;
-
     public static UserDTO FromUser(User user)
     {
         return new UserDTO 

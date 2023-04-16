@@ -13,7 +13,7 @@ public class User : IdentityUser<Guid>
     public Location Location { get; set; } = null!;
     public Guid LocationId { get; set; }
     public ICollection<Wanted> Wanteds { get; set; } = null!;
-    public ICollection<Instrument> Instruments { get; set; } = null!;
-    public ICollection<Genre>? Genre { get; set; }
+    public ICollection<UserInstrument> Instruments { get; set; } = null!;
+    public ICollection<Genre>? Genres { get; set; }
     public Instrument MainInstrument { get; set; } = null!;
 }

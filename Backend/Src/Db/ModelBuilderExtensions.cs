@@ -37,12 +37,17 @@ public static class ModelBuilderExtensions
             .WithOne();
 
         modelBuilder.Entity<User>()
-            .HasMany(user => user.Genre)
+            .HasMany(user => user.Genres)
             .WithOne();
 
         modelBuilder.Entity<User>()
             .HasOne(user => user.MainInstrument)
             .WithMany();
+
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Instruments)
+            .WithOne()
+            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
 
         modelBuilder.Entity<User>()
             .Navigation(user => user.Instruments)
@@ -57,7 +62,7 @@ public static class ModelBuilderExtensions
             .AutoInclude();
 
         modelBuilder.Entity<User>()
-            .Navigation(user => user.Genre)
+            .Navigation(user => user.Genres)
             .AutoInclude();
     }
     public static void AddTimestampConfig(this ModelBuilder modelBuilder)
@@ -76,18 +81,12 @@ public static class ModelBuilderExtensions
     public static void AddUserInstrumentConfig(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserInstrument>()
-            .HasOne(userInstrument => userInstrument.Instrument)
-            .WithMany();
-        modelBuilder.Entity<UserInstrument>()
-            .HasOne(userInstrument => userInstrument.User)
-            .WithMany();
-        modelBuilder.Entity<UserInstrument>()
             .HasKey(userInstrument => new { userInstrument.InstrumentId, userInstrument.UserId });
     }
 
     public static void AddGenresConfig(this ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Genres>()
+        modelBuilder.Entity<Genre>()
             .HasIndex(genre => genre.Name)
             .IsUnique();                     
     }
