@@ -14,6 +14,6 @@ public class User : IdentityUser<Guid>
     public Guid LocationId { get; set; }
     public ICollection<Wanted> Wanteds { get; set; } = null!;
     public ICollection<Instrument> Instruments { get; set; } = null!;
-    public ICollection<Genre>? Genres { get; set; }
+    public ICollection<Genre>? Genre { get; set; }
     public Instrument MainInstrument { get; set; } = null!;
 }

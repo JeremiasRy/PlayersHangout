@@ -37,7 +37,7 @@ public static class ModelBuilderExtensions
             .WithOne();
 
         modelBuilder.Entity<User>()
-            .HasMany(user => user.Genres)
+            .HasMany(user => user.Genre)
             .WithOne();
 
         modelBuilder.Entity<User>()
@@ -57,7 +57,7 @@ public static class ModelBuilderExtensions
             .AutoInclude();
 
         modelBuilder.Entity<User>()
-            .Navigation(user => user.Genres)
+            .Navigation(user => user.Genre)
             .AutoInclude();
     }
     public static void AddTimestampConfig(this ModelBuilder modelBuilder)
