@@ -16,6 +16,7 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
     public WantedRepo(AppDbContext context) : base(context)
     {
     }
+    
     public override async Task<IEnumerable<Wanted>> GetAllAsync(IFilterOptions? request)
     {
         var query = _context.Wanteds.Where(wanted => true).AsNoTracking();

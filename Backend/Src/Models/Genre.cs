@@ -1,6 +1,6 @@
-using Backend.Src.Models;
-
 namespace Backend.src.Models;
+
+using Backend.Src.Models;
 
 public class Genre : BaseModel
 { 

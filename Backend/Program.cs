@@ -11,6 +11,9 @@ using Backend.src.Services.WantedService;
 using Backend.src.Converter.Wanted;
 using Backend.Src.Services.UserService;
 using Backend.Src.Services.Implementation;
+using Backend.src.Converter.Genre;
+using Backend.src.Repositories.GenreRepo;
+using Backend.src.Services.GenresService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +71,8 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services.AddScoped<IWantedRepo, WantedRepo>().AddScoped<IWantedService, WantedService>();
+builder.Services.AddScoped<IGenreConverter, GenreConverter>();
+builder.Services.AddScoped<IGenreRepo, GenreRepo>().AddScoped<IGenreService, GenreService>();
 
 var app = builder.Build();
 
@@ -78,8 +83,8 @@ if (app.Environment.IsDevelopment())
         var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
         if (dbContext != null)
         {
-            dbContext.Database.EnsureDeleted();
-            dbContext.Database.EnsureCreated();
+            // dbContext.Database.EnsureDeleted();
+            // dbContext.Database.EnsureCreated();
         }
     }
     app.UseSwagger();
