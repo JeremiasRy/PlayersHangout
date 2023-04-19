@@ -1,4 +1,4 @@
-namespace Backend.src.Repositories.BaseRepo;
+namespace Backend.Src.Repositories.BaseRepo;
 
 public interface IBaseRepo<T>
 {

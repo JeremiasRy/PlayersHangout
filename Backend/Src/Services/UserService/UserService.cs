@@ -1,6 +1,6 @@
 ﻿namespace Backend.Src.Services.UserService;
 
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;

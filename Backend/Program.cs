@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
-using Backend.src.Repositories.WantedRepo;
+using Backend.Src.Repositories.WantedRepo;
 using Backend.Src.Services;
-using Backend.src.Services.WantedService;
-using Backend.src.Converter.Wanted;
+using Backend.Src.Services.WantedService;
 using Backend.Src.Services.UserService;
 using Backend.Src.Services.Implementation;
+using Backend.Src.Repositories.GenreRepo;
+using Backend.Src.Services.GenresService;
+using Backend.src.Converter.Wanted;
+using Backend.src.Converter.Genre;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +71,8 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services.AddScoped<IWantedRepo, WantedRepo>().AddScoped<IWantedService, WantedService>();
+builder.Services.AddScoped<IGenreConverter, GenreConverter>();
+builder.Services.AddScoped<IGenreRepo, GenreRepo>().AddScoped<IGenreService, GenreService>();
 
 var app = builder.Build();
 

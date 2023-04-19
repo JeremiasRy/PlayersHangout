@@ -1,6 +1,4 @@
-namespace Backend.src.DTOs.Wanted;
-
-using Backend.Src.Models;
+namespace Backend.Src.DTOs.Wanted;
 
 public class WantedReadDTO
 {

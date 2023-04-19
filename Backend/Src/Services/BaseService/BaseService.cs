@@ -1,10 +1,10 @@
 namespace Backend.Src.Services.Implementation;
 
-using Backend.src.Converter;
-using Backend.src.Repositories.BaseRepo;
-using Backend.src.Services.BaseService;
+using Backend.Src.Repositories.BaseRepo;
+using Backend.Src.Services.BaseService;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
+using Backend.src.Converter;
 
 public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
     where T : BaseModel, new()    

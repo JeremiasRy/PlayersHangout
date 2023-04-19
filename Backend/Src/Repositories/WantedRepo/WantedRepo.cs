@@ -1,11 +1,9 @@
-namespace Backend.src.Repositories.WantedRepo;
+namespace Backend.Src.Repositories.WantedRepo;
 
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
-using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,6 +14,7 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
     public WantedRepo(AppDbContext context) : base(context)
     {
     }
+    
     public override async Task<IEnumerable<Wanted>> GetAllAsync(IFilterOptions? request)
     {
         var query = _context.Wanteds.Where(wanted => true).AsNoTracking();

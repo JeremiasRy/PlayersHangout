@@ -1,4 +1,4 @@
-namespace Backend.src.Repositories.BaseRepo;
+namespace Backend.Src.Repositories.BaseRepo;
 
 using Backend.Src.Db;
 using Backend.Src.Models;

@@ -1,3 +1,8 @@
-namespace Backend.src.Services.GenresService;
+namespace Backend.Src.Services.GenresService;
 
-// public interface IGenreService : ICrudService
+using Backend.Src.DTOs.Genre;
+using Backend.Src.Models;
+using Backend.Src.Services.BaseService;
+
+public interface IGenreService : IBaseService<Genre, GenreReadDTO, GenreCreateDTO, GenreUpdateDTO>
+{}
