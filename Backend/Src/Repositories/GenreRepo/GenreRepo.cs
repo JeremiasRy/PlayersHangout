@@ -1,7 +1,7 @@
-namespace Backend.src.Repositories.GenreRepo;
+namespace Backend.Src.Repositories.GenreRepo;
 
-using Backend.src.Models;
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Models;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
 
 public class GenreRepo : BaseRepo<Genre>, IGenreRepo

@@ -1,7 +1,7 @@
-namespace Backend.src.DTOs.Genre;
+namespace Backend.Src.DTOs.Genre;
 
 using Backend.Src.DTOs;
-using Backend.src.Models;
+using Backend.Src.Models;
 using System.ComponentModel.DataAnnotations;
 
 public class GenreCreateDTO : BaseDTO<Genre>

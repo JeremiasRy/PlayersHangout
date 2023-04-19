@@ -1,7 +1,7 @@
 namespace Backend.src.Converter.Genre;
 
-using Backend.src.DTOs.Genre;
-using Backend.src.Models;
+using Backend.Src.DTOs.Genre;
+using Backend.Src.Models;
 
 public class GenreConverter : IGenreConverter
 {

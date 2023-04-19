@@ -1,6 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace Backend.Src.Models;
 
-namespace Backend.Src.Models;
+using System.Text.Json.Serialization;
+
 public class Location : BaseModel
 {
     [JsonIgnore]

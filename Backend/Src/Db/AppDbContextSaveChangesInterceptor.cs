@@ -1,8 +1,8 @@
-﻿using Backend.Src.Models;
+﻿namespace Backend.Src.Db;
+
+using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-
-namespace Backend.Src.Db;
 
 public class AppDbContextSaveChangesInterceptor : SaveChangesInterceptor
 {

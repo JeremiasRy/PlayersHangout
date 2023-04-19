@@ -1,6 +1,5 @@
-﻿using Backend.src.Models;
+﻿namespace Backend.Src.Models;
 
-namespace Backend.Src.Models;
 public class Wanted : BaseModel
 {
     public Instrument Instrument { get; set; } = null!;

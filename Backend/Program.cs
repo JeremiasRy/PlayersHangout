@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
-using Backend.src.Repositories.WantedRepo;
+using Backend.Src.Repositories.WantedRepo;
 using Backend.Src.Services;
-using Backend.src.Services.WantedService;
-using Backend.src.Converter.Wanted;
+using Backend.Src.Services.WantedService;
 using Backend.Src.Services.UserService;
 using Backend.Src.Services.Implementation;
+using Backend.Src.Repositories.GenreRepo;
+using Backend.Src.Services.GenresService;
+using Backend.src.Converter.Wanted;
 using Backend.src.Converter.Genre;
-using Backend.src.Repositories.GenreRepo;
-using Backend.src.Services.GenresService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,8 +83,8 @@ if (app.Environment.IsDevelopment())
         var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
         if (dbContext != null)
         {
-            // dbContext.Database.EnsureDeleted();
-            // dbContext.Database.EnsureCreated();
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.EnsureCreated();
         }
     }
     app.UseSwagger();

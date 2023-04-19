@@ -1,6 +1,6 @@
-namespace Backend.src.Repositories.WantedRepo;
+namespace Backend.Src.Repositories.WantedRepo;
 
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Models;
 
 public interface IWantedRepo : IBaseRepo<Wanted>

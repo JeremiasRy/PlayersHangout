@@ -1,8 +1,8 @@
-namespace Backend.src.Services.GenresService;
+namespace Backend.Src.Services.GenresService;
 
-using Backend.src.DTOs.Genre;
-using Backend.src.Models;
-using Backend.src.Services.BaseService;
+using Backend.Src.DTOs.Genre;
+using Backend.Src.Models;
+using Backend.Src.Services.BaseService;
 
 public interface IGenreService : IBaseService<Genre, GenreReadDTO, GenreCreateDTO, GenreUpdateDTO>
 {}

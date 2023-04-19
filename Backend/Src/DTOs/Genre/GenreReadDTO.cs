@@ -1,7 +1,7 @@
-namespace Backend.src.DTOs.Genre;
+namespace Backend.Src.DTOs.Genre;
 
 using Backend.Src.DTOs;
-using Backend.src.Models;
+using Backend.Src.Models;
 
 public class GenreReadDTO : BaseDTO<Genre>
 {
