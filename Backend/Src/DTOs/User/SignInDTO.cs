@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Backend.Src.DTOs;
+﻿namespace Backend.Src.DTOs;
 
 public class SignInDTO
 {

@@ -1,6 +1,6 @@
-﻿using Backend.Src.Models;
+﻿namespace Backend.Src.DTOs;
 
-namespace Backend.Src.DTOs;
+using Backend.Src.Models;
 
 public class UserCreateDTO
 {

@@ -6,15 +6,16 @@ using Backend.Src.DTOs.Wanted;
 using Backend.Src.Repositories.WantedRepo;
 using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;
+using Backend.Src.Repositories.WantedRepo;
 using Backend.Src.Models;
 using Backend.Src.Services;
 using Backend.Src.Services.Implementation;
-using System;
-using System.Threading.Tasks;
+using Backend.src.Converter.Wanted;
 
 public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, IWantedService
 {
     private readonly IUserService _userService;
+    
     public WantedService(IUserService userService, IWantedRepo repo, IWantedConverter converter) : base(repo, converter)
     {
         _userService = userService;

@@ -1,8 +1,7 @@
 ﻿using Backend.Src.Models;
 using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Models;
-
-namespace Backend.Src.DTOs.Wanted;
+using Backend.Src.Repositories.BaseRepo;
 
 public class MatchDTO : IFilterOptions // works both ways wanted -> user || user -> wanted
 {

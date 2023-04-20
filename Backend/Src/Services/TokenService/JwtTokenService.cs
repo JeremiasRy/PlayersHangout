@@ -1,12 +1,12 @@
-﻿using Backend.Src.DTOs;
+﻿namespace Backend.Src.Services.Implementation;
+
+using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
-namespace Backend.Src.Services.Implementation;
 
 public class JwtTokenService : IJwtTokenService
 {

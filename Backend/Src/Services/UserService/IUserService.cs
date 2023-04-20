@@ -2,8 +2,6 @@
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 
-namespace Backend.Src.Services;
-
 public interface IUserService
 {
     Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter); // We put some filters here also

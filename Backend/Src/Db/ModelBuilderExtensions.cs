@@ -2,9 +2,6 @@
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-
-namespace Backend.Src.Db;
 
 public static class ModelBuilderExtensions
 {
@@ -34,7 +31,8 @@ public static class ModelBuilderExtensions
 
         modelBuilder.Entity<User>()
             .HasMany(user => user.Wanteds)
-            .WithOne();
+            .WithOne(w => w.User)
+            .HasForeignKey(w => w.UserId);
 
         modelBuilder.Entity<User>()
             .HasMany(user => user.Genres)
@@ -44,10 +42,10 @@ public static class ModelBuilderExtensions
             .HasOne(user => user.MainInstrument)
             .WithMany();
 
-        modelBuilder.Entity<User>()
-            .HasMany(user => user.Instruments)
-            .WithOne()
-            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
+        // modelBuilder.Entity<User>()
+        //     .HasMany(user => user.Instruments)
+        //     .WithOne();
+            // .HasForeignKey(userInstrument => userInstrument.InstrumentId);
 
         modelBuilder.Entity<User>()
             .Navigation(user => user.Instruments)
