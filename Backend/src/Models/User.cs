@@ -1,7 +1,7 @@
 namespace Backend.Src.Models;
 
 using System.ComponentModel.DataAnnotations;
-using Backend.src.Models;
+using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 
 public class User : IdentityUser<Guid>

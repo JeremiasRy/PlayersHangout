@@ -2,7 +2,7 @@
 
 namespace Backend.Src.DTOs;
 
-public class UserDTO
+public class UserReadDTO
 {
     public string FirstName { get; set; } = null!;
     public string LastName { get; set;} = null!;
@@ -10,9 +10,9 @@ public class UserDTO
     public string? City { get; set; }
     public ICollection<UserInstrument> Instruments { get; set; } = null!;
     public Instrument MainInstrument { get; set; } = null!;
-    public static UserDTO FromUser(User user)
+    public static UserReadDTO FromUser(User user)
     {
-        return new UserDTO 
+        return new UserReadDTO 
         { 
             FirstName = user.FirstName, 
             LastName = user.LastName, 

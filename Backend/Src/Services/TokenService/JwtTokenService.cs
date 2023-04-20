@@ -19,7 +19,7 @@ public class JwtTokenService : IJwtTokenService
         _userManager = userManager;
     }
     
-    public async Task<SignInResponseDTO> GenerateToken(User user)
+    public async Task<TokenDTO> GenerateToken(User user)
     {
         List<Claim> claims = new()
         {
@@ -50,6 +50,6 @@ public class JwtTokenService : IJwtTokenService
 
         var writer = new JwtSecurityTokenHandler();
 
-        return SignInResponseDTO.FromUser(user, writer.WriteToken(token), roles.ToArray());
+        return TokenDTO.FromUser(user, writer.WriteToken(token), roles.ToArray());
     }
 }

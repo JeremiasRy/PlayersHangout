@@ -2,7 +2,7 @@
 
 namespace Backend.Src.DTOs;
 
-public class UpdateUserDTO
+public class UserUpdateDTO
 {
     public string FirstName { get; set; } = null!;
     public string LastName { get; set;} = null!;

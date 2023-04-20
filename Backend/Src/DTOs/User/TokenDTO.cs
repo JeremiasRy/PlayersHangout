@@ -2,19 +2,14 @@
 
 namespace Backend.Src.DTOs;
 
-public class SignInResponseDTO
+public class TokenDTO
 {
-    public string FirstName { get; set; } = null!;
-    public string LastName { get; set; } = null!;
-    public string Email { get; set; } = null!;
-    public ICollection<UserInstrument> Instruments { get; set; } = null!;
-    public Instrument MainInstrument { get; set; } = null!;
     public string[] Roles { get; set; } = null!;
     public string Token { get; set; } = null!;
 
-    public static SignInResponseDTO FromUser(User user, string token, string[] roles)
+    public static TokenDTO FromUser(User user, string token, string[] roles)
     {
-        return new SignInResponseDTO
+        return new TokenDTO
         {
             FirstName = user.FirstName,
             LastName = user.LastName,

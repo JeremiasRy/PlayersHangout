@@ -1,4 +1,4 @@
-namespace Backend.src.Converter;
+namespace Backend.Src.Converter;
 
 public interface IConvertReadDTO<T, TReadDTO>
 {

@@ -1,6 +1,6 @@
-namespace Backend.src.Repositories.WantedRepo;
+namespace Backend.Src.Repositories.WantedRepo;
 
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;

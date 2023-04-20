@@ -1,6 +1,6 @@
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 
-namespace Backend.src.Services.BaseService;
+namespace Backend.Src.Services.BaseService;
 
 public interface IBaseService<T,TReadDTO, TCreateDto, TUpdateDto>
 {    

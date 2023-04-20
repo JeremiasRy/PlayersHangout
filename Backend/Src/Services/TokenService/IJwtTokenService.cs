@@ -5,5 +5,5 @@ namespace Backend.Src.Services;
 
 public interface IJwtTokenService
 {
-    Task<SignInResponseDTO> GenerateToken(User user);
+    Task<TokenDTO> GenerateToken(User user);
 }

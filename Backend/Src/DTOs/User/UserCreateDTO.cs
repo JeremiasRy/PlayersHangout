@@ -2,7 +2,7 @@
 
 namespace Backend.Src.DTOs;
 
-public class SignUpDTO
+public class UserCreateDTO
 {
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

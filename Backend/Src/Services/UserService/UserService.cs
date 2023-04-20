@@ -1,6 +1,6 @@
 ﻿namespace Backend.Src.Services.UserService;
 
-using Backend.src.Repositories.BaseRepo;
+using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;
@@ -17,14 +17,14 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
-    public async Task<ICollection<UserDTO>> GetAllUsersAsync(IFilterOptions? filter)
+    public async Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter)
     {
         if (filter is BaseQueryOptions optionsFilter)
         {
             return await _userManager.Users
                 .Skip(optionsFilter.Skip)
                 .Take(optionsFilter.Limit)
-                .Select(user => UserDTO.FromUser(user))
+                .Select(user => UserReadDTO.FromUser(user))
                 .ToListAsync();
         }
         if (filter is MatchDTO matchDTO)
@@ -40,17 +40,17 @@ public class UserService : IUserService
                 query = query.Where(user => user.Genres == null || user.Genres.Any(genre => matchDTO.Genres.Any(matchGenre => genre.Id == matchGenre.Id)));
             }
             return await query.Where(user => user.Location.City == matchDTO.City)
-                .Select(user => UserDTO.FromUser(user))
+                .Select(user => UserReadDTO.FromUser(user))
                 .ToListAsync();
         }
         return await _userManager.Users
             .Skip(0)
             .Take(30)
-            .Select(user => UserDTO.FromUser(user))
+            .Select(user => UserReadDTO.FromUser(user))
             .ToListAsync();
     }
 
-    public async Task<SignInResponseDTO> SignInAsync(SignInDTO request)
+    public async Task<TokenDTO> SignInAsync(SignInDTO request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (await _userManager.CheckPasswordAsync(user, request.Password))
@@ -60,7 +60,7 @@ public class UserService : IUserService
         throw new ArgumentException("Login failed!");
     }
 
-    public async Task<User?> SignUpAsync(SignUpDTO request)
+    public async Task<User?> SignUpAsync(UserCreateDTO request)
     {
         var user = new User() 
         {
@@ -77,7 +77,7 @@ public class UserService : IUserService
         return null;
     }
 
-    public async Task<User?> UpdateUserAsync(Guid id, UpdateUserDTO request)
+    public async Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password)) 

@@ -1,3 +1,3 @@
-namespace Backend.src.Services.GenresService;
+namespace Backend.Src.Services.GenresService;
 
 // public interface IGenreService : ICrudService
