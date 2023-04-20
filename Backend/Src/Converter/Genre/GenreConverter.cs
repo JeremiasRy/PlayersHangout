@@ -1,4 +1,4 @@
-namespace Backend.src.Converter.Genre;
+namespace Backend.Src.Converter.Genre;
 
 using Backend.Src.DTOs.Genre;
 using Backend.Src.Models;

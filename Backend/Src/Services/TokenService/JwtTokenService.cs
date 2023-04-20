@@ -50,6 +50,6 @@ public class JwtTokenService : IJwtTokenService
 
         var writer = new JwtSecurityTokenHandler();
 
-        return TokenDTO.FromUser(user, writer.WriteToken(token), roles.ToArray());
+        return new TokenDTO() { Token = writer.WriteToken(token), Roles = roles.ToArray() };
     }
 }

@@ -1,7 +1,6 @@
 namespace Backend.Src.Db;
 
 using Backend.Src.Models;
-using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

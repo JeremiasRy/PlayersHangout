@@ -1,6 +1,6 @@
-namespace Backend.Src.Services.GenresService;
+namespace Backend.Src.Services.GenreService;
 
-using Backend.src.Converter.Genre;
+using Backend.Src.Converter.Genre;
 using Backend.Src.DTOs.Genre;
 using Backend.Src.Models;
 using Backend.Src.Repositories.GenreRepo;

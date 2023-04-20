@@ -2,7 +2,7 @@ namespace Backend.Src.Controllers;
 
 using Backend.Src.DTOs.Genre;
 using Backend.Src.Models;
-using Backend.Src.Services.GenresService;
+using Backend.Src.Services.GenreService;
 
 public class GenreController : BaseController<Genre, GenreReadDTO, GenreCreateDTO, GenreUpdateDTO>
 {

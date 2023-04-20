@@ -1,4 +1,4 @@
-namespace Backend.Src.Services.GenresService;
+namespace Backend.Src.Services.GenreService;
 
 using Backend.Src.DTOs.Genre;
 using Backend.Src.Models;

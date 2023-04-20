@@ -12,7 +12,7 @@ using Backend.Src.Converter.Wanted;
 using Backend.Src.Services.UserService;
 using Backend.Src.Services.Implementation;
 using Backend.Src.Repositories.GenreRepo;
-using Backend.Src.Services.GenresService;
+using Backend.Src.Services.GenreService;
 using Backend.src.Converter.Wanted;
 using Backend.src.Converter.Genre;
 
