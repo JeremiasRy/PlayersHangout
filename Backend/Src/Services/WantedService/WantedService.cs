@@ -4,13 +4,8 @@ using Backend.Src.Converter.Wanted;
 using Backend.Src.DTOs;
 using Backend.Src.DTOs.Wanted;
 using Backend.Src.Repositories.WantedRepo;
-using Backend.Src.DTOs;
-using Backend.Src.DTOs.Wanted;
-using Backend.Src.Repositories.WantedRepo;
 using Backend.Src.Models;
-using Backend.Src.Services;
 using Backend.Src.Services.Implementation;
-using Backend.src.Converter.Wanted;
 
 public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, IWantedService
 {

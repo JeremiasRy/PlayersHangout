@@ -12,4 +12,17 @@ public class WantedConverter : IWantedConverter
             Description = model.Description
         };
     }
+
+    public void CreateModel(Wanted model, WantedCreateDTO create)
+    {
+        model.SkillLevel = create.SkillLevel;
+        model.User = create.User;
+        model.Description = create.Description;
+        model.Genres = create.Genres;
+    }
+
+    public void UpdateModel(Wanted model, WantedUpdateDTO update)
+    {
+        model.Description = update.Description;
+    }
 }

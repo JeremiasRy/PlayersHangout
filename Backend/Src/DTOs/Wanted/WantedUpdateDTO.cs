@@ -1,12 +1,6 @@
 namespace Backend.Src.DTOs.Wanted;
 
-using Backend.Src.DTOs;
-using Backend.Src.Models;
-
-public class WantedUpdateDTO : BaseDTO<Wanted>
+public class WantedUpdateDTO
 {
-    public override void UpdateModel(Wanted model)
-    {
-        throw new NotImplementedException();
-    }
+    public string Description { get; set; } = null!;
 }

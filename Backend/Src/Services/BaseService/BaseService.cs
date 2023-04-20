@@ -3,19 +3,15 @@ namespace Backend.Src.Services.Implementation;
 using Backend.Src.Converter;
 using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Services.BaseService;
-using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.src.Converter;
 
 public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
     where T : BaseModel, new()    
-    where TCreateDTO : BaseDTO<T>
-    where TUpdateDTO : BaseDTO<T>
 {
     protected readonly IBaseRepo<T> _repo;
-    protected readonly IConvertReadDTO<T, TReadDTO> _converter;
+    protected readonly IConverter<T, TReadDTO, TCreateDTO, TUpdateDTO> _converter;
 
-    public BaseService(IBaseRepo<T> repo, IConvertReadDTO<T, TReadDTO> converter)
+    public BaseService(IBaseRepo<T> repo, IConverter<T, TReadDTO, TCreateDTO, TUpdateDTO> converter)
     {
         _repo = repo;
         _converter = converter;
@@ -24,7 +20,7 @@ public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TR
     public virtual async Task<TReadDTO> CreateAsync(TCreateDTO request)
     {
         var item = new T();
-        request.UpdateModel(item);
+        _converter.CreateModel(item, request);
         var result = await _repo.CreateOneAsync(item);
         if (result is null)
         {
@@ -61,7 +57,7 @@ public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TR
         {
             throw new ArgumentException("Did not find item with id");
         }
-        request.UpdateModel(entity);
+        _converter.UpdateModel(entity, request);
         var item = await _repo.UpdateOneAsync(entity);
         return _converter.ConvertReadDTO(item);
     }

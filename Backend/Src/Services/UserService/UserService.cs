@@ -2,19 +2,22 @@
 
 using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.DTOs;
-using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Backend.Src.Converter.User;
+using Backend.Src.DTOs.Wanted;
 
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
-    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService)
+    private readonly IUserConverter _converter;
+    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService, IUserConverter converter)
     {
         _jwtTokenService = jwtTokenService;
         _userManager = userManager;
+        _converter = converter;
     }
 
     public async Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter)
@@ -24,12 +27,16 @@ public class UserService : IUserService
             return await _userManager.Users
                 .Skip(optionsFilter.Skip)
                 .Take(optionsFilter.Limit)
-                .Select(user => UserReadDTO.FromUser(user))
+                .Select(user => _converter.ConvertReadDTO(user))
                 .ToListAsync();
         }
         if (filter is MatchDTO matchDTO)
         {
-            var query = _userManager.Users.Where(user => true);
+            var query = _userManager.Users.Where(user => user.Location.City == matchDTO.City);
+            if (!query.Any()) 
+            {
+                throw new Exception("No wanteds in this location!");
+            }
             if (matchDTO.Instruments is not null)
             {
                 query = query.Where(user => user.Instruments
@@ -39,14 +46,14 @@ public class UserService : IUserService
             {
                 query = query.Where(user => user.Genres == null || user.Genres.Any(genre => matchDTO.Genres.Any(matchGenre => genre.Id == matchGenre.Id)));
             }
-            return await query.Where(user => user.Location.City == matchDTO.City)
-                .Select(user => UserReadDTO.FromUser(user))
+            return await query
+                .Select(user => _converter.ConvertReadDTO(user))
                 .ToListAsync();
         }
         return await _userManager.Users
             .Skip(0)
             .Take(30)
-            .Select(user => UserReadDTO.FromUser(user))
+            .Select(user => _converter.ConvertReadDTO(user))
             .ToListAsync();
     }
 
@@ -88,10 +95,7 @@ public class UserService : IUserService
         {
             await _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword);
         }
-        user.Email = request.Email;
-        user.LastName = request.LastName;
-        user.FirstName = request.FirstName;
-        user.Location = request.Location;
+        _converter.UpdateModel(user, request);
         await _userManager.UpdateAsync(user);
 
         return user;

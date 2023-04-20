@@ -1,5 +1,5 @@
-﻿using Backend.Src.Models;
-using Backend.Src.Repositories.BaseRepo;
+﻿namespace Backend.Src.DTOs.Wanted;
+
 using Backend.Src.Models;
 using Backend.Src.Repositories.BaseRepo;
 

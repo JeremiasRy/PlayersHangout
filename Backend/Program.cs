@@ -15,6 +15,7 @@ using Backend.Src.Repositories.GenreRepo;
 using Backend.Src.Services.GenreService;
 using Backend.src.Converter.Wanted;
 using Backend.src.Converter.Genre;
+using Backend.Src.Converter.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +69,9 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IUserConverter, UserConverter>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services.AddScoped<IWantedRepo, WantedRepo>().AddScoped<IWantedService, WantedService>();
