@@ -1,5 +1,3 @@
-using Backend.Src.Models;
-
 namespace Backend.Src.Models;
 
 public class Genre : BaseModel
