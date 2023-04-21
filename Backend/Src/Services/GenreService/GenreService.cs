@@ -6,12 +6,9 @@ using Backend.Src.Models;
 using Backend.Src.Repositories.GenreRepo;
 using Backend.Src.Services.Implementation;
 
-public class GenreService : BaseService<Genre, GenreReadDTO, GenreCreateDTO, GenreUpdateDTO>, IGenreService
+public class GenreService : BaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, IGenreService
 {
-    private readonly IGenreRepo _repo;
-
     public GenreService(IGenreRepo repo, IGenreConverter converter) : base(repo, converter)
-    {     
-        _repo = repo;   
+    {      
     }
 }

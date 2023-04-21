@@ -5,20 +5,20 @@ using Backend.Src.Models;
 
 public class GenreConverter : IGenreConverter
 {
-    public GenreReadDTO ConvertReadDTO(Genre model)
+    public GenreDTO ConvertReadDTO(Genre model)
     {
-        return new GenreReadDTO
+        return new GenreDTO
         {
             Name = model.Name
         };
     }
 
-    public void CreateModel(Genre model, GenreCreateDTO create)
+    public void CreateModel(Genre model, GenreDTO create)
     {
         model.Name = create.Name;
     }
 
-    public void UpdateModel(Genre model, GenreUpdateDTO update)
+    public void UpdateModel(Genre model, GenreDTO update)
     {
         model.Name = update.Name;
     }

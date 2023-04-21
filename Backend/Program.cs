@@ -13,9 +13,11 @@ using Backend.Src.Services.UserService;
 using Backend.Src.Services.Implementation;
 using Backend.Src.Repositories.GenreRepo;
 using Backend.Src.Services.GenreService;
-using Backend.src.Converter.Wanted;
-using Backend.src.Converter.Genre;
 using Backend.Src.Converter.User;
+using Backend.Src.Converter.Instrument;
+using Backend.Src.Services.InstrumentService;
+using Backend.Src.Converter.Genre;
+using Backend.Src.Repositories.InstrumentRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,9 +74,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserConverter, UserConverter>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
+builder.Services.AddScoped<IGenreConverter, GenreConverter>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
-builder.Services.AddScoped<IWantedRepo, WantedRepo>().AddScoped<IWantedService, WantedService>();
+builder.Services
+    .AddScoped<IGenreRepo, GenreRepo>()
+    .AddScoped<IGenreService, GenreService>();
+builder.Services
+    .AddScoped<IInstrumentRepo, InstrumentRepo>()
+    .AddScoped<IInstrumentService, InstrumentService>();
+builder.Services
+    .AddScoped<IWantedRepo, WantedRepo>()
+    .AddScoped<IWantedService, WantedService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 

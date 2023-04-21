@@ -13,7 +13,7 @@ using Backend.Src.DTOs.Filter;
 
 public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, IWantedService
 {
-    public WantedService(IUserService userService, IWantedRepo repo, IWantedConverter converter) : base(repo, converter)
+    public WantedService(IWantedRepo repo, IWantedConverter converter) : base(repo, converter)
     {
     }
 }
