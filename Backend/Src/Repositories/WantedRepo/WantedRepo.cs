@@ -2,12 +2,12 @@ namespace Backend.Src.Repositories.WantedRepo;
 
 using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
-using Backend.Src.DTOs.Wanted;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Backend.Src.DTOs.Filter;
 
 public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
 {
@@ -23,8 +23,7 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
         {
             return await base.GetAllAsync(filter);
         }
-        var wantedFilter = request != null ? (MatchDTO)request : null;
-        if (wantedFilter != null)
+        if (request is MatchDTO wantedFilter)
         {
             query = query.Where(wanted => wanted.User.Location.City == wantedFilter.City);
             if (wantedFilter.Instruments != null)
@@ -33,12 +32,10 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
             }
             if (wantedFilter.Genres != null)
             {
-                query = query
-                    .Where(wanted => wanted.Genres.Select(genre => genre.Id).Any(id => wantedFilter.Genres.Select(genre => genre.Id).Contains(id)));
+                query = query.Where(wanted => wanted.Genres.Select(genre => genre.Id).Any(id => wantedFilter.Genres.Select(genre => genre.Id).Contains(id)));
             }
             return await query.ToListAsync();
         }
-
         return await base.GetAllAsync(new BaseQueryOptions());
     }
 }

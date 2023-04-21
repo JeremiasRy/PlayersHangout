@@ -1,4 +1,4 @@
-﻿namespace Backend.Src.DTOs.Wanted;
+﻿namespace Backend.Src.DTOs.Filter;
 
 using Backend.Src.Models;
 using Backend.Src.Repositories.BaseRepo;

@@ -7,5 +7,4 @@ using Backend.Src.Models;
 
 public interface IWantedService : IBaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>
 {
-    Task<ICollection<UserReadDTO>> MatchUsersToWanted(MatchDTO match);
 }

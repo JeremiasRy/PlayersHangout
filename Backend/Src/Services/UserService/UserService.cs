@@ -6,7 +6,7 @@ using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Backend.Src.Converter.User;
-using Backend.Src.DTOs.Wanted;
+using Backend.Src.DTOs.Filter;
 
 public class UserService : IUserService
 {
@@ -35,7 +35,7 @@ public class UserService : IUserService
             var query = _userManager.Users.Where(user => user.Location.City == matchDTO.City);
             if (!query.Any()) 
             {
-                throw new Exception("No wanteds in this location!");
+                throw new Exception("No users in this location!");
             }
             if (matchDTO.Instruments is not null)
             {
@@ -69,13 +69,8 @@ public class UserService : IUserService
 
     public async Task<User?> SignUpAsync(UserCreateDTO request)
     {
-        var user = new User() 
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Location = request.Location,
-        };
+        var user = new User();
+        _converter.CreateModel(user, request);
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
