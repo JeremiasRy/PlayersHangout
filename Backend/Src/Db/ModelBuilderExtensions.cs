@@ -41,10 +41,10 @@ public static class ModelBuilderExtensions
             .HasOne(user => user.MainInstrument)
             .WithMany();
 
-        // modelBuilder.Entity<User>()
-        //     .HasMany(user => user.Instruments)
-        //     .WithOne();
-            // .HasForeignKey(userInstrument => userInstrument.InstrumentId);
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Instruments)
+            .WithOne()
+            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
 
         modelBuilder.Entity<User>()
             .Navigation(user => user.Instruments)

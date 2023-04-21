@@ -9,7 +9,10 @@ public class WantedConverter : IWantedConverter
     {
         return new WantedReadDTO
         {
-            Description = model.Description
+            Description = model.Description,
+            City = model.User.Location.City,
+            Instrument = model.Instrument.Name,
+            SkillLevel = model.SkillLevel,
         };
     }
 
@@ -24,5 +27,6 @@ public class WantedConverter : IWantedConverter
     public void UpdateModel(Wanted model, WantedUpdateDTO update)
     {
         model.Description = update.Description;
+        model.Fullfilled = update.Fullfilled;
     }
 }

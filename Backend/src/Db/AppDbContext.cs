@@ -35,12 +35,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddUserConfig();
         modelBuilder.AddUserInstrumentConfig();
         modelBuilder.AddTimestampConfig();
-        modelBuilder.AddGenresConfig();
-
-        modelBuilder.Entity<Instrument>()
-            .HasMany(instrument => instrument.Users)
-            .WithOne()
-            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
+        modelBuilder.AddGenresConfig(); 
     }
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;

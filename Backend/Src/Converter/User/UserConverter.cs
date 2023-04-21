@@ -19,7 +19,10 @@ public class UserConverter : IUserConverter
 
     public void CreateModel(User model, UserCreateDTO create)
     {
-        throw new NotImplementedException();
+        model.FirstName = create.FirstName;
+        model.LastName = create.LastName;
+        model.Email = create.Email;
+        model.Location = create.Location;
     }
 
     public void UpdateModel(User model, UserUpdateDTO update)
@@ -28,5 +31,7 @@ public class UserConverter : IUserConverter
         model.LastName = update.LastName;
         model.Email = update.Email;
         model.Location = update.Location;
+        model.Instruments = update.Instruments;
+        model.Genres = update.Genres;
     }
 }

@@ -8,4 +8,5 @@ public class Wanted : BaseModel
     public User User { get; set; } = null!;
     public Guid UserId { get; set; }
     public ICollection<Genre> Genres { get; set; } = null!;
+    public bool Fullfilled { get; set; } = false;
 }
