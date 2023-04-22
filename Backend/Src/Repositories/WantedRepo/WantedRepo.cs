@@ -26,13 +26,13 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
         if (request is MatchDTO wantedFilter)
         {
             query = query.Where(wanted => wanted.User.Location.City == wantedFilter.City);
-            if (wantedFilter.Instruments != null)
+            if (wantedFilter.Instrument != null)
             {
-                query = query.Where(wanted => wantedFilter.Instruments.Select(instrument => instrument.Id).Contains(wanted.Instrument.Id));
+                query = query.Where(wanted => wanted.Instrument.Name.Contains(wantedFilter.Instrument));
             }
-            if (wantedFilter.Genres != null)
+            if (wantedFilter.Genre != null)
             {
-                query = query.Where(wanted => wanted.Genres.Select(genre => genre.Id).Any(id => wantedFilter.Genres.Select(genre => genre.Id).Contains(id)));
+                query = query.Where(wanted => wanted.Genres.Select(genre => genre.Name).Any(gname => gname.Contains(wantedFilter.Genre)));
             }
             return await query.ToListAsync();
         }
