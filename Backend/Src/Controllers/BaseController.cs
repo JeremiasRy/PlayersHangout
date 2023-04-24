@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiControllerBase
 {
     protected readonly IBaseService<T, TReadDto, TCreateDto, TUpdateDto> _service;
-
     public BaseController(IBaseService<T, TReadDto, TCreateDto, TUpdateDto> service)
     {
         _service = service;
+    }
+    [HttpGet]
+    public virtual async Task<ICollection<TReadDto>> GetAll()
+    {
+        return await _service.GetAllAsync(null);
     }
 
     [HttpPost]

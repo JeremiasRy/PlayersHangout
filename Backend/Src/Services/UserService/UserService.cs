@@ -40,14 +40,15 @@ public class UserService : IUserService
             {
                 throw new Exception("No users in this location!");
             }
-            if (matchDTO.Instruments is not null)
+            if (matchDTO.Instrument is not null)
             {
                 query = query.Where(user => user.Instruments
-                    .Any(instrument => matchDTO.Instruments.Any(matchInstrument => matchInstrument.Id == instrument.InstrumentId)));
+                    .Select(instrument => new { Instrument = instrument.Instrument.Name, SkillLevel = instrument.Skill, instrument.LookingToPlay })
+                    .Any(instrument => instrument.Instrument.Contains(matchDTO.Instrument) && instrument.SkillLevel == matchDTO.SkillLevel && instrument.LookingToPlay);
             }
-            if (matchDTO.Genres is not null)
+            if (matchDTO.Genre is not null)
             {
-                query = query.Where(user => user.Genres == null || user.Genres.Any(genre => matchDTO.Genres.Any(matchGenre => genre.Id == matchGenre.Id)));
+                query = query.Where(user => user.Genres == null || user.Genres.Any(genre => genre.Name.Contains(matchDTO.Genre)));
             }
             return await query
                 .Select(user => _converter.ConvertReadDTO(user))
