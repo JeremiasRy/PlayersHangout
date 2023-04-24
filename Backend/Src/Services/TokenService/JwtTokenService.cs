@@ -1,6 +1,7 @@
 ﻿namespace Backend.Src.Services.Implementation;
 
 using Backend.Src.DTOs;
+using Backend.Src.DTOs.Auth;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +20,7 @@ public class JwtTokenService : IJwtTokenService
         _userManager = userManager;
     }
     
-    public async Task<TokenDTO> GenerateToken(User user)
+    public async Task<AuthReadDTO> GenerateToken(User user)
     {
         List<Claim> claims = new()
         {
@@ -46,10 +47,15 @@ public class JwtTokenService : IJwtTokenService
             claims,
             expires: expiration,
             signingCredentials: signinkey
-            );
+        );
 
         var writer = new JwtSecurityTokenHandler();
 
-        return new TokenDTO() { Token = writer.WriteToken(token), Roles = roles.ToArray() };
+        return new AuthReadDTO()
+        { 
+            Roles = roles.ToArray(), 
+            Token = writer.WriteToken(token), 
+            Expiration = expiration  
+        };
     }
 }

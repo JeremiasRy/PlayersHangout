@@ -7,17 +7,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Backend.Src.Converter.User;
 using Backend.Src.DTOs.Filter;
+using Backend.Src.Services.ClaimService;
 
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IUserConverter _converter;
-    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService, IUserConverter converter)
+    private readonly  IClaimService _claim;
+    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService, IUserConverter converter,  IClaimService claim)
     {
         _jwtTokenService = jwtTokenService;
         _userManager = userManager;
         _converter = converter;
+        _claim = claim;
     }
 
     public async Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter)
@@ -58,28 +61,6 @@ public class UserService : IUserService
             .ToListAsync();
     }
 
-    public async Task<TokenDTO> SignInAsync(SignInDTO request)
-    {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (await _userManager.CheckPasswordAsync(user, request.Password))
-        {
-            return await _jwtTokenService.GenerateToken(user);
-        }
-        throw new ArgumentException("Login failed!");
-    }
-
-    public async Task<User?> SignUpAsync(UserCreateDTO request)
-    {
-        var user = new User();
-        _converter.CreateModel(user, request);
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (result.Succeeded)
-        {
-            return user;
-        }
-        return null;
-    }
-
     public async Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
@@ -95,5 +76,15 @@ public class UserService : IUserService
         await _userManager.UpdateAsync(user);
 
         return user;
+    }
+
+    public async Task<UserReadDTO> GetUserProfile() 
+    {
+        var user = await _userManager.FindByIdAsync(_claim.GetUserIDFromToken());
+        if (user is null)
+        {
+            throw new Exception("Profile is not found");
+        }
+        return _converter.ConvertReadDTO(user);
     }
 }

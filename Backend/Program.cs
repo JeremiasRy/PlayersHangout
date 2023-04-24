@@ -18,6 +18,9 @@ using Backend.Src.Converter.Instrument;
 using Backend.Src.Services.InstrumentService;
 using Backend.Src.Converter.Genre;
 using Backend.Src.Repositories.InstrumentRepo;
+using Backend.Src.Services.AuthService;
+using System.Security.Claims;
+using Backend.Src.Services.ClaimService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +89,12 @@ builder.Services
 builder.Services
     .AddScoped<IWantedRepo, WantedRepo>()
     .AddScoped<IWantedService, WantedService>();
+
+builder.Services.AddTransient<ClaimsPrincipal>(s =>
+    s.GetService<IHttpContextAccessor>().HttpContext.User);
+
+builder.Services.AddScoped<IClaimService, ClaimService>();    
+builder.Services.AddScoped<IAuthService, AuthService>(); 
 builder.Services.AddScoped<IUserService, UserService>();
 
 
@@ -107,6 +116,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -11,9 +11,10 @@ public class UserConverter : IUserConverter
         {
             FirstName = model.FirstName,
             LastName = model.LastName,
-            Instruments = model.Instruments,
-            MainInstrument = model.MainInstrument,
-            City = model.Location.City
+            Instruments = model.Instruments ?? null,
+            MainInstrument = model.MainInstrument ?? null,
+            City = "Finland"
+            // City = model.Location.City
         };
     }
 
