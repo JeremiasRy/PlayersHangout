@@ -57,16 +57,6 @@ public class UserService : IUserService
             .ToListAsync();
     }
 
-    public async Task<TokenDTO> SignInAsync(SignInDTO request)
-    {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (await _userManager.CheckPasswordAsync(user, request.Password))
-        {
-            return await _jwtTokenService.GenerateToken(user);
-        }
-        throw new ArgumentException("Login failed!");
-    }
-
     public async Task<User?> SignUpAsync(UserCreateDTO request)
     {
         var user = new User();
