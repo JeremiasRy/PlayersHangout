@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Identity;
 using Backend.Src.Models;
 using System.Security.Claims;
 using Backend.Src.DTOs.Auth;
+using Backend.Src.Services.ClaimService;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _tokenService;
-    private readonly  ClaimsPrincipal _claim;
+    private readonly  IClaimService _claim;
 
-    public AuthService(UserManager<User> userManager, IJwtTokenService tokenService, ClaimsPrincipal claim)
+    public AuthService(UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
         _userManager = userManager;
         _tokenService = tokenService;
@@ -64,7 +65,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> Logout()
     {
-        var user = await _userManager.FindByIdAsync(GetUserId());
+        var user = await _userManager.FindByIdAsync(_claim.GetUserIDFromToken());
         if (user is null)
         {
             throw new Exception("User is not found");
@@ -73,12 +74,5 @@ public class AuthService : IAuthService
         user.ActiveSession = false;
         await _userManager.UpdateAsync(user);
         return true;
-    }
-
-    public string GetUserId()
-    {
-        var claim = _claim.FindFirst(ClaimTypes.NameIdentifier);
-        Console.WriteLine("get user id ----> ", claim.Value);
-        return claim.Value ?? "";        
     }
 }
