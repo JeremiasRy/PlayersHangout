@@ -1,5 +1,8 @@
 namespace Backend.Src.Controllers;
 
+using Backend.Src.Common;
+using Backend.Src.DTOs;
+using Backend.Src.Repositories;
 using Backend.Src.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,5 +18,15 @@ public class UserController : ApiControllerBase
     public async Task<IActionResult> GetProfile()
     {
         return Ok(await _service.GetUserProfile());
+    }
+    [HttpGet]
+    public async Task<ICollection<UserReadDTO>> GetAll()
+    {
+        var filter = Request.QueryString.ParseParams<MatchDTO>();
+        if (filter == null)
+        {
+            return await _service.GetAllUsersAsync(new BaseQueryOptions());
+        }
+        return await _service.GetAllUsersAsync(filter);
     }
 }
