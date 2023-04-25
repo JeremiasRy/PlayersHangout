@@ -35,7 +35,7 @@ public class UserService : IUserService
         }
         if (filter is MatchDTO matchDTO)
         {
-            var query = _userManager.Users.Where(user => user.Location.City == matchDTO.City);
+            var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City);
             if (!query.Any()) 
             {
                 throw new Exception("No users in this location!");

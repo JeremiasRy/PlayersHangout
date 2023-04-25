@@ -87,4 +87,16 @@ public static class ModelBuilderExtensions
             .HasIndex(genre => genre.Name)
             .IsUnique();                     
     }
+    public static void AddCitiesConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<City>()
+            .HasIndex(city => city.Name)
+            .IsUnique();
+    }
+    public static void AddLocationConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Location>()
+            .HasOne(location => location.City)
+            .WithMany();
+    }
 }

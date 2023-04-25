@@ -8,5 +8,6 @@ public class Location : BaseModel
     public double Latitude { get; set; }
     [JsonIgnore]
     public double Longitude { get; set; }
-    public string? City { get; set; }
+    public City City { get; set; } = null!;
+    public Guid CityId { get; set; }
 }
