@@ -1,7 +1,6 @@
-using Backend.Src.Repositories.BaseRepo;
+namespace Backend.Src.Services;
 
-namespace Backend.Src.Services.BaseService;
-
+using Backend.Src.Repositories;
 public interface IBaseService<T,TReadDTO, TCreateDto, TUpdateDto>
 {    
     Task<ICollection<TReadDTO>> GetAllAsync(IFilterOptions? request);

@@ -1,19 +1,13 @@
-namespace Backend.Src.Services.WantedService;
+namespace Backend.Src.Services;
 
-using Backend.Src.Converter.Wanted;
+using Backend.Src.Converters;
 using Backend.Src.DTOs;
-using Backend.Src.DTOs.Wanted;
-using Backend.Src.Repositories.WantedRepo;
+using Backend.Src.Repositories;
 using Backend.Src.Models;
-using Backend.Src.Services.Implementation;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Backend.Src.Repositories.BaseRepo;
-using Backend.Src.DTOs.Filter;
 
-public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, IWantedService
+public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>
 {
-    public WantedService(IWantedRepo repo, IWantedConverter converter) : base(repo, converter)
+    public WantedService(IBaseRepo<Wanted> repo, IWantedConverter converter) : base(repo, converter)
     {
     }
 }

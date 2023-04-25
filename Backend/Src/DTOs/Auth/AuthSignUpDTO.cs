@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+namespace Backend.Src.DTOs;
 
-namespace Backend.Src.DTOs.Auth;
+using System.ComponentModel.DataAnnotations;
 
 public class AuthSignUpDTO
 {

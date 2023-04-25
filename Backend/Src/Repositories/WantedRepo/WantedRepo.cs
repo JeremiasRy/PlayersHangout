@@ -1,15 +1,13 @@
-namespace Backend.Src.Repositories.WantedRepo;
+namespace Backend.Src.Repositories;
 
-using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
 using Backend.Src.Models;
+using Backend.Src.DTOs;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Backend.Src.DTOs.Filter;
 
-public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
+public class WantedRepo : BaseRepo<Wanted>
 {
     public WantedRepo(AppDbContext context) : base(context)
     {
@@ -25,7 +23,7 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
         }
         if (request is MatchDTO wantedFilter)
         {
-            query = query.Where(wanted => wanted.User.Location.City == wantedFilter.City);
+            query = query.Where(wanted => wanted.User.Location.City.Name == wantedFilter.City);
             if (wantedFilter.Instrument != null)
             {
                 query = query.Where(wanted => wanted.Instrument.Name.Contains(wantedFilter.Instrument));
@@ -34,7 +32,10 @@ public class WantedRepo : BaseRepo<Wanted>, IWantedRepo
             {
                 query = query.Where(wanted => wanted.Genres.Select(genre => genre.Name).Any(gname => gname.Contains(wantedFilter.Genre)));
             }
-            return await query.ToListAsync();
+            return await query
+                .Skip(wantedFilter.Skip)
+                .Take(wantedFilter.Limit)
+                .ToListAsync();
         }
         return await base.GetAllAsync(new BaseQueryOptions());
     }

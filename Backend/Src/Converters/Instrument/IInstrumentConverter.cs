@@ -1,4 +1,4 @@
-﻿namespace Backend.Src.Converter.Instrument;
+﻿namespace Backend.Src.Converters;
 
 using Backend.Src.DTOs;
 using Backend.Src.Models;

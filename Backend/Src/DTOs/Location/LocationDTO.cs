@@ -1,4 +1,4 @@
-﻿namespace Backend.Src.DTOs.Location;
+﻿namespace Backend.Src.DTOs;
 
 public class LocationCreateDTO
 {

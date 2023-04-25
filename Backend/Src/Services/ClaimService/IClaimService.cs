@@ -1,4 +1,4 @@
-namespace Backend.Src.Services.ClaimService;
+namespace Backend.Src.Services;
 
 public interface IClaimService
 {

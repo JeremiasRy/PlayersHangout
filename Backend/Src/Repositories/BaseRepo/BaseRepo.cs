@@ -1,10 +1,10 @@
-namespace Backend.Src.Repositories.BaseRepo;
+namespace Backend.Src.Repositories;
 
 using Backend.Src.Db;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
-public class BaseRepo<T> : IBaseRepo<T>
+public abstract class BaseRepo<T> : IBaseRepo<T>
     where T : BaseModel
 {
     protected readonly AppDbContext _context;

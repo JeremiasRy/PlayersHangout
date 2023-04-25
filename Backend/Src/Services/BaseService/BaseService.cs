@@ -1,11 +1,10 @@
-namespace Backend.Src.Services.Implementation;
+namespace Backend.Src.Services;
 
-using Backend.Src.Converter;
-using Backend.Src.Repositories.BaseRepo;
-using Backend.Src.Services.BaseService;
+using Backend.Src.Converters;
+using Backend.Src.Repositories;
 using Backend.Src.Models;
 
-public class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
+public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
     where T : BaseModel, new()    
 {
     protected readonly IBaseRepo<T> _repo;

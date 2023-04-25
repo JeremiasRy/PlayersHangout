@@ -1,8 +1,7 @@
-﻿using Backend.Src.Db;
-using Backend.Src.Models;
-using Backend.Src.Repositories.BaseRepo;
+﻿namespace Backend.Src.Repositories;
 
-namespace Backend.Src.Repositories.LocationRepo;
+using Backend.Src.Db;
+using Backend.Src.Models;
 
 public class LocationRepo : BaseRepo<Location>
 {

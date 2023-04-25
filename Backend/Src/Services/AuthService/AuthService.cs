@@ -1,11 +1,9 @@
-namespace Backend.Src.Services.AuthService;
+namespace Backend.Src.Services;
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Backend.Src.Models;
-using System.Security.Claims;
-using Backend.Src.DTOs.Auth;
-using Backend.Src.Services.ClaimService;
+using Backend.Src.DTOs;
 
 public class AuthService : IAuthService
 {

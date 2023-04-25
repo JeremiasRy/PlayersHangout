@@ -1,10 +1,9 @@
-namespace Backend.Src.Repositories.GenreRepo;
+namespace Backend.Src.Repositories;
 
 using Backend.Src.Models;
-using Backend.Src.Repositories.BaseRepo;
 using Backend.Src.Db;
 
-public class GenreRepo : BaseRepo<Genre>, IGenreRepo
+public class GenreRepo : BaseRepo<Genre>
 {
     public GenreRepo(AppDbContext context) : base(context)
     {}

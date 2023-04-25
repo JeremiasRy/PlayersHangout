@@ -1,6 +1,6 @@
-﻿namespace Backend.Src.Converter.Location;
+﻿namespace Backend.Src.Converters;
 
-using Backend.Src.DTOs.Location;
+using Backend.Src.DTOs;
 using Backend.Src.Models;
 
 public class LocationConverter : ILocationConverter

@@ -1,7 +1,7 @@
 namespace Backend.Src.Controllers;
 
-using Backend.Src.DTOs.Auth;
-using Backend.Src.Services.AuthService;
+using Backend.Src.DTOs;
+using Backend.Src.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

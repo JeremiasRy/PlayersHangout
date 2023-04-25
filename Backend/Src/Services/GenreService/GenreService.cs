@@ -1,14 +1,13 @@
-namespace Backend.Src.Services.GenreService;
+namespace Backend.Src.Services;
 
-using Backend.Src.Converter.Genre;
-using Backend.Src.DTOs.Genre;
+using Backend.Src.Converters;
+using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories.GenreRepo;
-using Backend.Src.Services.Implementation;
+using Backend.Src.Repositories;
 
-public class GenreService : BaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, IGenreService
+public class GenreService : BaseService<Genre, GenreDTO, GenreDTO, GenreDTO>
 {
-    public GenreService(IGenreRepo repo, IGenreConverter converter) : base(repo, converter)
+    public GenreService(IBaseRepo<Genre> repo, IGenreConverter converter) : base(repo, converter)
     {      
     }
 }

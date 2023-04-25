@@ -1,6 +1,6 @@
 ﻿namespace Backend.Src.Services;
 
-using Backend.Src.DTOs.Auth;
+using Backend.Src.DTOs;
 using Backend.Src.Models;
 
 public interface IJwtTokenService

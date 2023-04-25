@@ -1,13 +1,11 @@
-﻿namespace Backend.Src.Services.UserService;
+﻿namespace Backend.Src.Services;
 
-using Backend.Src.Repositories.BaseRepo;
+using Backend.Src.Repositories;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
+using Backend.Src.Converters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Backend.Src.Converter.User;
-using Backend.Src.DTOs.Filter;
-using Backend.Src.Services.ClaimService;
 
 public class UserService : IUserService
 {
@@ -44,7 +42,7 @@ public class UserService : IUserService
             {
                 query = query.Where(user => user.Instruments
                     .Select(instrument => new { Instrument = instrument.Instrument.Name, SkillLevel = instrument.Skill, instrument.LookingToPlay })
-                    .Any(instrument => instrument.Instrument.Contains(matchDTO.Instrument) && instrument.SkillLevel == matchDTO.SkillLevel && instrument.LookingToPlay);
+                    .Any(instrument => instrument.Instrument.Contains(matchDTO.Instrument) && instrument.SkillLevel == matchDTO.SkillLevel && instrument.LookingToPlay));
             }
             if (matchDTO.Genre is not null)
             {
@@ -52,6 +50,8 @@ public class UserService : IUserService
             }
             return await query
                 .Select(user => _converter.ConvertReadDTO(user))
+                .Skip(matchDTO.Skip)
+                .Take(matchDTO.Limit)
                 .ToListAsync();
         }
         return await _userManager.Users

@@ -1,7 +1,6 @@
-﻿namespace Backend.Src.Services.Implementation;
+﻿namespace Backend.Src.Services;
 
 using Backend.Src.DTOs;
-using Backend.Src.DTOs.Auth;
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;

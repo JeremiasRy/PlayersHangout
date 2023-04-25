@@ -1,6 +1,6 @@
 namespace Backend.Src.Controllers;
 
-using Backend.Src.Services.BaseService;
+using Backend.Src.Services;
 using Microsoft.AspNetCore.Mvc;
 
 public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiControllerBase

@@ -1,4 +1,4 @@
-namespace Backend.Src.DTOs.Wanted;
+namespace Backend.Src.DTOs;
 
 using Backend.Src.Models;
 

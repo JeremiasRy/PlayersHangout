@@ -1,4 +1,4 @@
-namespace Backend.Src.DTOs.Wanted;
+namespace Backend.Src.DTOs;
 
 public class WantedUpdateDTO
 {

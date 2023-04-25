@@ -1,9 +1,8 @@
-﻿using Backend.Src.Repositories.BaseRepo;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿namespace Backend.Src.DTOs;
 
-namespace Backend.Src.DTOs.Filter;
+using Backend.Src.Repositories;
 
-public class NameFilter : IFilterOptions
+public class NameFilter : BaseQueryOptions
 {
     public string Name { get; set; } = null!;
 }

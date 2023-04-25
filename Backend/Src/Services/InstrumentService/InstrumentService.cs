@@ -1,14 +1,13 @@
-﻿using Backend.Src.Converter.Instrument;
+﻿namespace Backend.Src.Services;
+
+using Backend.Src.Converters;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories.InstrumentRepo;
-using Backend.Src.Services.Implementation;
+using Backend.Src.Repositories;
 
-namespace Backend.Src.Services.InstrumentService;
-
-public class InstrumentService : BaseService<Instrument, InstrumentDTO,  InstrumentDTO, InstrumentDTO>, IInstrumentService
+public class InstrumentService : BaseService<Instrument, InstrumentDTO,  InstrumentDTO, InstrumentDTO>
 {
-    public InstrumentService(IInstrumentRepo repo, IInstrumentConverter converter) : base(repo, converter)
+    public InstrumentService(IBaseRepo<Instrument> repo, IInstrumentConverter converter) : base(repo, converter)
     {   
     }
 }

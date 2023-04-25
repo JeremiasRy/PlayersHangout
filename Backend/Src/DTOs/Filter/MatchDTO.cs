@@ -1,9 +1,9 @@
-﻿namespace Backend.Src.DTOs.Filter;
+﻿namespace Backend.Src.DTOs;
 
 using Backend.Src.Models;
-using Backend.Src.Repositories.BaseRepo;
+using Backend.Src.Repositories;
 
-public class MatchDTO : IFilterOptions // works both ways wanted -> user || user -> wanted
+public class MatchDTO : BaseQueryOptions // works both ways wanted -> user || user -> wanted
 {
     public string? City { get; set; } = null!;
     public UserInstrument.SkillLevel SkillLevel { get; set; }

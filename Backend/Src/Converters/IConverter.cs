@@ -1,4 +1,4 @@
-namespace Backend.Src.Converter;
+namespace Backend.Src.Converters;
 
 public interface IConverter<T, TReadDTO, TCreateDTO, TUpdateDTO>
 {

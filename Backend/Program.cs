@@ -1,26 +1,15 @@
-using Backend.Src.Db;
-using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
-using Backend.Src.Repositories.WantedRepo;
-using Backend.Src.Services;
-using Backend.Src.Services.WantedService;
-using Backend.Src.Converter.Wanted;
-using Backend.Src.Services.UserService;
-using Backend.Src.Services.Implementation;
-using Backend.Src.Repositories.GenreRepo;
-using Backend.Src.Services.GenreService;
-using Backend.Src.Converter.User;
-using Backend.Src.Converter.Instrument;
-using Backend.Src.Services.InstrumentService;
-using Backend.Src.Converter.Genre;
-using Backend.Src.Repositories.InstrumentRepo;
-using Backend.Src.Services.AuthService;
 using System.Security.Claims;
-using Backend.Src.Services.ClaimService;
+using Backend.Src.Db;
+using Backend.Src.Models;
+using Backend.Src.DTOs;
+using Backend.Src.Converters;
+using Backend.Src.Repositories;
+using Backend.Src.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,14 +70,14 @@ builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
 builder.Services.AddScoped<IGenreConverter, GenreConverter>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services
-    .AddScoped<IGenreRepo, GenreRepo>()
-    .AddScoped<IGenreService, GenreService>();
+    .AddScoped<IBaseRepo<Genre>, GenreRepo>()
+    .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();
 builder.Services
-    .AddScoped<IInstrumentRepo, InstrumentRepo>()
-    .AddScoped<IInstrumentService, InstrumentService>();
+    .AddScoped<IBaseRepo<Instrument>, InstrumentRepo>()
+    .AddScoped<IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO >, InstrumentService>();
 builder.Services
-    .AddScoped<IWantedRepo, WantedRepo>()
-    .AddScoped<IWantedService, WantedService>();
+    .AddScoped<IBaseRepo<Wanted>, WantedRepo>()
+    .AddScoped<IBaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, WantedService>();
 
 builder.Services.AddTransient<ClaimsPrincipal>(s =>
     s.GetService<IHttpContextAccessor>().HttpContext.User);

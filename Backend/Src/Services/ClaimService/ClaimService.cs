@@ -1,10 +1,10 @@
-using System.Security.Claims;
+namespace Backend.Src.Services;
 
-namespace Backend.Src.Services.ClaimService;
+using System.Security.Claims;
 
 public class ClaimService : IClaimService
 {
-    private ClaimsPrincipal User;    
+    readonly private ClaimsPrincipal User;    
 
     public ClaimService(ClaimsPrincipal user)
     {

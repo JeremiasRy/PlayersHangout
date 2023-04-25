@@ -1,4 +1,4 @@
-namespace Backend.Src.DTOs.Auth;
+namespace Backend.Src.DTOs;
 
 using System.ComponentModel.DataAnnotations;
 

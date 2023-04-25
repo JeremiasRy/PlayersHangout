@@ -1,7 +1,7 @@
-namespace Backend.Src.Converter.Wanted;
+namespace Backend.Src.Converters;
 
 using Backend.Src.Models;
-using Backend.Src.DTOs.Wanted;
+using Backend.Src.DTOs;
 
 public class WantedConverter : IWantedConverter
 {
@@ -10,7 +10,7 @@ public class WantedConverter : IWantedConverter
         return new WantedReadDTO
         {
             Description = model.Description,
-            City = model.User.Location.City,
+            City = model.User.Location.City.Name,
             Instrument = model.Instrument.Name,
             SkillLevel = model.SkillLevel,
         };

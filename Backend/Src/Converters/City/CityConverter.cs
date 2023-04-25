@@ -1,4 +1,4 @@
-﻿namespace Backend.Src.Converter.City;
+﻿namespace Backend.Src.Converters;
 
 using Backend.Src.Models;
 

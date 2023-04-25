@@ -1,6 +1,6 @@
 namespace Backend.Src.Controllers;
 
-using Backend.Src.Services.UserService;
+using Backend.Src.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
