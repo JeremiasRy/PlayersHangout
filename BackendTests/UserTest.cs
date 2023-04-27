@@ -1,7 +1,6 @@
 namespace BackendTests;
 
 using Backend.Src.Db.TestFixtures;
-using Microsoft.Extensions.Configuration;
 
 public class UserTests : IClassFixture<DbTestFixture>
 {
@@ -17,6 +16,6 @@ public class UserTests : IClassFixture<DbTestFixture>
         using var context = Fixture.CreateContext();
         Assert.True(context.Genres.Any());
         Assert.True(context.Instruments.Any());
-        Assert.True()
+        Assert.True(context.Cities.Any());
     }
 }
