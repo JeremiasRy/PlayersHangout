@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 public class LocationService : BaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>
 {
-    private readonly CityService _cityService; 
-    public LocationService(CityService cityService, LocationRepo repo, ILocationConverter converter) : base(repo, converter)
+    private readonly IBaseService<City, City, City, City> _cityService; 
+    public LocationService(IBaseService<City, City, City, City> cityService, IBaseRepo<Location> repo, ILocationConverter converter) : base(repo, converter)
     {
         _cityService = cityService;
     }

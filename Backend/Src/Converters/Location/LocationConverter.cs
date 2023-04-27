@@ -15,14 +15,14 @@ public class LocationConverter : ILocationConverter
 
     public void CreateModel(Location model, LocationCreateDTO create)
     {
-        model.CityId = create.CityId;
+        model.CityId = (Guid)create.CityId;
         model.Latitude = create.Latitude;
         model.Longitude = create.Longitude;
     }
 
     public void UpdateModel(Location model, LocationCreateDTO update)
     {
-        model.CityId = update.CityId;
+        model.CityId = (Guid)update.CityId;
         model.Latitude = update.Latitude;
         model.Longitude = update.Longitude;
     }

@@ -1,17 +1,18 @@
 ﻿namespace Backend.Src.Db.TestFixtures;
 
-using Microsoft.EntityFrameworkCore;
 using Backend.Src.Db;
 using Backend.Src.Models;
 
 public class DbTestFixture
 {
-    private IConfiguration _configuration;
     private static readonly object _lock = new();
     private static bool _dbInitialized;
-    public DbTestFixture(IConfiguration configuration)
+
+    private readonly IConfiguration _configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+    public DbTestFixture()
     {
-        _configuration = configuration;
         // Thread safety
         lock (_lock)
         {
@@ -42,9 +43,14 @@ public class DbTestFixture
                         new Instrument() { Name = "Piano" },
                         new Instrument() { Name = "Saxophone" }
                         );
-
-
+                    // Cities
+                    context.AddRange(
+                        new City() { Name = "Helsinki"},
+                        new City() { Name = "Tampere"}
+                        );
+                    context.SaveChanges();
                 }
+                _dbInitialized = true;
             }
         }
     }

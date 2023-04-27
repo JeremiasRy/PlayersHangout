@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/BackendTests/appsettings.Development.json
+/BackendTests/appsettings.json
+/BackendTests/bin/Debug/net6.0
+/BackendTests/obj/Debug/net6.0/ref
+/BackendTests/obj/Debug/net6.0/refint
+/BackendTests/obj/Debug/net6.0/BackendTests.csproj.AssemblyReference.cache
+/BackendTests/obj/Debug/net6.0/BackendTests.csproj.BuildWithSkipAnalyzers
+/BackendTests/obj/Debug/net6.0/BackendTests.csproj.CopyComplete
+/BackendTests/obj/Debug/net6.0/BackendTests.csproj.CoreCompileInputs.cache
+/BackendTests/obj/Debug/net6.0/BackendTests.csproj.FileListAbsolute.txt
+/BackendTests/obj/Debug/net6.0/BackendTests.dll
+/BackendTests/obj/Debug/net6.0/BackendTests.genruntimeconfig.cache
+/BackendTests/obj/Debug/net6.0/BackendTests.pdb

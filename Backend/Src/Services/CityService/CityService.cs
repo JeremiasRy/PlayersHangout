@@ -6,7 +6,7 @@ using Backend.Src.Repositories;
 
 public class CityService : BaseService<City, City, City, City>
 {
-    public CityService(CityRepo repo, ICityConverter converter) : base(repo, converter)
+    public CityService(IBaseRepo<City> repo, ICityConverter converter) : base(repo, converter)
     {
     }
 }

@@ -8,11 +8,11 @@ using Backend.Src.DTOs;
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
-    private readonly LocationService _locationService;
+    private readonly IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO> _locationService;
     private readonly IJwtTokenService _tokenService;
     private readonly  IClaimService _claim;
 
-    public AuthService(LocationService locationService, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
+    public AuthService(IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO> locationService, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
         _locationService = locationService;
         _userManager = userManager;

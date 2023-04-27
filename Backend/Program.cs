@@ -68,7 +68,16 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserConverter, UserConverter>();
 builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
 builder.Services.AddScoped<IGenreConverter, GenreConverter>();
+builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
+builder.Services.AddScoped<ICityConverter, CityConverter>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
+builder.Services.AddScoped<ILocationConverter, LocationConverter>();
+builder.Services
+    .AddScoped<IBaseRepo<City>, CityRepo>()
+    .AddScoped<IBaseService<City, City, City, City>, CityService>();
+builder.Services
+    .AddScoped<IBaseRepo<Location>, LocationRepo>()
+    .AddScoped<IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, LocationService>();
 builder.Services
     .AddScoped<IBaseRepo<Genre>, GenreRepo>()
     .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();

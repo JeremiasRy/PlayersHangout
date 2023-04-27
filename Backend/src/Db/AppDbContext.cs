@@ -63,6 +63,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Wanted> Wanteds { get; set; } = null!;
+    public DbSet<City> Cities { get; set; } = null!;    
 }
 public enum DbType
 {
