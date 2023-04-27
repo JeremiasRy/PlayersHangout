@@ -5,16 +5,17 @@ using Backend.Src.Models;
 
 public class UserConverter : IUserConverter
 {
+    private readonly IUserInstrumentConverter _userInstrumentConverter;
+    public UserConverter(IUserInstrumentConverter userInstrumentConverter) => _userInstrumentConverter = userInstrumentConverter;
     public UserReadDTO ConvertReadDTO(User model)
     {
         return new UserReadDTO
         {
             FirstName = model.FirstName,
             LastName = model.LastName,
-            Instruments = model.Instruments ?? null,
+            Instruments = model.Instruments.Select(instrument => _userInstrumentConverter.ConvertReadDTO(instrument)).ToList(),
             MainInstrument = model.MainInstrument ?? null,
-            City = "Finland"
-            // City = model.Location.City
+            City = model.Location.City.Name
         };
     }
 
@@ -32,7 +33,5 @@ public class UserConverter : IUserConverter
         model.LastName = update.LastName;
         model.Email = update.Email;
         model.Location = update.Location;
-        model.Instruments = update.Instruments;
-        model.Genres = update.Genres;
     }
 }

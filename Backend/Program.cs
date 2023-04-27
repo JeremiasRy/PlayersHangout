@@ -65,6 +65,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IUserInstrumentConverter, UserInstrumentConverter>();
 builder.Services.AddScoped<IUserConverter, UserConverter>();
 builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
 builder.Services.AddScoped<IGenreConverter, GenreConverter>();

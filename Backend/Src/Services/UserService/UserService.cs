@@ -85,4 +85,14 @@ public class UserService : IUserService
         }
         return _converter.ConvertReadDTO(user);
     }
+
+    public Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UserReadDTO> AddGenre(Guid userId, string genre)
+    {
+        throw new NotImplementedException();
+    }
 }
