@@ -9,6 +9,7 @@ using Npgsql;
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     private readonly IConfiguration _configuration;
+    private readonly DbType _dbType;
     static AppDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<UserInstrument.SkillLevel>();
@@ -16,15 +17,36 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration confirguration) : base(options) => _configuration = confirguration;
-
+    public AppDbContext(IConfiguration configuration, DbType dbType = DbType.Production)
+    { 
+        _dbType = dbType;
+        _configuration = configuration; 
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = _configuration.GetConnectionString("DefaultConnection");
         optionsBuilder
-            .UseNpgsql(connectionString)
+            .UseNpgsql(ConnectionString())
             .AddInterceptors(new AppDbContextSaveChangesInterceptor())
             .UseSnakeCaseNamingConvention();
+    }
+    private string ConnectionString()
+    {
+        switch (_dbType)
+        {
+            case DbType.Production:
+                {
+                    return _configuration.GetConnectionString("DefaultConnection");
+                }
+            case DbType.Test:
+                {
+                    return _configuration.GetConnectionString("TestConnection");
+                }
+            case DbType.Transactional:
+                {
+                    return _configuration.GetConnectionString("TransactionalConnection");
+                }
+        }
+        throw new Exception("No database type was provided");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,4 +63,10 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Wanted> Wanteds { get; set; } = null!;
+}
+public enum DbType
+{
+    Production,
+    Test,
+    Transactional
 }

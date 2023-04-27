@@ -8,11 +8,13 @@ using Backend.Src.DTOs;
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
+    private readonly LocationService _locationService;
     private readonly IJwtTokenService _tokenService;
     private readonly  IClaimService _claim;
 
-    public AuthService(UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
+    public AuthService(LocationService locationService, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
+        _locationService = locationService;
         _userManager = userManager;
         _tokenService = tokenService;
         _claim = claim;
@@ -43,12 +45,22 @@ public class AuthService : IAuthService
 
     public async Task<AuthReadDTO> SignUp(AuthSignUpDTO request)
     {
+        var location = await _locationService.CreateAsync(
+            new LocationCreateDTO()
+            {
+                City = request.City,
+                CityId = request.CityId,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+            });
+
         var user = new User
         {
             UserName = request.Email,
             FirstName = request.Name,
             LastName = request.LastName,
-            Email = request.Email
+            Email = request.Email,
+            LocationId = location.Id,
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)

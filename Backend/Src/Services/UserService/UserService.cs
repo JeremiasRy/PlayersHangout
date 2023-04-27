@@ -10,12 +10,10 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IJwtTokenService _jwtTokenService;
     private readonly IUserConverter _converter;
     private readonly  IClaimService _claim;
-    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService, IUserConverter converter,  IClaimService claim)
+    public UserService(UserManager<User> userManager, IUserConverter converter,  IClaimService claim)
     {
-        _jwtTokenService = jwtTokenService;
         _userManager = userManager;
         _converter = converter;
         _claim = claim;
