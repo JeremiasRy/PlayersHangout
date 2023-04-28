@@ -14,14 +14,21 @@ public class UserInstrumentConverter : IUserInstrumentConverter
         };
     }
 
-    public void CreateModel(UserInstrument model, UserInstrumentCreateDTO create)
+    public void CreateModel(UserInstrumentCreateDTO create, out UserInstrument model)
     {
-        if (create.UserId is not null && create.InstrumentId is not null)
+        
+        if (create.UserId is null || create.InstrumentId is null)
         {
-            model.UserId = (Guid)create.UserId;
-            model.InstrumentId = (Guid)create.InstrumentId;
-            model.LookingToPlay = create.LookingToPlay;
-            model.Skill = create.SkillLevel;
+            throw new Exception("Cant' create model with IDs");
+        } else
+        {
+            model = new UserInstrument()
+            {
+                UserId = (Guid)create.UserId,
+                InstrumentId = (Guid)create.InstrumentId,
+                LookingToPlay = create.LookingToPlay,
+                Skill = create.SkillLevel
+            };
         }
     }
 

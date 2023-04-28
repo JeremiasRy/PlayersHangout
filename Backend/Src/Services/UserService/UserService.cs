@@ -10,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
+    private readonly IUserInstrumentConverter _userInstrumentConverter;
     private readonly IUserConverter _converter;
     private readonly  IClaimService _claim;
-    public UserService(UserManager<User> userManager, IUserConverter converter,  IClaimService claim)
+    public UserService(IUserInstrumentConverter userInstrumentConverter, UserManager<User> userManager, IUserConverter converter,  IClaimService claim)
     {
+        _userInstrumentConverter = userInstrumentConverter;
         _userManager = userManager;
         _converter = converter;
         _claim = claim;
@@ -86,9 +88,16 @@ public class UserService : IUserService
         return _converter.ConvertReadDTO(user);
     }
 
-    public Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
+    public async Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.Users.SingleOrDefaultAsync(user => user.Id == userId) ?? throw new Exception("Incalid user ID");
+
+        var user_instrument = new UserInstrument();
+
+        _userInstrumentConverter.CreateModel(user_instrument, request);
+        user.Instruments.Add(user_instrument);
+
+        return _converter.ConvertReadDTO(user);
     }
 
     public Task<UserReadDTO> AddGenre(Guid userId, string genre)

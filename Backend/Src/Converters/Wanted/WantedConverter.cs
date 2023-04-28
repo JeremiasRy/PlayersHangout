@@ -10,18 +10,21 @@ public class WantedConverter : IWantedConverter
         return new WantedReadDTO
         {
             Description = model.Description,
-            City = model.User.Location.City.Name,
+            City = model.User.Location is not null ? model.User.Location.City.Name : "",
             Instrument = model.Instrument.Name,
             SkillLevel = model.SkillLevel,
         };
     }
 
-    public void CreateModel(Wanted model, WantedCreateDTO create)
+    public void CreateModel(WantedCreateDTO create, out Wanted model)
     {
-        model.SkillLevel = create.SkillLevel;
-        model.User = create.User;
-        model.Description = create.Description;
-        model.Genres = create.Genres;
+        model = new Wanted()
+        {
+            SkillLevel = create.SkillLevel,
+            User = create.User,
+            Description = create.Description,
+            Genres = create.Genres
+        };
     }
 
     public void UpdateModel(Wanted model, WantedUpdateDTO update)

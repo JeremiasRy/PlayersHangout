@@ -15,16 +15,19 @@ public class UserConverter : IUserConverter
             LastName = model.LastName,
             Instruments = model.Instruments.Select(instrument => _userInstrumentConverter.ConvertReadDTO(instrument)).ToList(),
             MainInstrument = model.MainInstrument ?? null,
-            City = model.Location.City.Name
+            City = model.Location is not null ? model.Location.City.Name : "",
         };
     }
 
-    public void CreateModel(User model, UserCreateDTO create)
+    public void CreateModel(UserCreateDTO create, out User model)
     {
-        model.FirstName = create.FirstName;
-        model.LastName = create.LastName;
-        model.Email = create.Email;
-        model.Location = create.Location;
+        model = new User()
+        {
+            FirstName = create.FirstName,
+            LastName = create.LastName,
+            Email = create.Email,
+            Location = create.Location
+        };
     }
 
     public void UpdateModel(User model, UserUpdateDTO update)

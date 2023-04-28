@@ -13,9 +13,12 @@ public class InstrumentConverter : IInstrumentConverter
         };
     }
 
-    public void CreateModel(Instrument model, InstrumentDTO create)
+    public void CreateModel(InstrumentDTO create, out Instrument model)
     {
-        model.Name = create.Name;
+        model = new Instrument()
+        {
+            Name = create.Name
+        };
     }
 
     public void UpdateModel(Instrument model, InstrumentDTO update)

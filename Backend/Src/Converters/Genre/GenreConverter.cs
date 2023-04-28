@@ -13,10 +13,7 @@ public class GenreConverter : IGenreConverter
         };
     }
 
-    public void CreateModel(Genre model, GenreDTO create)
-    {
-        model.Name = create.Name;
-    }
+    public void CreateModel(GenreDTO create, out Genre model) => model = new Genre() { Name = create.Name };
 
     public void UpdateModel(Genre model, GenreDTO update)
     {

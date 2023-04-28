@@ -13,11 +13,19 @@ public class LocationConverter : ILocationConverter
         };
     }
 
-    public void CreateModel(Location model, LocationCreateDTO create)
+    public void CreateModel(LocationCreateDTO create, out Location model)
     {
-        model.CityId = (Guid)create.CityId;
-        model.Latitude = create.Latitude;
-        model.Longitude = create.Longitude;
+        if (create.CityId == null)
+        {
+            throw new Exception("City Id was not initialized");
+        }
+        model = new Location()
+        {
+            CityId = (Guid)create.CityId,
+            Latitude = create.Latitude,
+            Longitude = create.Longitude
+        };
+
     }
 
     public void UpdateModel(Location model, LocationCreateDTO update)
