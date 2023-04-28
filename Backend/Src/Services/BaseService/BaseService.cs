@@ -18,14 +18,9 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
 
     public virtual async Task<TReadDTO> CreateAsync(TCreateDTO request)
     {
-        var item = new T();
-        _converter.CreateModel(item, request);
+        _converter.CreateModel(request, out T item);
         var result = await _repo.CreateOneAsync(item);
-        if (result is null)
-        {
-            throw new Exception();
-        }   
-        return _converter.ConvertReadDTO(item);
+        return result is null ? throw new Exception() : _converter.ConvertReadDTO(item);
     }
 
     public async Task<bool> DeleteAsync(Guid id)

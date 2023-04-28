@@ -10,6 +10,6 @@ public interface IUserService
     Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request);
     Task<UserReadDTO> GetUserProfile();
     Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request);
-    Task<UserReadDTO> AddGenre(Guid userId, string genre);
+    Task<UserReadDTO> AddGenre(Guid userId, GenreDTO genre);
 
 }

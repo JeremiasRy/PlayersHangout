@@ -1,6 +1,7 @@
 namespace Backend.Src.Repositories;
 
 using Backend.Src.Db;
+using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
     public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {
         var query = _context.Set<T>().AsNoTracking().Where(c => true);
-
+        
         if (request is BaseQueryOptions filter)
         {
             return await query
