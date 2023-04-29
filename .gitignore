@@ -15,3 +15,7 @@
 /BackendTests/obj/Debug/net6.0/BackendTests.dll
 /BackendTests/obj/Debug/net6.0/BackendTests.genruntimeconfig.cache
 /BackendTests/obj/Debug/net6.0/BackendTests.pdb
+/BackendTests/obj/project.nuget.cache
+/BackendTests/obj/project.assets.json
+/BackendTests/obj/BackendTests.csproj.nuget.dgspec.json
+/BackendTests/obj/Debug/net6.0/BackendTests.assets.cache
