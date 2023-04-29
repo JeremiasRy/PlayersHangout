@@ -70,7 +70,7 @@ public class AuthService : IAuthService
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
         
-        _locationConverter.CreateModel(new LocationCreateDTO() { City = null, CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        _locationConverter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
         
         location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
 

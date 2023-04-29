@@ -17,6 +17,7 @@ public abstract class BaseRepoName<T> : BaseRepo<T>
         {
             return await _context
                 .Set<T>()
+                .AsNoTracking()
                 .Where(item => item.Name == nameFilter.Name)
                 .Skip(nameFilter.Skip)
                 .Take(nameFilter.Limit)

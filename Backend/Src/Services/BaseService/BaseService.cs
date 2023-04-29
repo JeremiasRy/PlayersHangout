@@ -16,11 +16,11 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
         _converter = converter;
     }
 
-    public virtual async Task<TReadDTO> CreateAsync(TCreateDTO request)
+    public virtual async Task<TReadDTO?> CreateAsync(TCreateDTO request)
     {
         _converter.CreateModel(request, out T item);
         var result = await _repo.CreateOneAsync(item);
-        return result is null ? throw new Exception("Creating database entry failed") : _converter.ConvertReadDTO(item);
+        return result is null ? default(TReadDTO) : _converter.ConvertReadDTO(result);
     }
 
     public async Task<bool> DeleteAsync(Guid id)

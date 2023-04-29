@@ -2,9 +2,10 @@
 
 using Backend.Src.Converters;
 using Backend.Src.Models;
+using Backend.Src.DTOs;
 using Backend.Src.Repositories;
 
-public class CityService : BaseService<City, City, City, City>
+public class CityService : BaseService<City, CityDTO, CityDTO, CityDTO>
 {
     public CityService(IBaseRepo<City> repo, ICityConverter converter) : base(repo, converter)
     {

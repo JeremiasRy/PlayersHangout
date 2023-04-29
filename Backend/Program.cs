@@ -75,7 +75,7 @@ builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services.AddScoped<ILocationConverter, LocationConverter>();
 builder.Services
     .AddScoped<IBaseRepo<City>, CityRepo>()
-    .AddScoped<IBaseService<City, City, City, City>, CityService>();
+    .AddScoped<IBaseService<City, CityDTO, CityDTO, CityDTO>, CityService>();
 builder.Services
     .AddScoped<IBaseRepo<Location>, LocationRepo>()
     .AddScoped<IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, LocationService>();
