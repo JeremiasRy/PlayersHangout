@@ -8,7 +8,7 @@ public class DbTestFixture
     private static readonly object _lock = new();
     private static bool _dbInitialized;
 
-    private readonly IConfiguration _configuration = new ConfigurationBuilder()
+    public readonly IConfiguration Configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
     public DbTestFixture()
@@ -43,6 +43,7 @@ public class DbTestFixture
                         new Instrument() { Name = "Piano" },
                         new Instrument() { Name = "Saxophone" }
                         );
+
                     // Cities
                     context.AddRange(
                         new City() { Name = "Helsinki"},
@@ -54,5 +55,5 @@ public class DbTestFixture
             }
         }
     }
-    public AppDbContext CreateContext() => new AppDbContext(_configuration, DbType.Test);
+    public AppDbContext CreateContext() => new AppDbContext(Configuration, DbType.Test);
 }
