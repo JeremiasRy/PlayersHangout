@@ -1,6 +1,7 @@
-﻿namespace Backend.Src.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class City : BaseModel
+namespace Backend.Src.Models;
+
+public class City : HasName
 {
-    public string Name { get; set; } = null!;
 }

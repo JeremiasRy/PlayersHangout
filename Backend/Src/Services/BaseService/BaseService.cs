@@ -20,7 +20,7 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
     {
         _converter.CreateModel(request, out T item);
         var result = await _repo.CreateOneAsync(item);
-        return result is null ? throw new Exception() : _converter.ConvertReadDTO(item);
+        return result is null ? throw new Exception("Creating database entry failed") : _converter.ConvertReadDTO(item);
     }
 
     public async Task<bool> DeleteAsync(Guid id)

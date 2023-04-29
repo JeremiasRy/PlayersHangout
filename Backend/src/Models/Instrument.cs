@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Backend.Src.Models;
 
-public class Instrument : BaseModel
+public class Instrument : HasName
 {
-    public string Name { get; set; } = null!;
 }

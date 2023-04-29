@@ -3,7 +3,7 @@
 using Backend.Src.Db;
 using Backend.Src.Models;
 
-public class InstrumentRepo : BaseRepo<Instrument>
+public class InstrumentRepo : BaseRepoName<Instrument>
 {
     public InstrumentRepo(AppDbContext context) : base(context)
     {

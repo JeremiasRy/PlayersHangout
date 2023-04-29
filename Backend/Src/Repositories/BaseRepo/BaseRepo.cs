@@ -6,7 +6,7 @@ using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
 public abstract class BaseRepo<T> : IBaseRepo<T>
-    where T : BaseModel
+    where T : BaseModel, new()
 {
     protected readonly AppDbContext _context;
 
@@ -17,8 +17,14 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
 
     public virtual async Task<T?> CreateOneAsync(T create)
     {
-        await _context.AddAsync(create);
-        await _context.SaveChangesAsync();        
+        try
+        {
+            await _context.AddAsync(create);
+            await _context.SaveChangesAsync();
+        } catch
+        {
+            return null;
+        }
         return create;
     }
 
@@ -37,7 +43,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
     public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {
         var query = _context.Set<T>().AsNoTracking().Where(c => true);
-        
+
         if (request is BaseQueryOptions filter)
         {
             return await query
@@ -45,7 +51,10 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
                 .Take(filter.Limit)
                 .ToListAsync();
         }
-        return await query.ToListAsync();      
+        return await query
+            .Skip(0)
+            .Take(30)
+            .ToListAsync();      
     }
 
     public virtual async Task<T?> GetByIdAsync(Guid id)
@@ -62,4 +71,5 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         await _context.SaveChangesAsync();
         return update;
     }
+    bool CheckType(Type generic, Type toCheck) => generic.IsSubclassOf(toCheck);
 }

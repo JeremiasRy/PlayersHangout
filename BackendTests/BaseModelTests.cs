@@ -33,5 +33,12 @@ public class BaseModelTests : IClassFixture<DbTestFixture>
     [Fact]
     public async void CreateBaseModels()
     {
+        IBaseService<City, City, City, City> baseService = new CityService(new CityRepo(Fixture.CreateContext()), new CityConverter());
+        var result = await baseService.GetAllAsync(null);
+        Assert.True(result.Count == 2);
+        var shouldBeNull = await baseService.CreateAsync(new City() { Name = "Tampere" });
+        Assert.True(shouldBeNull is null);
+        shouldBeNull = await baseService.CreateAsync(new City() { Name = "Helsinki" });
+        Assert.True(shouldBeNull is null);
     }
 }
