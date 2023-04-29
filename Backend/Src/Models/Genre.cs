@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Backend.Src.Models;
 
-public class Genre : BaseModel
-{ 
-    public string Name { get; set; } = null!;    
+public class Genre : HasName
+{
 }   

@@ -10,12 +10,22 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IJwtTokenService _jwtTokenService;
+    private readonly IUserInstrumentConverter _userInstrumentConverter;
+    private readonly IBaseRepo<Genre> _genreRepo;
+    private readonly IGenreConverter _genreConverter;
     private readonly IUserConverter _converter;
-    private readonly  IClaimService _claim;
-    public UserService(UserManager<User> userManager, IJwtTokenService jwtTokenService, IUserConverter converter,  IClaimService claim)
+    private readonly IClaimService _claim;
+    public UserService(
+        IUserInstrumentConverter userInstrumentConverter,
+        IGenreConverter genreConverter,
+        IBaseRepo<Genre> genreRepo,
+        UserManager<User> userManager,
+        IUserConverter converter,
+        IClaimService claim)
     {
-        _jwtTokenService = jwtTokenService;
+        _genreConverter = genreConverter;
+        _genreRepo = genreRepo;
+        _userInstrumentConverter = userInstrumentConverter;
         _userManager = userManager;
         _converter = converter;
         _claim = claim;
@@ -86,5 +96,47 @@ public class UserService : IUserService
             throw new Exception("Profile is not found");
         }
         return _converter.ConvertReadDTO(user);
+    }
+
+    public async Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString()) ?? throw new Exception("Invalid user ID");
+
+        _userInstrumentConverter.CreateModel(request, out UserInstrument userInstrument);
+        user.Instruments.Add(userInstrument);
+
+        return _converter.ConvertReadDTO(user);
+    }
+
+    public async Task<UserReadDTO> AddGenre(Guid userId, GenreDTO request)
+    {
+        var genre = await _genreRepo.GetAllAsync(new NameFilter() { Name = request.Name });
+        var user = await _userManager.FindByIdAsync(userId.ToString()) ?? throw new Exception("Invalid user ID");
+
+        if (genre.Any())
+        {
+            var genreToAdd = genre.First();
+            AddGenre(genreToAdd, user);
+            return _converter.ConvertReadDTO(user);
+            
+        } else
+        {
+            _genreConverter.CreateModel(request, out Genre genreToAdd);
+            await _genreRepo.CreateOneAsync(genreToAdd);
+            AddGenre(genreToAdd, user);
+            return _converter.ConvertReadDTO(user);
+        }
+
+        static void AddGenre(Genre genreToAdd, User user)
+        {
+            if (user.Genres is null)
+            {
+                user.Genres = new List<Genre>() { genreToAdd };
+            }
+            else
+            {
+                user.Genres.Add(genreToAdd);
+            }
+        }
     }
 }

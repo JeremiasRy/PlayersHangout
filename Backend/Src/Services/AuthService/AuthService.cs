@@ -4,15 +4,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Backend.Src.Models;
 using Backend.Src.DTOs;
+using Backend.Src.Repositories;
+using Backend.Src.Converters;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
+    private readonly IBaseRepo<Location> _locationRepo;
+    private readonly IBaseRepo<City> _cityRepo;
+    private readonly ILocationConverter _locationConverter;
     private readonly IJwtTokenService _tokenService;
     private readonly  IClaimService _claim;
 
-    public AuthService(UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
+    public AuthService(ILocationConverter locationConverter, IBaseRepo<City> cityRepo, IBaseRepo<Location> locationRepo, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
+        _locationConverter = locationConverter;
+        _locationRepo = locationRepo;
+        _cityRepo = cityRepo;
         _userManager = userManager;
         _tokenService = tokenService;
         _claim = claim;
@@ -43,12 +51,36 @@ public class AuthService : IAuthService
 
     public async Task<AuthReadDTO> SignUp(AuthSignUpDTO request)
     {
+        City? city;
+        if (request.CityId is null && request.City is not null)
+        {
+            var cities = await _cityRepo.GetAllAsync(new NameFilter() { Name = request.City });
+            if (cities.Any())
+            {
+                city = cities.First();
+            } else
+            {
+                city = await _cityRepo.CreateOneAsync(new City() { Name = request.City }) ?? throw new Exception("Invalid value for city name");
+            }   
+        } else if (request.CityId is not null && request.City is null)
+        {
+            city = await _cityRepo.GetByIdAsync((Guid)request.CityId) ?? throw new Exception("Did not find requested city from DB");
+        } else
+        {
+            throw new Exception("City was not provided correctly use only cityId or city name");
+        }
+        
+        _locationConverter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        
+        location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
+
         var user = new User
         {
             UserName = request.Email,
             FirstName = request.Name,
             LastName = request.LastName,
-            Email = request.Email
+            Email = request.Email,
+            LocationId = location.Id,
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)

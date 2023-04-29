@@ -14,13 +14,13 @@ public class UserController : ApiControllerBase
     
     public UserController(IUserService service) => _service = service;
             
-    [HttpGet]
+    [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {
         return Ok(await _service.GetUserProfile());
     }
     [HttpGet]
-    public async Task<ICollection<UserReadDTO>> GetAll()
+    public async Task<ICollection<UserReadDTO>> GetAll([FromQuery] IFilterOptions? _)
     {
         var filter = Request.QueryString.ParseParams<MatchDTO>();
         if (filter == null)

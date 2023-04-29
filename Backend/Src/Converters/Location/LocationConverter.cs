@@ -13,16 +13,24 @@ public class LocationConverter : ILocationConverter
         };
     }
 
-    public void CreateModel(Location model, LocationCreateDTO create)
+    public void CreateModel(LocationCreateDTO create, out Location model)
     {
-        model.CityId = create.CityId;
-        model.Latitude = create.Latitude;
-        model.Longitude = create.Longitude;
+        if (create.CityId == null)
+        {
+            throw new Exception("City Id was not initialized");
+        }
+        model = new Location()
+        {
+            CityId = (Guid)create.CityId,
+            Latitude = create.Latitude,
+            Longitude = create.Longitude
+        };
+
     }
 
     public void UpdateModel(Location model, LocationCreateDTO update)
     {
-        model.CityId = update.CityId;
+        model.CityId = (Guid)update.CityId;
         model.Latitude = update.Latitude;
         model.Longitude = update.Longitude;
     }

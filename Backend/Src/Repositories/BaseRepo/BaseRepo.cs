@@ -1,11 +1,12 @@
 namespace Backend.Src.Repositories;
 
 using Backend.Src.Db;
+using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
 public abstract class BaseRepo<T> : IBaseRepo<T>
-    where T : BaseModel
+    where T : BaseModel, new()
 {
     protected readonly AppDbContext _context;
 
@@ -16,8 +17,8 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
 
     public virtual async Task<T?> CreateOneAsync(T create)
     {
-        await _context.AddAsync(create);
-        await _context.SaveChangesAsync();        
+        _context.Add(create);
+        await _context.SaveChangesAsync();
         return create;
     }
 
@@ -44,7 +45,10 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
                 .Take(filter.Limit)
                 .ToListAsync();
         }
-        return await query.ToListAsync();      
+        return await query
+            .Skip(0)
+            .Take(30)
+            .ToListAsync();      
     }
 
     public virtual async Task<T?> GetByIdAsync(Guid id)
@@ -61,4 +65,5 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         await _context.SaveChangesAsync();
         return update;
     }
+    bool CheckType(Type generic, Type toCheck) => generic.IsSubclassOf(toCheck);
 }
