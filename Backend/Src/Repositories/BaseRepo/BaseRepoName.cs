@@ -1,7 +1,9 @@
 ﻿using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
+using Castle.DynamicProxy.Contributors;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace Backend.Src.Repositories;
 
@@ -10,6 +12,18 @@ public abstract class BaseRepoName<T> : BaseRepo<T>
 {
     protected BaseRepoName(AppDbContext context) : base(context)
     {
+    }
+    public async override Task<T?> CreateOneAsync(T create)
+    {
+        var check = await _context
+            .Set<T>()
+            .AsNoTracking()
+            .SingleOrDefaultAsync(item => item.Name == create.Name);
+        if (check != null)
+        {
+            return null;
+        }
+        return await base.CreateOneAsync(create);
     }
     public async override Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {

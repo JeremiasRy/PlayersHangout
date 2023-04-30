@@ -25,25 +25,41 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
     public async void CreateBaseRepos()
     {
         using var context = Fixture.CreateContext();
+        
+        // city
+        
         CityRepo cityRepo = new(context);
-        var result = await cityRepo.CreateOneAsync(new City() { Name = "Espoo" });
-        Assert.True(result?.Name == "Espoo");
-        try
-        {
-            result = await cityRepo.CreateOneAsync(new City() { Name = "Tampere" });
-            Assert.True(false, "Database creation did not fail");
-        }
-        catch
-        {
-            Assert.True(true);
-        }
+        var cityResult = await cityRepo.CreateOneAsync(new City() { Name = "Espoo" });
+        Assert.True(cityResult?.Name == "Espoo");
+        cityResult = await cityRepo.CreateOneAsync(new City() { Name = "Tampere" });
+        Assert.True(cityResult is null);
         var total = await cityRepo.GetAllAsync(null);
         Assert.True(total.Count() == 3);
+
+        // instrument
+
+        InstrumentRepo instrumentRepo = new(context);
+        var instrumentResult = await instrumentRepo.CreateOneAsync(new Instrument() { Name = "Trombone" });
+        Assert.True(instrumentResult?.Name == "Trombone");
+        instrumentResult = await instrumentRepo.CreateOneAsync(new Instrument() { Name = "Guitar" });
+        Assert.True(instrumentResult is null);
+        var instrumentTotal = await instrumentRepo.GetAllAsync(null);
+        Assert.True(instrumentTotal.Count() == 9);
+
+        // genre
+
+        GenreRepo genreRepo = new(context);
+        var genreResult = await genreRepo.CreateOneAsync(new Genre() { Name = "Jazz" });
+        Assert.True(genreResult?.Name == "Jazz");
+        genreResult = await genreRepo.CreateOneAsync(new Genre() { Name = "Metal" });
+        Assert.True(genreResult is null);
+        var genreTotal = await genreRepo.GetAllAsync(null);
+        Assert.True(genreTotal.Count() == 6);
     }
     [Fact]
     public async void GetAllBaseRepos()
     {
-        var context = Fixture.CreateContext();
+        using var context = Fixture.CreateContext();
         CityRepo cityRepo = new(context);
         var result = await cityRepo.GetAllAsync(new BaseQueryOptions() { Limit = 1 });
         Assert.True(result.Count() == 1);
