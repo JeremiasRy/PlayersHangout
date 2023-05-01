@@ -1,9 +1,9 @@
 ﻿namespace Backend.Src.Services;
 
-using Backend.Src.Repositories;
+using Backend.Src.Converters;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Converters;
+using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +44,7 @@ public class UserService : IUserService
         if (filter is MatchDTO matchDTO)
         {
             var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City);
-            if (!query.Any()) 
+            if (!query.Any())
             {
                 throw new Exception("No users in this location!");
             }
@@ -74,7 +74,7 @@ public class UserService : IUserService
     public async Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password)) 
+        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
             return null;
         }
@@ -88,7 +88,7 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<UserReadDTO> GetUserProfile() 
+    public async Task<UserReadDTO> GetUserProfile()
     {
         var user = await _userManager.FindByIdAsync(_claim.GetUserIDFromToken());
         if (user is null)
@@ -118,8 +118,9 @@ public class UserService : IUserService
             var genreToAdd = genre.First();
             AddGenre(genreToAdd, user);
             return _converter.ConvertReadDTO(user);
-            
-        } else
+
+        }
+        else
         {
             _genreConverter.CreateModel(request, out Genre genreToAdd);
             await _genreRepo.CreateOneAsync(genreToAdd);

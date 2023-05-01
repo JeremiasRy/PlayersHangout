@@ -1,11 +1,11 @@
 namespace Backend.Src.Services;
 
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Backend.Src.Models;
-using Backend.Src.DTOs;
-using Backend.Src.Repositories;
 using Backend.Src.Converters;
+using Backend.Src.DTOs;
+using Backend.Src.Models;
+using Backend.Src.Repositories;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 public class AuthService : IAuthService
 {
@@ -14,7 +14,7 @@ public class AuthService : IAuthService
     private readonly IBaseRepo<City> _cityRepo;
     private readonly ILocationConverter _locationConverter;
     private readonly IJwtTokenService _tokenService;
-    private readonly  IClaimService _claim;
+    private readonly IClaimService _claim;
 
     public AuthService(ILocationConverter locationConverter, IBaseRepo<City> cityRepo, IBaseRepo<Location> locationRepo, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
@@ -28,16 +28,16 @@ public class AuthService : IAuthService
 
     public async Task<AuthReadDTO?> Login(AuthSignInDTO request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);        
-        if (user is null) 
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user is null)
         {
             throw new Exception("The Email is not valid");
         }
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
-             throw new Exception("Wrong Password");
-        }        
+            throw new Exception("Wrong Password");
+        }
 
         if (user.ActiveSession)
         {
@@ -58,20 +58,23 @@ public class AuthService : IAuthService
             if (cities.Any())
             {
                 city = cities.First();
-            } else
+            }
+            else
             {
                 city = await _cityRepo.CreateOneAsync(new City() { Name = request.City }) ?? throw new Exception("Invalid value for city name");
-            }   
-        } else if (request.CityId is not null && request.City is null)
+            }
+        }
+        else if (request.CityId is not null && request.City is null)
         {
             city = await _cityRepo.GetByIdAsync((Guid)request.CityId) ?? throw new Exception("Did not find requested city from DB");
-        } else
+        }
+        else
         {
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
-        
+
         _locationConverter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
-        
+
         location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
 
         var user = new User
@@ -84,7 +87,7 @@ public class AuthService : IAuthService
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
-        {   
+        {
             throw new Exception(result.Errors.ToList()[0].Description ?? "Error Registering User");
         }
 
@@ -100,7 +103,7 @@ public class AuthService : IAuthService
         {
             throw new Exception("User is not found");
         }
-        
+
         user.ActiveSession = false;
         await _userManager.UpdateAsync(user);
         return true;

@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Security.Claims;
-using Backend.Src.Db;
-using Backend.Src.Models;
-using Backend.Src.DTOs;
 using Backend.Src.Converters;
+using Backend.Src.Db;
+using Backend.Src.DTOs;
+using Backend.Src.Models;
 using Backend.Src.Repositories;
 using Backend.Src.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,7 +84,7 @@ builder.Services
     .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();
 builder.Services
     .AddScoped<IBaseRepo<Instrument>, InstrumentRepo>()
-    .AddScoped<IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO >, InstrumentService>();
+    .AddScoped<IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>, InstrumentService>();
 builder.Services
     .AddScoped<IBaseRepo<Wanted>, WantedRepo>()
     .AddScoped<IBaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, WantedService>();
@@ -92,8 +92,8 @@ builder.Services
 builder.Services.AddTransient<ClaimsPrincipal>(s =>
     s.GetService<IHttpContextAccessor>().HttpContext.User);
 
-builder.Services.AddScoped<IClaimService, ClaimService>();    
-builder.Services.AddScoped<IAuthService, AuthService>(); 
+builder.Services.AddScoped<IClaimService, ClaimService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 

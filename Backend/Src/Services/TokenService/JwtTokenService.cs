@@ -18,7 +18,7 @@ public class JwtTokenService : IJwtTokenService
         _configuration = configuration;
         _userManager = userManager;
     }
-    
+
     public async Task<AuthReadDTO> GenerateToken(User user)
     {
         List<Claim> claims = new()
@@ -51,10 +51,10 @@ public class JwtTokenService : IJwtTokenService
         var writer = new JwtSecurityTokenHandler();
 
         return new AuthReadDTO()
-        { 
-            Roles = roles.ToArray(), 
-            Token = writer.WriteToken(token), 
-            Expiration = expiration  
+        {
+            Roles = roles.ToArray(),
+            Token = writer.WriteToken(token),
+            Expiration = expiration
         };
     }
 }

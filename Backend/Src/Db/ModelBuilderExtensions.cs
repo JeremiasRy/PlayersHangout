@@ -25,7 +25,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<User>()
             .HasIndex(user => new { user.FirstName, user.LastName })
             .IsUnique();
-        
+
         modelBuilder.Entity<User>()
             .HasOne(user => user.Location)
             .WithOne();
@@ -87,7 +87,7 @@ public static class ModelBuilderExtensions
     {
         modelBuilder.Entity<Genre>()
             .HasIndex(genre => genre.Name)
-            .IsUnique();                     
+            .IsUnique();
     }
     public static void AddCitiesConfig(this ModelBuilder modelBuilder)
     {

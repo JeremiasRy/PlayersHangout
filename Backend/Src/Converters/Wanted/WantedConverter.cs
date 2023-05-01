@@ -1,7 +1,7 @@
 namespace Backend.Src.Converters;
 
-using Backend.Src.Models;
 using Backend.Src.DTOs;
+using Backend.Src.Models;
 
 public class WantedConverter : IWantedConverter
 {

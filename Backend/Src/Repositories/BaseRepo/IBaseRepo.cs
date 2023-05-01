@@ -6,7 +6,7 @@ public interface IBaseRepo<T>
     Task<T?> GetByIdAsync(Guid id);
     Task<T> UpdateOneAsync(T update);
     Task<bool> DeleteOneAsync(Guid id);
-    Task<T?> CreateOneAsync (T create);
+    Task<T?> CreateOneAsync(T create);
 }
 
 public interface IFilterOptions

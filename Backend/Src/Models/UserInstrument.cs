@@ -5,7 +5,7 @@ public class UserInstrument
     public User User { get; set; } = null!;
     public Guid UserId { get; set; }
     public Instrument Instrument { get; set; } = null!;
-    public Guid InstrumentId { get; set; } 
+    public Guid InstrumentId { get; set; }
     public bool LookingToPlay { get; set; }
     public SkillLevel Skill { get; set; }
     public enum SkillLevel

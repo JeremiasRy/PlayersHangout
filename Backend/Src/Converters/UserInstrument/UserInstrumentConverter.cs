@@ -16,11 +16,12 @@ public class UserInstrumentConverter : IUserInstrumentConverter
 
     public void CreateModel(UserInstrumentCreateDTO create, out UserInstrument model)
     {
-        
+
         if (create.UserId is null || create.InstrumentId is null)
         {
             throw new Exception("Cant' create model with IDs");
-        } else
+        }
+        else
         {
             model = new UserInstrument()
             {

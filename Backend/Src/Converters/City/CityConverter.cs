@@ -1,11 +1,11 @@
 ﻿namespace Backend.Src.Converters;
 
-using Backend.Src.Models;
 using Backend.Src.DTOs;
+using Backend.Src.Models;
 
 public class CityConverter : ICityConverter
 {
-    public CityDTO ConvertReadDTO(City model) => new CityDTO() { Name = model.Name};
+    public CityDTO ConvertReadDTO(City model) => new CityDTO() { Name = model.Name };
 
     public void CreateModel(CityDTO create, out City model)
     {

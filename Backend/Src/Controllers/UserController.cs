@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;
-    
+
     public UserController(IUserService service) => _service = service;
-            
+
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {

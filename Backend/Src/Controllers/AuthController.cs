@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthController : ApiControllerBase
 {
     private readonly IAuthService _service;
-    
+
     public AuthController(IAuthService service) => _service = service;
 
     [AllowAnonymous]
@@ -25,7 +25,7 @@ public class AuthController : ApiControllerBase
     {
         return Ok(await _service.SignUp(request));
     }
-            
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

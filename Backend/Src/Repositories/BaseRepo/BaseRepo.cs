@@ -1,7 +1,6 @@
 namespace Backend.Src.Repositories;
 
 using Backend.Src.Db;
-using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +30,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
             await _context.SaveChangesAsync();
             return true;
         }
-        return false;        
+        return false;
     }
 
     public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
@@ -48,11 +47,11 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         return await query
             .Skip(0)
             .Take(30)
-            .ToListAsync();      
+            .ToListAsync();
     }
 
     public virtual async Task<T?> GetByIdAsync(Guid id)
-    {        
+    {
         return await _context
             .Set<T>()
             .AsNoTracking()
@@ -60,7 +59,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
     }
 
     public async Task<T> UpdateOneAsync(T update)
-    {        
+    {
         _context.Update<T>(update);
         await _context.SaveChangesAsync();
         return update;
