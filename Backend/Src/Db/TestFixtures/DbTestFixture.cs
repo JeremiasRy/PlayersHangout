@@ -22,7 +22,7 @@ public class DbTestFixture
                 {
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
-                    
+
                     // Genres
                     context.AddRange(
                         new Genre() { Name = "Metal" },
@@ -46,8 +46,8 @@ public class DbTestFixture
 
                     // Cities
                     context.AddRange(
-                        new City() { Name = "Helsinki"},
-                        new City() { Name = "Tampere"}
+                        new City() { Name = "Helsinki" },
+                        new City() { Name = "Tampere" }
                         );
                     context.SaveChanges();
                 }
@@ -55,5 +55,5 @@ public class DbTestFixture
             }
         }
     }
-    public AppDbContext CreateContext() => new AppDbContext(Configuration, DbType.Test);
+    public AppDbContext CreateContext() => new(Configuration, DbType.Test);
 }

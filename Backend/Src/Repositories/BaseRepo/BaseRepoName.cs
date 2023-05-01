@@ -1,9 +1,7 @@
 ﻿using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Castle.DynamicProxy.Contributors;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace Backend.Src.Repositories;
 

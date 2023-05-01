@@ -19,7 +19,7 @@ public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiC
     [HttpPost]
     public async Task<ActionResult<TReadDto?>> CreateOne(TCreateDto create)
     {
-        return await _service.CreateAsync(create);        
+        return await _service.CreateAsync(create);
     }
 
     [HttpGet("{id:int}")]
@@ -31,12 +31,12 @@ public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiC
     [HttpDelete("{id:int}")]
     public async Task<bool> Delete(Guid id)
     {
-        return await _service.DeleteAsync(id);        
+        return await _service.DeleteAsync(id);
     }
 
     [HttpPut("{id:int}")]
     public async Task<TReadDto> Update(Guid id, TUpdateDto update)
     {
-        return await _service.UpdateAsync(id, update);        
+        return await _service.UpdateAsync(id, update);
     }
 }

@@ -1,11 +1,11 @@
 namespace Backend.Src.Services;
 
 using Backend.Src.Converters;
-using Backend.Src.Repositories;
 using Backend.Src.Models;
+using Backend.Src.Repositories;
 
-public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T,TReadDTO, TCreateDTO, TUpdateDTO>
-    where T : BaseModel, new()    
+public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T, TReadDTO, TCreateDTO, TUpdateDTO>
+    where T : BaseModel, new()
 {
     protected readonly IBaseRepo<T> _repo;
     protected readonly IConverter<T, TReadDTO, TCreateDTO, TUpdateDTO> _converter;
@@ -25,12 +25,12 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        return await _repo.DeleteOneAsync(id);        
+        return await _repo.DeleteOneAsync(id);
     }
 
     public virtual async Task<ICollection<TReadDTO>> GetAllAsync(IFilterOptions? filter)
     {
-        var items = await _repo.GetAllAsync(filter);        
+        var items = await _repo.GetAllAsync(filter);
         return items.Select(i => _converter.ConvertReadDTO(i)).ToList();
     }
 
@@ -39,7 +39,7 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
         var entity = await _repo.GetByIdAsync(id);
         if (entity is null)
         {
-           throw new ArgumentException("Did not find item with id");
+            throw new ArgumentException("Did not find item with id");
         }
         return _converter.ConvertReadDTO(entity);
     }
@@ -47,7 +47,7 @@ public abstract class BaseService<T,TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSer
     public async Task<TReadDTO> UpdateAsync(Guid id, TUpdateDTO request)
     {
         var entity = await _repo.GetByIdAsync(id);
-        if(entity is null)
+        if (entity is null)
         {
             throw new ArgumentException("Did not find item with id");
         }

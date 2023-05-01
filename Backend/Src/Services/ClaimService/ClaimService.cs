@@ -4,11 +4,11 @@ using System.Security.Claims;
 
 public class ClaimService : IClaimService
 {
-    readonly private ClaimsPrincipal User;    
+    readonly private ClaimsPrincipal User;
 
     public ClaimService(ClaimsPrincipal user)
     {
-        User = user;        
+        User = user;
     }
 
     public string GetUserIDFromToken()

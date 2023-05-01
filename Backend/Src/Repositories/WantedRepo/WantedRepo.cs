@@ -1,8 +1,8 @@
 namespace Backend.Src.Repositories;
 
 using Backend.Src.Db;
-using Backend.Src.Models;
 using Backend.Src.DTOs;
+using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;

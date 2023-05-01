@@ -13,6 +13,6 @@ public class WantedController : BaseController<Wanted, WantedReadDTO, WantedCrea
     public async override Task<ICollection<WantedReadDTO>> GetAll()
     {
         var filter = Request.QueryString.ParseParams<MatchDTO>();
-        return await _service.GetAllAsync(filter);    
+        return await _service.GetAllAsync(filter);
     }
 }
