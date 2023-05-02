@@ -60,9 +60,8 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
 
     public async Task<T> UpdateOneAsync(T update)
     {
-        _context.Update<T>(update);
+        _context.Update(update);
         await _context.SaveChangesAsync();
         return update;
     }
-    bool CheckType(Type generic, Type toCheck) => generic.IsSubclassOf(toCheck);
 }
