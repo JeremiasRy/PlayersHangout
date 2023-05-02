@@ -1,9 +1,11 @@
 namespace BackendTests;
 
+using Backend.Src.Db;
 using Backend.Src.Db.TestFixtures;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
+using System.Reflection;
 
 public class BaseRepoTests : IClassFixture<DbTestFixture>
 {
@@ -26,73 +28,77 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
         using var context = Fixture.CreateContext();
         context.Database.BeginTransaction();
 
-        CityRepo cityRepo = new(context);
-        var result = await cityRepo.GetAllAsync(new BaseQueryOptions() { Limit = 1 });
-        Assert.True(result.Count() == 1);
-        result = await cityRepo.GetAllAsync(new NameFilter() { Name = "Espoo" });
-        Assert.True(!result.Any());
-        result = await cityRepo.GetAllAsync(new NameFilter() { Name = "Tampere" });
-        Assert.True(result.First().Name == "Tampere");
-        result = await cityRepo.GetAllAsync(new NameFilter() { Name = "hsfdpoer" });
-        Assert.True(!result.Any());
+        await TestRun<Genre, GenreRepo>(new GenreRepo(context));
+        await TestRun<Instrument, InstrumentRepo>(new InstrumentRepo(context));
+        await TestRun<City, CityRepo>(new CityRepo(context));
 
-        InstrumentRepo instrumentRepo = new(context);
-        var instrumentResult = await instrumentRepo.GetAllAsync(new BaseQueryOptions() { Skip = 2, Limit = 1 });
-        Assert.True(instrumentResult?.Count() == 1);
-        instrumentResult = await instrumentRepo.GetAllAsync(new NameFilter() { Name = "Piano" });
-        Assert.True(instrumentResult?.First().Name == "Piano");
-        instrumentResult = await instrumentRepo.GetAllAsync(new NameFilter() { Name = "NotAnInstrument" });
-        Assert.True(!instrumentResult.Any());
+        static async Task TestRun<TModel, TRepo> (TRepo repo) where TModel : HasName, new() where TRepo : BaseRepoName<TModel>
+        {
+            IEnumerable<TModel> result = await repo.GetAllAsync(null);
 
-        GenreRepo genreRepo = new(context);
+            for (int i = 0; i < result.Count(); i++)
+            {
+                IEnumerable<TModel> searchResult = await repo.GetAllAsync(new NameFilter() { Name = result.ElementAt(i).Name });
+                Assert.Equal(result.ElementAt(i).Name, searchResult.First().Name);
+            }
+            int originalLength = result.Count();
+            result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = 1});
+            Assert.True(result.Count() == 1);
 
-        var genreResult = await genreRepo.GetAllAsync(new BaseQueryOptions() { Skip = 3, Limit = 2 });
-        Assert.True(genreResult.Count() == 2);
-        genreResult = await genreRepo.GetAllAsync(new NameFilter() { Name = "Pop" });
-        Assert.True(genreResult.First().Name == "Pop");
-        genreResult = await genreRepo.GetAllAsync(new NameFilter() { Name = "asdasd" });
-        Assert.True(!genreResult.Any());
+            result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = originalLength - 1 });
+            Assert.Equal(originalLength - 1, result.Count());
+
+            result = await repo.GetAllAsync(null);
+            TModel secondResult = result.ElementAt(1);
+            result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = 1, Skip = 1 });
+            Assert.Equal(secondResult.Name, result.First().Name);
+            Assert.Equal(secondResult.Id, result.First().Id);
+        }
+    }
+    [Fact]
+    public async void GetByIdBaseRepos()
+    {
+        using var context = Fixture.CreateContext();
+        context.Database.BeginTransaction();
+
+        await TestRun<Genre, GenreRepo>(new GenreRepo(context));
+        await TestRun<Instrument, InstrumentRepo>(new InstrumentRepo(context));
+        await TestRun<City, CityRepo>(new CityRepo(context));
+
+        async static Task TestRun<TModel, TRepo>(TRepo repo) where TModel : HasName, new() where TRepo : BaseRepo<TModel> 
+        {
+            IEnumerable<TModel> allItems = await repo.GetAllAsync(null);
+            for (int i = 0; i < allItems.Count(); i++)
+            {
+                TModel? item = await repo.GetByIdAsync(allItems.ElementAt(i).Id);
+                Assert.NotNull(item);
+                foreach (var property in typeof(Genre).GetProperties())
+                {
+                    Assert.Equal(property.GetValue(allItems.ElementAt(i)), property.GetValue(item));
+                }
+            }
+        }
     }
     [Fact]
     public async void CreateBaseRepos()
     {
         using var context = Fixture.CreateContext();
         context.Database.BeginTransaction();
-        // city
 
-        CityRepo cityRepo = new(context);
-        var cityResult = await cityRepo.CreateOneAsync(new City() { Name = "Espoo" });
-        context.ChangeTracker.Clear();
-        Assert.True(cityResult?.Name == "Espoo");
+        await TestRun<Genre, GenreRepo> (new GenreRepo(context));
+        await TestRun<Instrument, InstrumentRepo> (new InstrumentRepo(context));
+        await TestRun<City, CityRepo>(new CityRepo(context));
 
-        cityResult = await cityRepo.CreateOneAsync(new City() { Name = "Tampere" });
-        context.ChangeTracker.Clear();
-        Assert.True(cityResult is null);
-        var total = await cityRepo.GetAllAsync(null);
-        Assert.True(total.Count() == 3);
+        static async Task TestRun<TModel, TRepo>(TRepo repo) where TModel : HasName, new() where TRepo : BaseRepoName<TModel>
+        {
+            TModel? createItem = await repo.CreateOneAsync(new TModel() { Name = "Test" });
+            Assert.NotNull(createItem);
+            TModel? createInvalidItem = await repo.CreateOneAsync(new TModel() { Name = "Test" });
+            Assert.Null(createInvalidItem);
 
-        // instrument
-
-        InstrumentRepo instrumentRepo = new(context);
-        var instrumentResult = await instrumentRepo.CreateOneAsync(new Instrument() { Name = "Trombone" });
-        context.ChangeTracker.Clear();
-        Assert.True(instrumentResult?.Name == "Trombone");
-        instrumentResult = await instrumentRepo.CreateOneAsync(new Instrument() { Name = "Guitar" });
-        context.ChangeTracker.Clear();
-        Assert.True(instrumentResult is null);
-        var instrumentTotal = await instrumentRepo.GetAllAsync(null);
-        Assert.True(instrumentTotal.Count() == 9);
-
-        // genre
-
-        GenreRepo genreRepo = new(context);
-        var genreResult = await genreRepo.CreateOneAsync(new Genre() { Name = "Jazz" });
-        context.ChangeTracker.Clear();
-        Assert.True(genreResult?.Name == "Jazz");
-        genreResult = await genreRepo.CreateOneAsync(new Genre() { Name = "Metal" });
-        context.ChangeTracker.Clear();
-        Assert.True(genreResult is null);
-        var genreTotal = await genreRepo.GetAllAsync(null);
-        Assert.True(genreTotal.Count() == 6);
+            TModel? result = await repo.GetByIdAsync(createItem.Id);
+            Assert.NotNull(result);
+            Assert.Equal("Test", result.Name);
+        }
     }
 }
