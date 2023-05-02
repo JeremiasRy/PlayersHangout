@@ -11,18 +11,6 @@ public abstract class BaseRepoName<T> : BaseRepo<T>
     protected BaseRepoName(AppDbContext context) : base(context)
     {
     }
-    public async override Task<T?> CreateOneAsync(T create)
-    {
-        var check = await _context
-            .Set<T>()
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.Name == create.Name);
-        if (check != null)
-        {
-            return null;
-        }
-        return await base.CreateOneAsync(create);
-    }
     public async override Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {
         if (request is NameFilter nameFilter)

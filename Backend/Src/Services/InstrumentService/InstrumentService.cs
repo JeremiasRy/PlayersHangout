@@ -5,9 +5,9 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class InstrumentService : BaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>
+public class InstrumentService : BaseServiceName<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>
 {
-    public InstrumentService(IBaseRepo<Instrument> repo, IInstrumentConverter converter) : base(repo, converter)
+    public InstrumentService(BaseRepoName<Instrument> repo, IInstrumentConverter converter) : base(repo, converter)
     {
     }
 }

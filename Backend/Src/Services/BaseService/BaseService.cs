@@ -20,7 +20,7 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
     {
         _converter.CreateModel(request, out T item);
         var result = await _repo.CreateOneAsync(item);
-        return result is null ? default(TReadDTO) : _converter.ConvertReadDTO(result);
+        return _converter.ConvertReadDTO(result);
     }
 
     public async Task<bool> DeleteAsync(Guid id)

@@ -5,9 +5,9 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class CityService : BaseService<City, CityDTO, CityDTO, CityDTO>
+public class CityService : BaseServiceName<City, CityDTO, CityDTO, CityDTO>
 {
-    public CityService(IBaseRepo<City> repo, ICityConverter converter) : base(repo, converter)
+    public CityService(BaseRepoName<City> repo, ICityConverter converter) : base(repo, converter)
     {
     }
 }

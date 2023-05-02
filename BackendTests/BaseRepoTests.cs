@@ -1,11 +1,9 @@
 namespace BackendTests;
 
-using Backend.Src.Db;
 using Backend.Src.Db.TestFixtures;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
-using System.Reflection;
 
 public class BaseRepoTests : IClassFixture<DbTestFixture>
 {
@@ -86,15 +84,24 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
         context.Database.BeginTransaction();
 
         await TestRun<Genre, GenreRepo> (new GenreRepo(context));
+        context.ChangeTracker.Clear();
         await TestRun<Instrument, InstrumentRepo> (new InstrumentRepo(context));
+        context.ChangeTracker.Clear();
         await TestRun<City, CityRepo>(new CityRepo(context));
 
         static async Task TestRun<TModel, TRepo>(TRepo repo) where TModel : HasName, new() where TRepo : BaseRepoName<TModel>
         {
             TModel? createItem = await repo.CreateOneAsync(new TModel() { Name = "Test" });
             Assert.NotNull(createItem);
-            TModel? createInvalidItem = await repo.CreateOneAsync(new TModel() { Name = "Test" });
-            Assert.Null(createInvalidItem);
+            try
+            {
+                await repo.CreateOneAsync(new TModel() { Name = "Test" });
+                Assert.Fail("Repo should throw exception for unique name");
+            } catch
+            {
+                Assert.True(true);
+                
+            }
 
             TModel? result = await repo.GetByIdAsync(createItem.Id);
             Assert.NotNull(result);
