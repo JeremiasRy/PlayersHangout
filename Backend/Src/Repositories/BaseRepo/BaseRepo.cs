@@ -14,7 +14,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         _context = context;
     }
 
-    public virtual async Task<T?> CreateOneAsync(T create)
+    public virtual async Task<T> CreateOneAsync(T create)
     {
         _context.Add(create);
         await _context.SaveChangesAsync();
