@@ -48,7 +48,7 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
 
             result = await repo.GetAllAsync(null);
             TModel secondResult = result.ElementAt(1);
-            result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = 1, Skip = 1 });
+            result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = 1, Skip = 1});
             Assert.Equal(secondResult.Name, result.First().Name);
             Assert.Equal(secondResult.Id, result.First().Id);
         }
@@ -100,7 +100,6 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
             } catch
             {
                 Assert.True(true);
-                
             }
 
             TModel? result = await repo.GetByIdAsync(createItem.Id);

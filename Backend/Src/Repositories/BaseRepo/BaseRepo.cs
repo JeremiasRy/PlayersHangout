@@ -21,16 +21,10 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         return create;
     }
 
-    public async Task<bool> DeleteOneAsync(Guid id)
+    public async Task DeleteOneAsync(T item)
     {
-        var item = _context.Set<T>().SingleOrDefault(model => model.Id == id);
-        if (item != null)
-        {
-            _context.Remove(item);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        return false;
+         _context.Remove(item);
+         await _context.SaveChangesAsync();
     }
 
     public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)

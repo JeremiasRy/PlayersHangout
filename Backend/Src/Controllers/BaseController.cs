@@ -19,13 +19,20 @@ public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiC
     [HttpPost]
     public async Task<ActionResult<TReadDto?>> CreateOne(TCreateDto create)
     {
-        return await _service.CreateAsync(create);
+        try
+        {
+            return await _service.CreateAsync(create);
+        } catch
+        {
+            return BadRequest("Can't create!");
+        }
+        
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<TReadDto?>> GetById([FromRoute] Guid id)
+    public async Task<TReadDto?> GetById([FromRoute] Guid id)
     {
-        return Ok(await _service.GetByIdAsync(id));
+        return await _service.GetByIdAsync(id);
     }
 
     [HttpDelete("{id:int}")]

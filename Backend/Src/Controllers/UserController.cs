@@ -20,7 +20,7 @@ public class UserController : ApiControllerBase
         return Ok(await _service.GetUserProfile());
     }
     [HttpGet]
-    public async Task<ICollection<UserReadDTO>> GetAll([FromQuery] IFilterOptions? _)
+    public async Task<ICollection<UserReadDTO>> GetAll()
     {
         var filter = Request.QueryString.ParseParams<MatchDTO>();
         if (filter == null)

@@ -11,5 +11,4 @@ public interface IUserService
     Task<UserReadDTO> GetUserProfile();
     Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request);
     Task<UserReadDTO> AddGenre(Guid userId, GenreDTO genre);
-
 }
