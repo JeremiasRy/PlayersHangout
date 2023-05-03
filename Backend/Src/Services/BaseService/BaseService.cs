@@ -25,7 +25,8 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        return await _repo.DeleteOneAsync(id);
+        var result = await _repo.GetByIdAsync(id);
+        return result is null ? false : await _repo.DeleteOneAsync(result);
     }
 
     public virtual async Task<ICollection<TReadDTO>> GetAllAsync(IFilterOptions? filter)
@@ -34,14 +35,10 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
         return items.Select(i => _converter.ConvertReadDTO(i)).ToList();
     }
 
-    public async Task<TReadDTO> GetByIdAsync(Guid id)
+    public async Task<TReadDTO?> GetByIdAsync(Guid id)
     {
         var entity = await _repo.GetByIdAsync(id);
-        if (entity is null)
-        {
-            throw new ArgumentException("Did not find item with id");
-        }
-        return _converter.ConvertReadDTO(entity);
+        return entity is null ? default : _converter.ConvertReadDTO(entity);
     }
 
     public async Task<TReadDTO> UpdateAsync(Guid id, TUpdateDTO request)

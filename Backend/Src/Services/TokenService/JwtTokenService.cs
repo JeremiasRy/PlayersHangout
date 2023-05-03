@@ -57,4 +57,9 @@ public class JwtTokenService : IJwtTokenService
             Expiration = expiration
         };
     }
+
+    public Guid ReadUserIdFromToken(string token)
+    {
+        throw new NotImplementedException();
+    }
 }
