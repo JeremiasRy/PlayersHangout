@@ -1,34 +1,32 @@
-﻿namespace Backend.Src.Services;
-
-using Backend.Src.Converters;
+﻿using Backend.Src.Converters;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+namespace Backend.Src.Services;
+
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
     private readonly IUserInstrumentConverter _userInstrumentConverter;
-    private readonly IBaseRepo<Genre> _genreRepo;
+    private readonly IGenreRepo _genreRepo;
     private readonly IGenreConverter _genreConverter;
-    private readonly IUserConverter _converter;
-    private readonly IClaimService _claim;
+    private readonly IUserConverter _converter;    
+
     public UserService(
         IUserInstrumentConverter userInstrumentConverter,
         IGenreConverter genreConverter,
-        IBaseRepo<Genre> genreRepo,
+        IGenreRepo genreRepo,
         UserManager<User> userManager,
-        IUserConverter converter,
-        IClaimService claim)
+        IUserConverter converter)
     {
         _genreConverter = genreConverter;
         _genreRepo = genreRepo;
         _userInstrumentConverter = userInstrumentConverter;
         _userManager = userManager;
-        _converter = converter;
-        _claim = claim;
+        _converter = converter;            
     }
 
     public async Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter)
@@ -88,9 +86,9 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<UserReadDTO> GetUserProfile()
-    {
-        var user = await _userManager.FindByIdAsync(_claim.GetUserIDFromToken());
+    public async Task<UserReadDTO> GetUserProfile(string userId)
+    {      
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new Exception("Profile is not found");

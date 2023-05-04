@@ -1,13 +1,13 @@
-﻿namespace Backend.Src.Services;
-
-using Backend.Src.Converters;
+﻿using Backend.Src.Converters;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class CityService : BaseServiceName<City, CityDTO, CityDTO, CityDTO>
+namespace Backend.Src.Services;
+
+public class CityService : BaseService<City, CityDTO, CityDTO, CityDTO>, ICityService
 {
-    public CityService(BaseRepoName<City> repo, ICityConverter converter) : base(repo, converter)
+    public CityService(ICityRepo repo, ICityConverter converter) : base(repo, converter)
     {
     }
 }

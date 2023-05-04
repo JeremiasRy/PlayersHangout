@@ -1,8 +1,8 @@
-namespace Backend.Src.Repositories;
-
 using Backend.Src.Db;
 using Backend.Src.Models;
 using Microsoft.EntityFrameworkCore;
+
+namespace Backend.Src.Repositories;
 
 public abstract class BaseRepo<T> : IBaseRepo<T>
     where T : BaseModel, new()
@@ -21,10 +21,12 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         return create;
     }
 
-    public async Task DeleteOneAsync(T item)
+    public async Task<bool> DeleteOneAsync(T item)
     {
-         _context.Remove(item);
-         await _context.SaveChangesAsync();
+        _context.Remove(item);
+        await _context.SaveChangesAsync();
+        var value = await GetByIdAsync(item.Id);
+        return value is null ? true : false;
     }
 
     public virtual async Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
@@ -58,4 +60,5 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
         await _context.SaveChangesAsync();
         return update;
     }
+
 }

@@ -63,8 +63,6 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserInstrumentConverter, UserInstrumentConverter>();
 builder.Services.AddScoped<IUserConverter, UserConverter>();
 builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
@@ -73,26 +71,36 @@ builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
 builder.Services.AddScoped<ICityConverter, CityConverter>();
 builder.Services.AddScoped<IWantedConverter, WantedConverter>();
 builder.Services.AddScoped<ILocationConverter, LocationConverter>();
-builder.Services
-    .AddScoped<IBaseRepo<City>, CityRepo>()
-    .AddScoped<IBaseService<City, CityDTO, CityDTO, CityDTO>, CityService>();
-builder.Services
-    .AddScoped<IBaseRepo<Location>, LocationRepo>()
-    .AddScoped<IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, LocationService>();
-builder.Services
-    .AddScoped<IBaseRepo<Genre>, GenreRepo>()
-    .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();
-builder.Services
-    .AddScoped<IBaseRepo<Instrument>, InstrumentRepo>()
-    .AddScoped<IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>, InstrumentService>();
-builder.Services
-    .AddScoped<IBaseRepo<Wanted>, WantedRepo>()
-    .AddScoped<IBaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, WantedService>();
+// builder.Services
+//     .AddScoped<IBaseRepo<City>, CityRepo>()
+//     .AddScoped<IBaseService<City, CityDTO, CityDTO, CityDTO>, CityService>();
+// builder.Services
+//     .AddScoped<IBaseRepo<Location>, LocationRepo>()
+//     .AddScoped<IBaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, LocationService>();
+// builder.Services
+//     .AddScoped<IBaseRepo<Genre>, GenreRepo>()
+//     .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();
+// builder.Services
+//     .AddScoped<IBaseRepo<Instrument>, InstrumentRepo>()
+//     .AddScoped<IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>, InstrumentService>();
+// builder.Services
+//     .AddScoped<IBaseRepo<Wanted>, WantedRepo>()
+//     .AddScoped<IBaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, WantedService>();
 
-builder.Services.AddTransient<ClaimsPrincipal>(s =>
-    s.GetService<IHttpContextAccessor>().HttpContext.User);
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-builder.Services.AddScoped<IClaimService, ClaimService>();
+builder.Services
+    .AddScoped<ILocationRepo, LocationRepo>()
+    .AddScoped<ILocationService, LocationService>();
+
+builder.Services
+    .AddScoped<ICityRepo, CityRepo>()
+    .AddScoped<ICityService, CityService>();
+
+    builder.Services
+    .AddScoped<IGenreRepo, GenreRepo>()
+    .AddScoped<IGenreService, GenreService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 

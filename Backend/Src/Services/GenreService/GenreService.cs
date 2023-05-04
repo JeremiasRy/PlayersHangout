@@ -5,9 +5,9 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class GenreService : BaseServiceName<Genre, GenreDTO, GenreDTO, GenreDTO>
+public class GenreService : BaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, IGenreService
 {
-    public GenreService(BaseRepoName<Genre> repo, IGenreConverter converter) : base(repo, converter)
+    public GenreService(IGenreRepo repo, IGenreConverter converter) : base(repo, converter)
     {
     }
 }
