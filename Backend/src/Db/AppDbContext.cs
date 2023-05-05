@@ -1,15 +1,16 @@
-namespace Backend.Src.Db;
-
 using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
+namespace Backend.Src.Db;
+
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     private readonly IConfiguration _configuration;
-    private readonly DbType _dbType;
+    private readonly DbType _dbType;    
+
     static AppDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<UserInstrument.SkillLevel>();
@@ -59,8 +60,13 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddTimestampConfig();
         modelBuilder.AddGenresConfig();
         modelBuilder.AddCitiesConfig();
+        modelBuilder.AddInstrumentConfig();
 
+        modelBuilder.InsertCity();
+        modelBuilder.InsertGenres();
+        modelBuilder.InsertInstruments();        
     }
+
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Wanted> Wanteds { get; set; } = null!;

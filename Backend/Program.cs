@@ -7,7 +7,6 @@ using Backend.Src.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -59,6 +58,7 @@ builder.Services
     });
 
 builder.Services.AddDbContext<AppDbContext>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -110,7 +110,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
     
 builder.Services.AddScoped<IUserService, UserService>();
 
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
@@ -127,6 +126,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseHttpsRedirection();
 

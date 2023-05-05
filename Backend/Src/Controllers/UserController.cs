@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Src.Controllers;
 
-[Authorize]
+
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;

@@ -1,10 +1,10 @@
-﻿namespace Backend.Src.Db;
-
-using Backend.Src.Models;
+﻿using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-public static class ModelBuilderExtensions
+namespace Backend.Src.Db;
+
+public static class ModelBuilderConfigExtensions
 {
     public static void AddUserConfig(this ModelBuilder modelBuilder)
     {
@@ -64,6 +64,7 @@ public static class ModelBuilderExtensions
             .Navigation(user => user.Genres)
             .AutoInclude();
     }
+
     public static void AddTimestampConfig(this ModelBuilder modelBuilder)
     {
         foreach (var propertyName in modelBuilder.Model.GetEntityTypes().Select(s => s.Name))
@@ -89,12 +90,21 @@ public static class ModelBuilderExtensions
             .HasIndex(genre => genre.Name)
             .IsUnique();
     }
+
     public static void AddCitiesConfig(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>()
             .HasIndex(city => city.Name)
             .IsUnique();
     }
+
+    public static void AddInstrumentConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Instrument>()
+            .HasIndex(instrument => instrument.Name)
+            .IsUnique();
+    }
+
     public static void AddLocationConfig(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Location>()
