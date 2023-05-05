@@ -5,9 +5,9 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>
+public class WantedService : BaseService<Wanted, WantedReadDTO, WantedCreateDTO, WantedUpdateDTO>, IWantedService
 {
-    public WantedService(IBaseRepo<Wanted> repo, IWantedConverter converter) : base(repo, converter)
+    public WantedService(IWantedRepo repo, IWantedConverter converter) : base(repo, converter)
     {
     }
 }

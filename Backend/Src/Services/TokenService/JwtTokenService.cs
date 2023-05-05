@@ -58,8 +58,14 @@ public class JwtTokenService : IJwtTokenService
         };
     }
 
-    public Guid ReadUserIdFromToken(string token)
-    {
-        throw new NotImplementedException();
+    public string ReadUserIdFromToken(string token)
+    {        
+        var writer = new JwtSecurityTokenHandler();
+        var jwtSecurity =  writer.ReadJwtToken(token);
+        if (Guid.TryParse(jwtSecurity.Subject, out Guid result))
+        {
+            return result.ToString();
+        }
+        return "";
     }
 }

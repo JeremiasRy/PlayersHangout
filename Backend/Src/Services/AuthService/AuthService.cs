@@ -1,29 +1,26 @@
-namespace Backend.Src.Services;
-
 using Backend.Src.Converters;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+
+namespace Backend.Src.Services;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IBaseRepo<Location> _locationRepo;
-    private readonly IBaseRepo<City> _cityRepo;
+    private readonly ILocationRepo _locationRepo;
+    private readonly ICityRepo _cityRepo;
     private readonly ILocationConverter _locationConverter;
-    private readonly IJwtTokenService _tokenService;
-    private readonly IClaimService _claim;
+    private readonly IJwtTokenService _tokenService;    
 
-    public AuthService(ILocationConverter locationConverter, IBaseRepo<City> cityRepo, IBaseRepo<Location> locationRepo, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
+    public AuthService(ILocationConverter locationConverter, ICityRepo cityRepo,  ILocationRepo locationRepo, UserManager<User> userManager, IJwtTokenService tokenService)
     {
         _locationConverter = locationConverter;
         _locationRepo = locationRepo;
         _cityRepo = cityRepo;
         _userManager = userManager;
-        _tokenService = tokenService;
-        _claim = claim;
+        _tokenService = tokenService;        
     }
 
     public async Task<AuthReadDTO?> Login(AuthSignInDTO request)
@@ -96,9 +93,9 @@ public class AuthService : IAuthService
         return await _tokenService.GenerateToken(user);
     }
 
-    public async Task<bool> Logout()
+    public async Task<bool> Logout(string userId)
     {
-        var user = await _userManager.FindByIdAsync(_claim.GetUserIDFromToken());
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new Exception("User is not found");

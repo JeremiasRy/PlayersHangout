@@ -6,5 +6,5 @@ using Backend.Src.Models;
 public interface IJwtTokenService
 {
     Task<AuthReadDTO> GenerateToken(User user);
-    Guid ReadUserIdFromToken(string token);
+    string ReadUserIdFromToken(string token);
 }

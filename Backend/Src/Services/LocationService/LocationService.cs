@@ -5,9 +5,9 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
-public class LocationService : BaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>
+public class LocationService : BaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, ILocationService
 {
-    public LocationService(IBaseRepo<Location> repo, ILocationConverter converter) : base(repo, converter)
+    public LocationService(ILocationRepo repo, ILocationConverter converter) : base(repo, converter)
     {
     }
 }
