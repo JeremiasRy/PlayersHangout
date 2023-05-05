@@ -1,6 +1,6 @@
 ﻿namespace Backend.Src.Services;
 
-using Backend.Src.Converters;
+using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
@@ -10,22 +10,16 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IUserInstrumentConverter _userInstrumentConverter;
     private readonly IBaseRepo<Genre> _genreRepo;
-    private readonly IGenreConverter _genreConverter;
-    private readonly IUserConverter _converter;
+    private readonly IConverter _converter;
     private readonly IClaimService _claim;
     public UserService(
-        IUserInstrumentConverter userInstrumentConverter,
-        IGenreConverter genreConverter,
         IBaseRepo<Genre> genreRepo,
         UserManager<User> userManager,
-        IUserConverter converter,
+        IConverter converter,
         IClaimService claim)
     {
-        _genreConverter = genreConverter;
         _genreRepo = genreRepo;
-        _userInstrumentConverter = userInstrumentConverter;
         _userManager = userManager;
         _converter = converter;
         _claim = claim;
@@ -38,7 +32,7 @@ public class UserService : IUserService
             return await _userManager.Users
                 .Skip(optionsFilter.Skip)
                 .Take(optionsFilter.Limit)
-                .Select(user => _converter.ConvertReadDTO(user))
+                .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
                 .ToListAsync();
         }
         if (filter is MatchDTO matchDTO)
@@ -59,7 +53,7 @@ public class UserService : IUserService
                 query = query.Where(user => user.Genres == null || user.Genres.Any(genre => genre.Name.Contains(matchDTO.Genre)));
             }
             return await query
-                .Select(user => _converter.ConvertReadDTO(user))
+                .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
                 .Skip(matchDTO.Skip)
                 .Take(matchDTO.Limit)
                 .ToListAsync();
@@ -67,7 +61,7 @@ public class UserService : IUserService
         return await _userManager.Users
             .Skip(0)
             .Take(30)
-            .Select(user => _converter.ConvertReadDTO(user))
+            .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
             .ToListAsync();
     }
 
@@ -95,17 +89,17 @@ public class UserService : IUserService
         {
             throw new Exception("Profile is not found");
         }
-        return _converter.ConvertReadDTO(user);
+        return _converter.ConvertReadDTO<User, UserReadDTO>(user);
     }
 
     public async Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString()) ?? throw new Exception("Invalid user ID");
 
-        _userInstrumentConverter.CreateModel(request, out UserInstrument userInstrument);
+        _converter.CreateModel(request, out UserInstrument userInstrument);
         user.Instruments.Add(userInstrument);
 
-        return _converter.ConvertReadDTO(user);
+        return _converter.ConvertReadDTO<User, UserReadDTO>(user);
     }
 
     public async Task<UserReadDTO> AddGenre(Guid userId, GenreDTO request)
@@ -117,15 +111,15 @@ public class UserService : IUserService
         {
             var genreToAdd = genre.First();
             AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO(user);
+            return _converter.ConvertReadDTO<User, UserReadDTO>(user);
 
         }
         else
         {
-            _genreConverter.CreateModel(request, out Genre genreToAdd);
+            _converter.CreateModel(request, out Genre genreToAdd);
             await _genreRepo.CreateOneAsync(genreToAdd);
             AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO(user);
+            return _converter.ConvertReadDTO<User, UserReadDTO>(user);
         }
 
         static void AddGenre(Genre genreToAdd, User user)
