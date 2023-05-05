@@ -1,6 +1,5 @@
-﻿namespace Backend.Src.Models;
-
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+namespace Backend.Src.Models;
 
 public class Location : BaseModel
 {
@@ -10,6 +9,7 @@ public class Location : BaseModel
     public double Longitude { get; set; }
     public City City { get; set; } = null!;
     public Guid CityId { get; set; }
+
     /// <summary>
     /// Calculate distance between two locations
     /// </summary>

@@ -26,6 +26,7 @@ public class UserController : ApiControllerBase
         var userId = _tokenService.ReadUserIdFromToken(token[0].Replace("Bearer ", string.Empty));
         return Ok(await _service.GetUserProfile(userId));
     }
+    
     [HttpGet]
     public async Task<ICollection<UserReadDTO>> GetAll()
     {

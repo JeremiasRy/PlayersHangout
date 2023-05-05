@@ -5,5 +5,5 @@ namespace Backend.Src.Services;
 
 public interface ICityService : IBaseService<City, CityDTO, CityDTO, CityDTO>
 {
-
+    
 }

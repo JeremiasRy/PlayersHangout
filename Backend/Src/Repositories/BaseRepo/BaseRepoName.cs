@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Src.Repositories;
 
-public abstract class BaseRepoName<T> : BaseRepo<T>
+public abstract class BaseRepoName<T> : BaseRepo<T>, IBaseRepoName<T>
     where T : HasName, new()
 {
     protected BaseRepoName(AppDbContext context) : base(context)
     {
     }
+    
     public async override Task<IEnumerable<T>> GetAllAsync(IFilterOptions? request)
     {
         if (request is NameFilter nameFilter)

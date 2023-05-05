@@ -5,7 +5,7 @@ using Backend.Src.Repositories;
 
 namespace Backend.Src.Services;
 
-public class CityService : BaseService<City, CityDTO, CityDTO, CityDTO>, ICityService
+public class CityService : BaseServiceName<City, CityDTO, CityDTO, CityDTO>, ICityService
 {
     public CityService(ICityRepo repo, ICityConverter converter) : base(repo, converter)
     {
