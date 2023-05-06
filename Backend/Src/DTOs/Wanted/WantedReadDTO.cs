@@ -7,5 +7,6 @@ public class WantedReadDTO
     public string? City { get; set; }
     public string Description { get; set; } = null!;
     public string Instrument { get; set; } = null!;
+    public ICollection<Genre> Genres { get; set; } = null!;
     public UserInstrument.SkillLevel SkillLevel { get; set; }
 }

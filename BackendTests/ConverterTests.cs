@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 public class ConverterTests
 {
     [Fact]
-    public virtual void ConverterDoesConverting()
+    public virtual void ConverterWanted()
     {
-        Converter converter = new Converter();
+        Converter converter = new();
         WantedCreateDTO wantedCreateDTO = new()
         {
             Instrument = new Instrument()
@@ -26,7 +26,7 @@ public class ConverterTests
                 UpdatedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
             },
-            SkillLevel = UserInstrument.SkillLevel.Beginner,
+            SkillLevel = UserInstrument.SkillLevel.Intermediate,
             Description = "I am initial description",
             User = new User()
             {
@@ -75,5 +75,19 @@ public class ConverterTests
         Assert.Equal(model.User.Location.City.Name, wantedReadDTO.City);
         Assert.Equal(model.Instrument.Name, wantedReadDTO.Instrument);
         Assert.Equal(model.Description, wantedReadDTO.Description);
+        Assert.Equal(model.SkillLevel, wantedReadDTO.SkillLevel);
+        if (model.Genres is not null && wantedReadDTO.Genres is not null)
+        {
+            foreach (var genre in model.Genres)
+            {
+                Assert.Contains(genre, wantedReadDTO.Genres);
+            }
+        }
+    }
+    [Fact]
+    public void ConverterUser()
+    {
+        Converter converter = new();
+
     }
 }

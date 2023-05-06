@@ -1,4 +1,6 @@
-﻿namespace Backend.Src.Converter;
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Backend.Src.Converter;
 
 public class Converter : IConverter
 {
@@ -9,23 +11,23 @@ public class Converter : IConverter
             throw new ArgumentNullException(nameof(model));
         }
         var item = new TReadDTO();
-        foreach (var property in model.GetType().GetProperties())
+        foreach (var property in item.GetType().GetProperties())
         {
-            var itemProperty = item.GetType().GetProperty(property.Name);
-            if (itemProperty is null)
+            var modelProperty = model.GetType().GetProperty(property.Name);
+            if (modelProperty == null) 
             {
-
-            } else
+                continue;
+            }
+            object? value = modelProperty.GetValue(model);
+            if (modelProperty.PropertyType.Name != property.PropertyType.Name && modelProperty.PropertyType.FullName is not null)
             {
-                if (itemProperty.PropertyType.Name != property.PropertyType.Name)
+                if (modelProperty.PropertyType.FullName.Contains("Backend.Src.Models") && property.PropertyType.Name == "String" && value is not null)
                 {
-                    itemProperty.SetValue(item, property.GetValue(model)?.ToString());
-                }
-                else
-                {
-                    itemProperty.SetValue(item, property.GetValue(model));
+                    property.SetValue(item, value.ToString());
+                    continue;
                 }
             }
+            property.SetValue(item, value);
         }
         return item;
     }
