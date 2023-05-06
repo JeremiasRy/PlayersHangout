@@ -1,5 +1,3 @@
-namespace Backend.Src.Services;
-
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
@@ -7,17 +5,15 @@ using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Src.Services;
-
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IBaseRepo<Location> _locationRepo;
-    private readonly IBaseRepo<City> _cityRepo;
+    private readonly ILocationRepo _locationRepo;
+    private readonly ICityRepo _cityRepo;
     private readonly IConverter _converter;
     private readonly IJwtTokenService _tokenService;
-    private readonly IClaimService _claim;
 
-    public AuthService(IConverter converter, IBaseRepo<City> cityRepo, IBaseRepo<Location> locationRepo, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
+    public AuthService(IConverter converter, ICityRepo cityRepo, ILocationRepo locationRepo, UserManager<User> userManager, IJwtTokenService tokenService)
     {
         _converter = converter;
         _locationRepo = locationRepo;

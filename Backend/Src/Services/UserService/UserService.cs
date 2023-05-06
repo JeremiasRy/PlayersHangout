@@ -1,6 +1,4 @@
-﻿namespace Backend.Src.Services;
-
-using Backend.Src.Converter;
+﻿using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
@@ -12,14 +10,13 @@ namespace Backend.Src.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IBaseRepo<Genre> _genreRepo;
+    private readonly IGenreRepo _genreRepo;
     private readonly IConverter _converter;
-    private readonly IClaimService _claim;
     public UserService(
-        IBaseRepo<Genre> genreRepo,
+        IGenreRepo genreRepo,
         UserManager<User> userManager,
-        IConverter converter,
-        IClaimService claim)
+        IConverter converter
+        )
     {
         _genreRepo = genreRepo;
         _userManager = userManager;

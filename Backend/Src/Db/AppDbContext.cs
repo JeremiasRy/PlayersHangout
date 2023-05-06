@@ -1,13 +1,10 @@
 ﻿namespace Backend.Src.Db;
 
 using Backend.Src.Models;
-using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using System.Diagnostics.Metrics;
-using System.Reflection.Metadata;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
