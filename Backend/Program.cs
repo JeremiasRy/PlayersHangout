@@ -1,4 +1,4 @@
-using Backend.Src.Converters;
+using Backend.Src.Converter;
 using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
@@ -63,15 +63,9 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUserInstrumentConverter, UserInstrumentConverter>();
-builder.Services.AddScoped<IUserConverter, UserConverter>();
-builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
-builder.Services.AddScoped<IGenreConverter, GenreConverter>();
-builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
-builder.Services.AddScoped<ICityConverter, CityConverter>();
-builder.Services.AddScoped<IWantedConverter, WantedConverter>();
-builder.Services.AddScoped<ILocationConverter, LocationConverter>();
 
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IConverter, Converter>();
 builder.Services
     .AddScoped<ICityRepo, CityRepo>()
     .AddScoped<ICityService, CityService>();

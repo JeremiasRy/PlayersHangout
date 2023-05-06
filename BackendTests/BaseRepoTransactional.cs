@@ -58,13 +58,10 @@ public class TransactionalRepoTests : IDisposable
             TModel itemToDelete = items.First();
             int originalLength = items.Count();
 
-            var result = await repo.DeleteOneAsync(itemToDelete.Id);
-            Assert.True(result);
+            await repo.DeleteOneAsync(itemToDelete);
 
             items = await repo.GetAllAsync(new NameFilter() { Name = itemToDelete.Name });
             Assert.True(!items.Any());
-            var result2 = await repo.DeleteOneAsync(new Guid(new byte[16] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}));
-            Assert.False(result2);
         }
     }
 }

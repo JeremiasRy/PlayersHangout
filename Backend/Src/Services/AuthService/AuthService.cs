@@ -1,4 +1,6 @@
-using Backend.Src.Converters;
+namespace Backend.Src.Services;
+
+using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
@@ -9,14 +11,15 @@ namespace Backend.Src.Services;
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
-    private readonly ILocationRepo _locationRepo;
-    private readonly ICityRepo _cityRepo;
-    private readonly ILocationConverter _locationConverter;
-    private readonly IJwtTokenService _tokenService;    
+    private readonly IBaseRepo<Location> _locationRepo;
+    private readonly IBaseRepo<City> _cityRepo;
+    private readonly IConverter _converter;
+    private readonly IJwtTokenService _tokenService;
+    private readonly IClaimService _claim;
 
-    public AuthService(ILocationConverter locationConverter, ICityRepo cityRepo,  ILocationRepo locationRepo, UserManager<User> userManager, IJwtTokenService tokenService)
+    public AuthService(IConverter converter, IBaseRepo<City> cityRepo, IBaseRepo<Location> locationRepo, UserManager<User> userManager, IJwtTokenService tokenService, IClaimService claim)
     {
-        _locationConverter = locationConverter;
+        _converter = converter;
         _locationRepo = locationRepo;
         _cityRepo = cityRepo;
         _userManager = userManager;
@@ -70,7 +73,7 @@ public class AuthService : IAuthService
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
 
-        _locationConverter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        _converter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
 
         location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
 
