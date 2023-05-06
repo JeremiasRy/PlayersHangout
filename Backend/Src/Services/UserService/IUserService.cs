@@ -1,8 +1,8 @@
-﻿namespace Backend.Src.Services;
-
-using Backend.Src.DTOs;
+﻿using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
+
+namespace Backend.Src.Services;
 
 public interface IUserService
 {

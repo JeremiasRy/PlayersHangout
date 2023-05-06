@@ -1,9 +1,8 @@
-namespace Backend.Src.Services;
-
 using Backend.Src.Converter;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 
+namespace Backend.Src.Services;
 public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseService<T, TReadDTO, TCreateDTO, TUpdateDTO>
     where T : BaseModel, new()
     where TReadDTO : new()
