@@ -11,6 +11,7 @@ public class Converter : IConverter
             throw new ArgumentNullException(nameof(model));
         }
         var item = new TReadDTO();
+
         foreach (var property in item.GetType().GetProperties())
         {
             var modelProperty = model.GetType().GetProperty(property.Name);

@@ -3,14 +3,9 @@
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using NuGet.Frameworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
 public class ConverterTests
 {
     [Fact]
@@ -21,7 +16,7 @@ public class ConverterTests
         {
             Instrument = new Instrument()
             {
-                Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                Id = Guid.NewGuid(),
                 Name = "test",
                 UpdatedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
@@ -35,7 +30,7 @@ public class ConverterTests
                     City = new City()
                     {
                         Name = "test city",
-                        Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                        Id = Guid.NewGuid(),
                         UpdatedAt = DateTime.Now,
                         CreatedAt = DateTime.Now,
                     },
@@ -47,8 +42,15 @@ public class ConverterTests
             {
                 new Genre()
                 {
-                    Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    Id = Guid.NewGuid(),
                     Name = "I am initial genre",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now
+                },
+                new Genre()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "I am second genre",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now
                 }
@@ -88,6 +90,43 @@ public class ConverterTests
     public void ConverterUser()
     {
         Converter converter = new();
+        
+        City city = new City()
+        {
+            Id = Guid.NewGuid(),
+            Name = "I am city",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+        };
+
+        Location location = new Location()
+        {
+            Id = Guid.NewGuid(),
+            Latitude = 0,
+            Longitude = 0,
+            City = city,
+            CityId = city.Id,
+        };
+
+        Instrument instrument = new Instrument()
+        {
+            Id = Guid.NewGuid(),
+            Name = "I am instrument",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+        };
+
+        User mockUser = new User() 
+        {
+            Id = Guid.NewGuid(),
+
+        };
+
+        UserInstrument userInstrument = new UserInstrument()
+        {
+            UserId = mockUser.Id,
+            InstrumentId = instrument.Id,
+        };
 
     }
 }
