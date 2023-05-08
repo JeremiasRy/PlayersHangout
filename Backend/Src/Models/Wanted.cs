@@ -1,4 +1,7 @@
-﻿namespace Backend.Src.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace Backend.Src.Models;
 
 public class Wanted : BaseModel
 {
@@ -9,4 +12,6 @@ public class Wanted : BaseModel
     public Guid UserId { get; set; }
     public ICollection<Genre> Genres { get; set; } = null!;
     public bool Fullfilled { get; set; } = false;
+    [NotMapped, JsonIgnore]
+    public string City => User.Location?.City.ToString() ?? throw new ArgumentNullException(nameof(User.Location));
 }

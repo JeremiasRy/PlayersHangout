@@ -1,6 +1,5 @@
-using Backend.Src.Converters;
+using Backend.Src.Converter;
 using Backend.Src.Db;
-using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 using Backend.Src.Services;
@@ -63,25 +62,12 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUserInstrumentConverter, UserInstrumentConverter>();
-builder.Services.AddScoped<IUserConverter, UserConverter>();
-builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
-builder.Services.AddScoped<IGenreConverter, GenreConverter>();
-builder.Services.AddScoped<IInstrumentConverter, InstrumentConverter>();
-builder.Services.AddScoped<ICityConverter, CityConverter>();
-builder.Services.AddScoped<IWantedConverter, WantedConverter>();
-builder.Services.AddScoped<ILocationConverter, LocationConverter>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IConverter, Converter>();
 
-builder.Services
-    .AddScoped<ICityRepo, CityRepo>()
-    .AddScoped<ICityService, CityService>();
 builder.Services
     .AddScoped<ILocationRepo, LocationRepo>()
     .AddScoped<ILocationService, LocationService>();
-
-builder.Services
-    .AddScoped<IBaseRepo<Genre>, GenreRepo>()
-    .AddScoped<IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO>, GenreService>();
 
 builder.Services
     .AddScoped<IInstrumentRepo, InstrumentRepo>()
@@ -92,17 +78,10 @@ builder.Services
     .AddScoped<IWantedService, WantedService>();
 
 builder.Services
-    .AddScoped<IJwtTokenService, JwtTokenService>();
-
-builder.Services
-    .AddScoped<ILocationRepo, LocationRepo>()
-    .AddScoped<ILocationService, LocationService>();
-
-builder.Services
     .AddScoped<ICityRepo, CityRepo>()
     .AddScoped<ICityService, CityService>();
 
-    builder.Services
+builder.Services
     .AddScoped<IGenreRepo, GenreRepo>()
     .AddScoped<IGenreService, GenreService>();
 
@@ -126,8 +105,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseHttpsRedirection();
 

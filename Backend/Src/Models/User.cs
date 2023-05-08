@@ -1,4 +1,4 @@
-namespace Backend.Src.Models;
+﻿namespace Backend.Src.Models;
 
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;

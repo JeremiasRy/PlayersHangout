@@ -5,7 +5,7 @@ public interface IBaseRepo<T>
     Task<IEnumerable<T>> GetAllAsync(IFilterOptions? filter);
     Task<T?> GetByIdAsync(Guid id);
     Task<T> UpdateOneAsync(T update);
-    Task<bool> DeleteOneAsync(T model);
+    Task DeleteOneAsync(T model);
     Task<T> CreateOneAsync(T create);
 }
 
