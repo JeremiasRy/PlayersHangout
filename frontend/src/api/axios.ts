@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api/v1/'
+    baseURL: 'https://localhost:7267/api/v1/'
 });
 
 class HttpError extends Error {

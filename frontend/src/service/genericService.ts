@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../utils/axios";
+import api from "../api/axios";
 
 export function getAll<T>(url: string, name: string) {
     return createAsyncThunk(
@@ -35,13 +35,14 @@ export function get<T>(url: string, name: string) {
     )
 }
 
-export function create<TCreate, TReturn>(url: string, name: string) {
+export function post<TCreate, TReturn>(url: string, name: string) {
     return createAsyncThunk(
         name,
         async (item: TCreate, thunkAPI) => {
             return api
                 .post(url, item)
                 .then((result) => {
+                    console.log("En post function result ---> ", result)
                     return result.data as TReturn;
                 })
                 .catch((err) => {
@@ -72,9 +73,9 @@ export function update<TUpdate, TReturn>(url: string, name: string) {
 export function remove<T>(url: string, name: string) {
     return createAsyncThunk(
         name,
-        async (item: T, thunkAPI) => {
+        async (thunkAPI) => {
             return api
-                .put(url, item)
+                .delete(url)
                 .then((result) => {
                     return result.data;
                 })

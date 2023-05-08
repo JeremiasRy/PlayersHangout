@@ -1,4 +1,4 @@
-import { PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers, createSlice } from "@reduxjs/toolkit"
+import { ActionReducerMapBuilder, CaseReducer, CreateSliceOptions, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers, createSlice } from "@reduxjs/toolkit"
 
 export interface GenericState<T> {
     data: T,
@@ -8,11 +8,13 @@ export interface GenericState<T> {
 export const genericSlice = <T, Reducers extends SliceCaseReducers<GenericState<T>>>({
     name = '',
     initialState,
-    reducers
+    reducers,
+    extraReducers
 } : {
     name: string,
     initialState: GenericState<T>,
-    reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>
+    reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>,
+    extraReducers:  (builder: ActionReducerMapBuilder<GenericState<T>>) => void
 }) => {
     return createSlice({
         name,
@@ -26,6 +28,7 @@ export const genericSlice = <T, Reducers extends SliceCaseReducers<GenericState<
                 state.status = 'success';
             },
             ...reducers
-        }
+        },
+        extraReducers
     })
 } 
