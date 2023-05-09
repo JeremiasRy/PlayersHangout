@@ -14,7 +14,7 @@ export const genericSlice = <T, Reducers extends SliceCaseReducers<GenericState<
     name: string,
     initialState: GenericState<T>,
     reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>,
-    extraReducers:  (builder: ActionReducerMapBuilder<GenericState<T>>) => void
+    extraReducers?:  (builder: ActionReducerMapBuilder<GenericState<T>>) => void
 }) => {
     return createSlice({
         name,
