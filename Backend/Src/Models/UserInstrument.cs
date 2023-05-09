@@ -1,13 +1,22 @@
-﻿namespace Backend.Src.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Backend.Src.Models;
 
 public class UserInstrument
 {
+    [JsonIgnore]
     public User User { get; set; } = null!;
+    [JsonIgnore]
     public Guid UserId { get; set; }
+    [JsonIgnore]
     public Instrument Instrument { get; set; } = null!;
+    [JsonIgnore]
     public Guid InstrumentId { get; set; }
+    [JsonIgnore]
     public bool LookingToPlay { get; set; }
     public SkillLevel Skill { get; set; }
+    public string InstrumentName => Instrument.Name;
+    public override string ToString() => $"{Instrument.Name}";
     public enum SkillLevel
     {
         // 0 < x < 5

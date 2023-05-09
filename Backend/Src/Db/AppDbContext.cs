@@ -61,6 +61,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddCitiesConfig();
 
     }
+    public DbSet<UserInstrument> UserInstruments { get; set; } = null!; 
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Wanted> Wanteds { get; set; } = null!;

@@ -20,7 +20,7 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
     {
         _converter.CreateModel(request, out T item);
         var result = await _repo.CreateOneAsync(item);
-        return _converter.ConvertReadDTO<T, TReadDTO>(result);
+        return _converter.ConvertReadDTO(result, default(TReadDTO));
     }
 
     public async Task<bool> DeleteAsync(Guid id)
@@ -37,13 +37,13 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
     public virtual async Task<ICollection<TReadDTO>> GetAllAsync(IFilterOptions? filter)
     {
         var items = await _repo.GetAllAsync(filter);
-        return items.Select(i => _converter.ConvertReadDTO<T, TReadDTO>(i)).ToList();
+        return items.Select(i => _converter.ConvertReadDTO(i, default(TReadDTO))).ToList();
     }
 
     public async Task<TReadDTO?> GetByIdAsync(Guid id)
     {
         var entity = await _repo.GetByIdAsync(id);
-        return entity is null ? default : _converter.ConvertReadDTO<T, TReadDTO>(entity);
+        return entity is null ? default : _converter.ConvertReadDTO(entity, default(TReadDTO));
     }
 
     public async Task<TReadDTO> UpdateAsync(Guid id, TUpdateDTO request)
@@ -55,6 +55,6 @@ public abstract class BaseService<T, TReadDTO, TCreateDTO, TUpdateDTO> : IBaseSe
         }
         _converter.UpdateModel(entity, request);
         var item = await _repo.UpdateOneAsync(entity);
-        return _converter.ConvertReadDTO<T, TReadDTO>(item);
+        return _converter.ConvertReadDTO(item, default(TReadDTO));
     }
 }
