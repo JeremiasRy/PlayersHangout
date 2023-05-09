@@ -3,10 +3,9 @@
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 public class ConverterTests
 {
     [Fact]
@@ -59,11 +58,7 @@ public class ConverterTests
         };
 
         converter.CreateModel(wantedCreateDTO, out Wanted model);
-        Assert.NotNull(model);
-        Assert.Equal(wantedCreateDTO.Description, model.Description);
-        Assert.Equal(wantedCreateDTO.Genres.First().Name, model.Genres.First().Name);
-        Assert.NotNull(model.User.Location);
-        Assert.Equal(wantedCreateDTO.User.Location.City.Name, model.User.Location.City.Name);
+        TestDifferentObjectsWithCommonProperties(wantedCreateDTO, model);
         
         WantedUpdateDTO wantedUpdateDTO = new()
         {
@@ -71,8 +66,7 @@ public class ConverterTests
             Fullfilled = true
         };
         converter.UpdateModel(model, wantedUpdateDTO);
-        Assert.True(model.Fullfilled);
-        Assert.Equal(wantedUpdateDTO.Description, model.Description);
+        TestDifferentObjectsWithCommonProperties(wantedUpdateDTO, model);
 
         WantedReadDTO wantedReadDTO = converter.ConvertReadDTO<Wanted, WantedReadDTO>(model);
         Assert.Equal(model.User.Location.City.Name, wantedReadDTO.City);
@@ -186,12 +180,16 @@ public class ConverterTests
         mockUser.Wanteds.Add(wanted);
         mockUser.Instruments.Add(userInstrument);
         UserReadDTO result = converter.ConvertReadDTO<User, UserReadDTO>(mockUser);
-        foreach(var property in result.GetType().GetProperties())
+        TestDifferentObjectsWithCommonProperties(result, mockUser);
+    }
+    static void TestDifferentObjectsWithCommonProperties(object obj1, object obj2)
+    {
+        foreach (var property in obj1.GetType().GetProperties())
         {
-            var equalToThisProperty = mockUser.GetType().GetProperty(property.Name);
+            var equalToThisProperty = obj2.GetType().GetProperty(property.Name);
             if (equalToThisProperty is not null)
             {
-                Assert.Equal(property.GetValue(result), equalToThisProperty.GetValue(mockUser));
+                Assert.Equal(property.GetValue(obj1), equalToThisProperty.GetValue(obj2));
             }
         }
     }
