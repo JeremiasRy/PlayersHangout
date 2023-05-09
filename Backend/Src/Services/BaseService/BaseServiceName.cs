@@ -22,6 +22,6 @@ public class BaseServiceName<T, TReadDTO, TCreateDTO, TUpdateDTO> : BaseService<
         {
             return default;
         }
-        return _converter.ConvertReadDTO<T, TReadDTO>(await _repo.CreateOneAsync(item));
+        return _converter.ConvertReadDTO(await _repo.CreateOneAsync(item), default(TReadDTO));
     }
 }

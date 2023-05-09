@@ -3,14 +3,10 @@
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using NuGet.Frameworks;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
 public class ConverterTests
 {
     [Fact]
@@ -21,7 +17,7 @@ public class ConverterTests
         {
             Instrument = new Instrument()
             {
-                Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                Id = Guid.NewGuid(),
                 Name = "test",
                 UpdatedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
@@ -35,7 +31,7 @@ public class ConverterTests
                     City = new City()
                     {
                         Name = "test city",
-                        Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                        Id = Guid.NewGuid(),
                         UpdatedAt = DateTime.Now,
                         CreatedAt = DateTime.Now,
                     },
@@ -47,8 +43,15 @@ public class ConverterTests
             {
                 new Genre()
                 {
-                    Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    Id = Guid.NewGuid(),
                     Name = "I am initial genre",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now
+                },
+                new Genre()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "I am second genre",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now
                 }
@@ -88,6 +91,108 @@ public class ConverterTests
     public void ConverterUser()
     {
         Converter converter = new();
+        
+        City city = new City()
+        {
+            Id = Guid.NewGuid(),
+            Name = "I am city",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+        };
 
+        Location location = new Location()
+        {
+            Id = Guid.NewGuid(),
+            Latitude = 0,
+            Longitude = 0,
+            City = city,
+            CityId = city.Id,
+        };
+
+        ICollection<Genre> genres = new List<Genre>()
+        {
+            new Genre()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Test genre 1",
+                CreatedAt= DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            },
+            new Genre()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Test genre 2",
+                CreatedAt= DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            },
+        };
+
+        Instrument instrument = new Instrument()
+        {
+            Id = Guid.NewGuid(),
+            Name = "I am instrument",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+        };
+
+        User mockUser = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Test First Name",
+            LastName = "Test Last Name",
+            Email = "email",
+            PasswordHash = "123456wqert",
+            PhoneNumber = "1234567890",
+            AccessFailedCount = 0,
+            ActiveSession = false,
+            ConcurrencyStamp = "concurrency_stamp",
+            EmailConfirmed = true,
+            LockoutEnabled = true,
+            Location = location,
+            LocationId = location.Id,
+            Genres = genres,
+            LockoutEnd = DateTime.Now,
+            NormalizedEmail = "EMAIL",
+            NormalizedUserName = "TEST FIRST NAME",
+            PhoneNumberConfirmed = true,
+            SecurityStamp = "security_stamp",
+            TwoFactorEnabled = false,
+            UserName = "So Nice",
+            MainInstrument = instrument,
+            Instruments = new List<UserInstrument>(),
+            Wanteds = new List<Wanted>(),
+        };
+        UserInstrument userInstrument = new UserInstrument()
+        {
+            UserId = mockUser.Id,
+            User = mockUser,
+            InstrumentId = instrument.Id,
+            Instrument = instrument,
+            LookingToPlay = true,
+            Skill = UserInstrument.SkillLevel.Experienced
+        };
+        Wanted wanted = new Wanted()
+        {
+            UserId = mockUser.Id,
+            User = mockUser,
+            Instrument = new Instrument()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Wanted Instrument",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            }
+        };
+        mockUser.Wanteds.Add(wanted);
+        mockUser.Instruments.Add(userInstrument);
+        UserReadDTO result = converter.ConvertReadDTO<User, UserReadDTO>(mockUser);
+        foreach(var property in result.GetType().GetProperties())
+        {
+            var equalToThisProperty = mockUser.GetType().GetProperty(property.Name);
+            if (equalToThisProperty is not null)
+            {
+                Assert.Equal(property.GetValue(result), equalToThisProperty.GetValue(mockUser));
+            }
+        }
     }
 }

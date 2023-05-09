@@ -30,7 +30,7 @@ public class UserService : IUserService
             return await _userManager.Users
                 .Skip(optionsFilter.Skip)
                 .Take(optionsFilter.Limit)
-                .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
+                .Select(user => _converter.ConvertReadDTO(user, default(UserReadDTO)))
                 .ToListAsync();
         }
         if (filter is MatchDTO matchDTO)
@@ -51,7 +51,7 @@ public class UserService : IUserService
                 query = query.Where(user => user.Genres == null || user.Genres.Any(genre => genre.Name.Contains(matchDTO.Genre)));
             }
             return await query
-                .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
+                .Select(user => _converter.ConvertReadDTO(user, default(UserReadDTO)))
                 .Skip(matchDTO.Skip)
                 .Take(matchDTO.Limit)
                 .ToListAsync();
@@ -59,7 +59,7 @@ public class UserService : IUserService
         return await _userManager.Users
             .Skip(0)
             .Take(30)
-            .Select(user => _converter.ConvertReadDTO<User, UserReadDTO>(user))
+            .Select(user => _converter.ConvertReadDTO(user, default(UserReadDTO)))
             .ToListAsync();
     }
 
@@ -87,7 +87,7 @@ public class UserService : IUserService
         {
             throw new Exception("Profile is not found");
         }
-        return _converter.ConvertReadDTO<User, UserReadDTO>(user);
+        return _converter.ConvertReadDTO(user, default(UserReadDTO));
     }
 
     public async Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request)
@@ -97,7 +97,7 @@ public class UserService : IUserService
         _converter.CreateModel(request, out UserInstrument userInstrument);
         user.Instruments.Add(userInstrument);
 
-        return _converter.ConvertReadDTO<User, UserReadDTO>(user);
+        return _converter.ConvertReadDTO(user, default(UserReadDTO));
     }
 
     public async Task<UserReadDTO> AddGenre(Guid userId, GenreDTO request)
@@ -109,7 +109,7 @@ public class UserService : IUserService
         {
             var genreToAdd = genre.First();
             AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO<User, UserReadDTO>(user);
+            return _converter.ConvertReadDTO(user, default(UserReadDTO));
 
         }
         else
@@ -117,7 +117,7 @@ public class UserService : IUserService
             _converter.CreateModel(request, out Genre genreToAdd);
             await _genreRepo.CreateOneAsync(genreToAdd);
             AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO<User, UserReadDTO>(user);
+            return _converter.ConvertReadDTO(user, default(UserReadDTO));
         }
 
         static void AddGenre(Genre genreToAdd, User user)
