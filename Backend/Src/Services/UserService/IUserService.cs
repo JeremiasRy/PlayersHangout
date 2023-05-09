@@ -9,6 +9,6 @@ public interface IUserService
     Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter); // We put some filters here also
     Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request);
     Task<UserReadDTO> GetUserProfile(string userId);
-    Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentCreateDTO request);
+    Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentDTO request);
     Task<UserReadDTO> AddGenre(Guid userId, GenreDTO genre);
 }
