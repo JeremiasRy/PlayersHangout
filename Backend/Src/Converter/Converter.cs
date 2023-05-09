@@ -1,36 +1,45 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Backend.Src.Converter;
 
 public class Converter : IConverter
 {
-    public TReadDTO ConvertReadDTO<T, TReadDTO>(T model) where TReadDTO : new()
+    public TReadDTO ConvertReadDTO<T, TReadDTO>(T model, TReadDTO? readDTO = default) where TReadDTO : new()
     {
         if (model == null)
         {
             throw new ArgumentNullException(nameof(model));
         }
-        var item = new TReadDTO();
+        readDTO ??= new TReadDTO();
 
-        foreach (var property in item.GetType().GetProperties())
+        foreach (var property in readDTO.GetType().GetProperties())
         {
             var modelProperty = model.GetType().GetProperty(property.Name);
-            if (modelProperty == null) 
+            if (modelProperty == null)
             {
                 continue;
             }
+            if (modelProperty.PropertyType.FullName is null || property.PropertyType.FullName is null)
+            {
+                throw new Exception();
+            } 
             object? value = modelProperty.GetValue(model);
+
             if (modelProperty.PropertyType.Name != property.PropertyType.Name && modelProperty.PropertyType.FullName is not null)
             {
                 if (modelProperty.PropertyType.FullName.Contains("Backend.Src.Models") && property.PropertyType.Name == "String" && value is not null)
                 {
-                    property.SetValue(item, value.ToString());
+                    property.SetValue(readDTO, value.ToString());
                     continue;
                 }
             }
-            property.SetValue(item, value);
+            property.SetValue(readDTO, value);
         }
-        return item;
+        return readDTO;
     }
 
     public void CreateModel<T, TCreateDTO>(TCreateDTO create, out T model) where T : new()
