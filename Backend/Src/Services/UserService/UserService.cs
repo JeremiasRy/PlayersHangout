@@ -89,17 +89,6 @@ public class UserService : IUserService
         }
         return _converter.ConvertReadDTO(user, default(UserReadDTO));
     }
-
-    public async Task<UserReadDTO> AddInstrument(Guid userId, UserInstrumentDTO request)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString()) ?? throw new Exception("Invalid user ID");
-
-        _converter.CreateModel(request, out UserInstrument userInstrument);
-        user.Instruments.Add(userInstrument);
-
-        return _converter.ConvertReadDTO(user, default(UserReadDTO));
-    }
-
     public async Task<UserReadDTO> AddGenre(Guid userId, GenreDTO request)
     {
         var genre = await _genreRepo.GetAllAsync(new NameFilter() { Name = request.Name });
@@ -110,7 +99,6 @@ public class UserService : IUserService
             var genreToAdd = genre.First();
             AddGenre(genreToAdd, user);
             return _converter.ConvertReadDTO(user, default(UserReadDTO));
-
         }
         else
         {
