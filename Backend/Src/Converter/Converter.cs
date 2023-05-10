@@ -54,10 +54,34 @@ public class Converter : IConverter
         foreach (var property in create.GetType().GetProperties())
         {
             var itemProperty = model.GetType().GetProperty(property.Name);
-            if (itemProperty is not null ) 
+            if (itemProperty == null)
+            {
+                continue;
+            }
+
+            object? value = property.GetValue(create);
+            if (property.PropertyType.FullName is null || itemProperty.PropertyType.FullName is null)
+            {
+                throw new Exception();
+            }
+            if (property.PropertyType.FullName.Contains("String") && itemProperty.PropertyType.FullName.Contains("Backend.Src.Models"))
+            {
+                var constructor = itemProperty.PropertyType.GetConstructor(Array.Empty<Type>()) ?? throw new Exception("Couldn't create model from default ctor");
+                var propertyModel = constructor.Invoke(Array.Empty<object>());
+                var createdModelProperty = propertyModel.GetType().GetProperty("Name");
+                if (createdModelProperty is not null)
+                {
+                    createdModelProperty.SetValue(propertyModel, property.GetValue(create));
+                    itemProperty.SetValue(model, propertyModel);
+                    continue;
+                }
+
+            }
+            if (value is not null) 
             {
                 itemProperty.SetValue(model, property.GetValue(create));
             }
+
         }
     }
 

@@ -182,6 +182,37 @@ public class ConverterTests
         UserReadDTO result = converter.ConvertReadDTO<User, UserReadDTO>(mockUser);
         TestDifferentObjectsWithCommonProperties(result, mockUser);
     }
+    [Fact]
+    public void ConverterCity()
+    {
+        var converter = new Converter();
+        CityDTO cityDTO = new CityDTO()
+        {
+            Name = "Initial City"
+        };
+        converter.CreateModel(cityDTO, out City city);
+        TestDifferentObjectsWithCommonProperties(cityDTO, city);
+        cityDTO.Name = "Changed city";
+        converter.UpdateModel(city, cityDTO);
+        TestDifferentObjectsWithCommonProperties(cityDTO, city);
+    }
+    [Fact]
+    public void ConverterLocation()
+    {
+        var converter = new Converter();
+        LocationCreateDTO locationCreateDTO = new LocationCreateDTO()
+        {
+            CityId = Guid.NewGuid(),
+            City = "Initial city",
+            Latitude = 10,
+            Longitude = 10,
+        };
+        converter.CreateModel(locationCreateDTO, out Location model);
+        Assert.Equal(model.City.Name, locationCreateDTO.City);
+        Assert.Equal(model.Latitude, locationCreateDTO.Latitude);
+        Assert.Equal(model.Longitude, locationCreateDTO.Longitude);
+
+    }
     static void TestDifferentObjectsWithCommonProperties(object obj1, object obj2)
     {
         foreach (var property in obj1.GetType().GetProperties())
