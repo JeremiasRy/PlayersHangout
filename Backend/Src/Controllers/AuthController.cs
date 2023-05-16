@@ -28,7 +28,14 @@ public class AuthController : ApiControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(AuthSignUpDTO request)
     {
-        return Ok(await _service.SignUp(request));
+        try
+        {
+            return Ok(await _service.SignUp(request));
+        } catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 
     [HttpPost("logout")]

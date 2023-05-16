@@ -25,6 +25,11 @@ if (builder.Environment.IsDevelopment())
         options.Password.RequireNonAlphanumeric = false;
     })
     .AddEntityFrameworkStores<AppDbContext>();
+} else
+{
+    builder.Services
+    .AddIdentity<User, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>();
 }
 
 builder.Services

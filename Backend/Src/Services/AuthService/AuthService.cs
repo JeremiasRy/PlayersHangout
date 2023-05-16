@@ -24,11 +24,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthReadDTO?> Login(AuthSignInDTO request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user is null)
-        {
-            throw new Exception("The Email is not valid");
-        }
+        var user = await _userManager.FindByEmailAsync(request.Email) ?? throw new Exception("The Email is not valid"); ;
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
@@ -70,8 +66,7 @@ public class AuthService : IAuthService
         }
 
         _converter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
-
-        location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
+        location.City = city;
 
         var user = new User
         {
@@ -79,6 +74,7 @@ public class AuthService : IAuthService
             FirstName = request.Name,
             LastName = request.LastName,
             Email = request.Email,
+            Location = location,
             LocationId = location.Id,
         };
         var result = await _userManager.CreateAsync(user, request.Password);
