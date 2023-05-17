@@ -44,6 +44,7 @@ class ProfileSlice {
       async (item, thunkAPI) => {
           try {
               const response = await axios.post<any, AxiosResponse<Profile>, RegisterRequest>('register', item);
+              localStorage.setItem('token', JSON.stringify(response.data.token));
               return thunkAPI.fulfillWithValue(response.data);
           } catch (error) {
               if (axios.isAxiosError(error)) return thunkAPI.rejectWithValue(error as AxiosError)
@@ -57,6 +58,7 @@ class ProfileSlice {
       async (item, thunkAPI) => {
           try {
               const response = await axios.post<any, AxiosResponse<Profile>, LoginRequest>('register', item);
+              localStorage.setItem('token', JSON.stringify(response.data.token));
               return thunkAPI.fulfillWithValue(response.data);
           } catch (error) {
               if (axios.isAxiosError(error)) return thunkAPI.rejectWithValue(error as AxiosError)
@@ -70,6 +72,7 @@ class ProfileSlice {
       async (_, thunkAPI) => {
           try {
               const response = await axios.post<any, AxiosResponse<boolean>, void>('register');
+              localStorage.removeItem('token');
               return thunkAPI.fulfillWithValue(response.data);
           } catch (error) {
               if (axios.isAxiosError(error)) return thunkAPI.rejectWithValue(error as AxiosError)
