@@ -1,15 +1,13 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
-import { userSlice } from "./Slice/userSlice";
-import { instrumentSlice } from "./Slice/instrumentSlice";
 import { genreSlice } from "./Slice/genreSlice";
-
-
+import { instrumentSlice } from "./Slice/instrumentSlice";
+import { profileSlice } from "./Slice/profileSlice";
 
 export const store = configureStore({
     reducer: {
-        user: userSlice.reducer,
-        instrument: instrumentSlice.reducer,
-        genre: genreSlice.reducer
+        profile: profileSlice.slice.reducer,
+        genres: genreSlice.slice.reducer,
+        instruments: instrumentSlice.slice.reducer
     }
 });
 

@@ -9,7 +9,7 @@ using Npgsql;
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     private readonly IConfiguration _configuration;
-    private readonly DbType _dbType;
+    private readonly DbType _dbType;    
     static AppDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<UserInstrument.SkillLevel>();
@@ -59,6 +59,9 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddTimestampConfig();
         modelBuilder.AddGenresConfig();
         modelBuilder.AddCitiesConfig();
+
+        modelBuilder.InsertInstruments();
+        modelBuilder.InsertGenres();
 
     }
     public DbSet<UserInstrument> UserInstruments { get; set; } = null!; 

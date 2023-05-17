@@ -1,4 +1,3 @@
-import { GenericState } from "../redux/Slice/genericSlice";
 import { BaseModel } from "./BaseModel";
 
 export interface User extends Omit<BaseModel, 'name'> {
@@ -10,8 +9,6 @@ export interface User extends Omit<BaseModel, 'name'> {
     longitude: number
 }
 
-export interface UserState extends GenericState<User> {}
-
 const userEmpty: User = {
     id: '',
     name: '',
@@ -20,9 +17,4 @@ const userEmpty: User = {
     city: '',
     latitude: 0,
     longitude: 0
-}
-
-export const userState: UserState = {
-    data: userEmpty,
-    status: 'loading'
 }

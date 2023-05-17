@@ -1,8 +1,4 @@
-import { instrumentState } from "../../model/Instrument";
-import { genericSlice } from "./genericSlice";
+import { Instrument } from "../../model/Instrument";
+import { BaseCrudSlice } from "./BaseCrudSlice";
 
-export const instrumentSlice = genericSlice({
-    name: 'instrumentSlice', 
-    initialState: instrumentState,
-    reducers: {}
-})
+export const instrumentSlice = new BaseCrudSlice<Instrument, Instrument, Instrument>('InstrumentSlice', 'Instruments');
