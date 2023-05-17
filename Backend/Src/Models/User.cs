@@ -9,7 +9,7 @@ public class User : IdentityUser<Guid>
     public string FirstName { get; set; } = null!;
     [MaxLength(60)]
     public string LastName { get; set; } = null!;
-    public Location Location { get; set; }
+    public Location Location { get; set; } = null!;
     public Guid LocationId { get; set; }
     public ICollection<Wanted> Wanteds { get; set; } = null!;
     public ICollection<UserInstrument> Instruments { get; set; } = null!;

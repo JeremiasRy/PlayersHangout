@@ -28,7 +28,6 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             CityId = null,
             Latitude = 60,
             Longitude = 60,
-            
         };
         
         var response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
@@ -36,10 +35,16 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var message = await response.Content.ReadAsStringAsync();
         Assert.True(message == "\"Passwords must have at least one uppercase ('A'-'Z').\"");
         authSignUpDTO.Password = "IhavAnUppercas5";
+
         response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
         Assert.False(response.IsSuccessStatusCode);
         message = await response.Content.ReadAsStringAsync();
         Assert.True(message == "\"Passwords must have at least one non alphanumeric character.\"");
+
+        authSignUpDTO.Password = "Ih@veUppercas5";
+        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
+        message = await response.Content.ReadAsStringAsync();
+        Assert.True(response.IsSuccessStatusCode);
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
