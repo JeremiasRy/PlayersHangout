@@ -70,13 +70,13 @@ public class AuthService : IAuthService
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
 
-        _converter.CreateModel(new LocationCreateDTO() { City = city.Name, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        _converter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        location.City.Id = location.CityId;
 
         await _context.AddAsync(location);
 
         var user = new User
         {
-            UserName = request.Email,
             FirstName = request.Name,
             LastName = request.LastName,
             Email = request.Email,
