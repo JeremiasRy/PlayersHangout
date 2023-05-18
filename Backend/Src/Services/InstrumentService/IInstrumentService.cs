@@ -3,5 +3,5 @@ using Backend.Src.Models;
 
 namespace Backend.Src.Services;
 
-public interface IInstrumentService : IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>
+public interface IInstrumentService : IBaseService<Instrument, InstrumentDTO>
 {}

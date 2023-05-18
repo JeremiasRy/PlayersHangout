@@ -2,6 +2,6 @@
 
 public class LocationReadDTO
 {
-    public Guid Id { get; set; }
     public string City { get; set; } = null!;
+    public int DistanceFromYouInKm { get; set; }
 }

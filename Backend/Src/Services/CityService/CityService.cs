@@ -1,13 +1,13 @@
 ﻿using Backend.Src.Converter;
+using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories;
 
 namespace Backend.Src.Services;
 
-public class CityService : BaseServiceName<City, CityDTO, CityDTO, CityDTO>, ICityService
+public class CityService : BaseServiceNameFilter<City, CityDTO>, ICityService
 {
-    public CityService(ICityRepo repo, IConverter converter) : base((CityRepo)repo, converter)
+    public CityService(IConverter converter, AppDbContext appDbContext) : base(converter, appDbContext)
     {
     }
 }

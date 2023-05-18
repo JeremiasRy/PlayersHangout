@@ -14,6 +14,5 @@ public class User : IdentityUser<Guid>
     public ICollection<Wanted> Wanteds { get; set; } = null!;
     public ICollection<UserInstrument> Instruments { get; set; } = null!;
     public ICollection<Genre>? Genres { get; set; }
-    public Instrument? MainInstrument { get; set; }
     public bool ActiveSession { get; set; } = false;
 }

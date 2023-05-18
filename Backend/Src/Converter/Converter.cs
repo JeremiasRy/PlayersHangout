@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Reflection.Metadata.Ecma335;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-namespace Backend.Src.Converter;
+﻿namespace Backend.Src.Converter;
 
 public class Converter : IConverter
 {

@@ -111,4 +111,13 @@ public static class ModelBuilderConfigExtensions
             .HasOne(location => location.City)
             .WithMany();
     }
+    public static void AddWantedConfig(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Wanted>()
+            .HasOne(wanted => wanted.Instrument)
+            .WithMany();
+        modelBuilder.Entity<Wanted>()
+            .HasOne(wanted => wanted.User)
+            .WithOne();
+    }
 }

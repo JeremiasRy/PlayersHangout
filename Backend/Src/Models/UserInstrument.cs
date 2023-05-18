@@ -14,6 +14,7 @@ public class UserInstrument
     public Guid InstrumentId { get; set; }
     [JsonIgnore]
     public bool LookingToPlay { get; set; }
+    public bool IsMain { get; set; }
     public SkillLevel Skill { get; set; }
     public string InstrumentName => Instrument.Name;
     public override string ToString() => $"{Instrument.Name}";

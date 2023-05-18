@@ -1,13 +1,13 @@
 ﻿namespace Backend.Src.Services;
 
 using Backend.Src.Converter;
+using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories;
 
-public class LocationService : BaseService<Location, LocationReadDTO, LocationCreateDTO, LocationCreateDTO>, ILocationService
+public class LocationService : BaseService<Location, LocationDTO>, ILocationService
 {
-    public LocationService(ILocationRepo repo, IConverter converter) : base(repo, converter)
+    public LocationService(IConverter converter, AppDbContext appDbContext) : base(converter, appDbContext)
     {
     }
 }

@@ -200,7 +200,7 @@ public class ConverterTests
     public void ConverterLocation()
     {
         var converter = new Converter();
-        LocationCreateDTO locationCreateDTO = new LocationCreateDTO()
+        LocationDTO locationCreateDTO = new LocationDTO()
         {
             CityId = Guid.NewGuid(),
             City = "Initial city",

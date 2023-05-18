@@ -2,7 +2,7 @@
 
 using Backend.Src.Models;
 
-public class UserCreateDTO
+public class UserDTO
 {
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

@@ -59,6 +59,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.AddTimestampConfig();
         modelBuilder.AddGenresConfig();
         modelBuilder.AddCitiesConfig();
+        modelBuilder.AddWantedConfig();
 
     }
     public DbSet<UserInstrument> UserInstruments { get; set; } = null!; 

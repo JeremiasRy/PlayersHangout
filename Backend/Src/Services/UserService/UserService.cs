@@ -1,7 +1,6 @@
 ﻿using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,15 +9,12 @@ namespace Backend.Src.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IGenreRepo _genreRepo;
     private readonly IConverter _converter;
     public UserService(
-        IGenreRepo genreRepo,
         UserManager<User> userManager,
         IConverter converter
         )
     {
-        _genreRepo = genreRepo;
         _userManager = userManager;
         _converter = converter;            
     }

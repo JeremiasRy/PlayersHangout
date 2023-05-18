@@ -70,7 +70,7 @@ public class AuthService : IAuthService
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
 
-        _converter.CreateModel(new LocationCreateDTO() { Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
+        _converter.CreateModel(new LocationDTO() { Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
         location.City = city;
 
         await _context.AddAsync(location);
