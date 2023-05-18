@@ -70,8 +70,7 @@ public class AuthService : IAuthService
             throw new Exception("City was not provided correctly use only cityId or city name");
         }
 
-        _converter.CreateModel(new LocationDTO() { Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
-        location.City = city;
+        _converter.CreateModel(new LocationDTO() { City = city.Name, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
 
         await _context.AddAsync(location);
 
@@ -82,6 +81,7 @@ public class AuthService : IAuthService
             LastName = request.LastName,
             Email = request.Email,
             Location = location,
+            ActiveSession = true,
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -90,8 +90,6 @@ public class AuthService : IAuthService
             throw new Exception(result.Errors.ToList()[0].Description ?? "Error Registering User");
         }
 
-        user.ActiveSession = true;
-        await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
         return await _tokenService.GenerateToken(user);
     }

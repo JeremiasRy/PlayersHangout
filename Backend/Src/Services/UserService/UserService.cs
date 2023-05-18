@@ -31,10 +31,10 @@ public class UserService : IUserService
         }
         if (filter is MatchDTO matchDTO)
         {
-            var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City);
-            if (!query.Any())
+            var query = _userManager.Users.Where(c => true);
+            if (matchDTO.City is not null)
             {
-                throw new Exception("No users in this location!");
+                query = query.Where(user => user.Location.City.Name == matchDTO.City);
             }
             if (matchDTO.Instrument is not null)
             {
@@ -59,7 +59,7 @@ public class UserService : IUserService
             .ToListAsync();
     }
 
-    public async Task<User?> UpdateUserAsync(Guid id, UserUpdateDTO request)
+    public async Task<User?> UpdateUserAsync(Guid id, UserDTO request)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
@@ -87,33 +87,6 @@ public class UserService : IUserService
     }
     public async Task<UserReadDTO> AddGenre(Guid userId, GenreDTO request)
     {
-        var genre = await _genreRepo.GetAllAsync(new NameFilter() { Name = request.Name });
-        var user = await _userManager.FindByIdAsync(userId.ToString()) ?? throw new Exception("Invalid user ID");
-
-        if (genre.Any())
-        {
-            var genreToAdd = genre.First();
-            AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO(user, default(UserReadDTO));
-        }
-        else
-        {
-            _converter.CreateModel(request, out Genre genreToAdd);
-            await _genreRepo.CreateOneAsync(genreToAdd);
-            AddGenre(genreToAdd, user);
-            return _converter.ConvertReadDTO(user, default(UserReadDTO));
-        }
-
-        static void AddGenre(Genre genreToAdd, User user)
-        {
-            if (user.Genres is null)
-            {
-                user.Genres = new List<Genre>() { genreToAdd };
-            }
-            else
-            {
-                user.Genres.Add(genreToAdd);
-            }
-        }
+        throw new NotImplementedException();
     }
 }

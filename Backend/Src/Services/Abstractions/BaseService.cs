@@ -34,9 +34,7 @@ public abstract class BaseService<T, TDto> : IBaseService<T, TDto>
 
     public virtual async Task DeleteAsync(Guid id)
     {
-        var result = _appDbContext
-            .Set<T>()
-            .SingleOrDefault(item => item.Id == id) ?? throw new Exception("No item found with id");
+        var result = await GetByIdAsync(id) ?? throw new Exception("Didn't find item with ID");
         _appDbContext.Remove(result);
         await _appDbContext.SaveChangesAsync();
     }

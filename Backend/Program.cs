@@ -1,7 +1,6 @@
 using Backend.Src.Converter;
 using Backend.Src.Db;
 using Backend.Src.Models;
-using Backend.Src.Repositories;
 using Backend.Src.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -69,29 +68,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IConverter, Converter>();
-
-builder.Services
-    .AddScoped<ILocationRepo, LocationRepo>()
-    .AddScoped<ILocationService, LocationService>();
-
-builder.Services
-    .AddScoped<IInstrumentRepo, InstrumentRepo>()
-    .AddScoped<IInstrumentService, InstrumentService>();
-
-builder.Services
-    .AddScoped<IWantedRepo, WantedRepo>()
-    .AddScoped<IWantedService, WantedService>();
-
-builder.Services
-    .AddScoped<ICityRepo, CityRepo>()
-    .AddScoped<ICityService, CityService>();
-
-builder.Services
-    .AddScoped<IGenreRepo, GenreRepo>()
-    .AddScoped<IGenreService, GenreService>();
-
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IInstrumentService, InstrumentService>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-    
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

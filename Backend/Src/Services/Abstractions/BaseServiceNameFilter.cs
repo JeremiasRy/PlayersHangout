@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Backend.Src.Services;
 
 public class BaseServiceNameFilter<T, TDto> : BaseService<T, TDto>
-    where T : HasName, new()
+    where T : WithName, new()
     where TDto : new()
 {
     public BaseServiceNameFilter(IConverter converter, AppDbContext appDbContext) : base(converter, appDbContext)

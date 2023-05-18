@@ -1,5 +1,5 @@
 ﻿namespace Backend.Src.Models;
 
-public class City : HasName
+public class City : WithName
 {
 }
