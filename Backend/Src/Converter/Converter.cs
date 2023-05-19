@@ -42,6 +42,15 @@ public class Converter : IConverter
         return readDTO;
     }
 
+    /// <summary>
+    ///  Creates a model from DTO, does not create inner objects but matches Ids if there is any. EX. Location has CityId and City only matches CityId from DTO
+    /// </summary>
+    /// <typeparam name="T">MOdel to create</typeparam>
+    /// <typeparam name="TCreateDTO">DTO to use to create</typeparam>
+    /// <param name="create">Template from where to create</param>
+    /// <param name="model">output model</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="Exception"></exception>
     public void CreateModel<T, TCreateDTO>(TCreateDTO create, out T model) where T : new()
     {
         model = new T();
@@ -66,16 +75,7 @@ public class Converter : IConverter
             }
             if (property.PropertyType.FullName.Contains("String") && itemProperty.PropertyType.FullName.Contains("Backend.Src.Models"))
             {
-                var constructor = itemProperty.PropertyType.GetConstructor(Array.Empty<Type>()) ?? throw new Exception("Couldn't create model from default ctor");
-                var propertyModel = constructor.Invoke(Array.Empty<object>());
-                var createdModelProperty = propertyModel.GetType().GetProperty("Name");
-                if (createdModelProperty is not null)
-                {
-                    createdModelProperty.SetValue(propertyModel, property.GetValue(create));
-                    itemProperty.SetValue(model, propertyModel);
-                    continue;
-                }
-
+                continue;
             }
             if (value is not null) 
             {

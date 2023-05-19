@@ -43,8 +43,41 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
 
         authSignUpDTO.Password = "Ih@veUppercas5";
         response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        message = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync();
+        AuthReadDTO authReadDTO = new();
+        JsonConvert.PopulateObject(content, authReadDTO);
+        
         Assert.True(response.IsSuccessStatusCode);
+        Assert.True(authReadDTO.Expiration - DateTime.Now < TimeSpan.FromHours(1) && !(authReadDTO.Expiration - DateTime.Now > TimeSpan.FromHours(1)));
+
+        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
+        Assert.False(response.IsSuccessStatusCode);
+
+        AuthSignInDTO authSignInDTO = new AuthSignInDTO()
+        {
+            Email = authSignUpDTO.Email,
+            Password = authSignUpDTO.Password
+        };
+        response = await client.PostAsync("api/v1/Auths/login", ConvertObjToContent(authSignInDTO));
+        Assert.False(response.IsSuccessStatusCode);
+        message = await response.Content.ReadAsStringAsync();
+        Assert.Equal("\"There is another session active\"", message);
+        
+        AuthSignUpDTO authSignUpDTO2 = new()
+        {
+            Name = "Test2",
+            LastName = "TestLastName2",
+            Email = "jeremias@mail.com",
+            Password = "P2@asdasdasd",
+            City = "Helsinki",
+            CityId = null,
+            Latitude = 60,
+            Longitude = 60,
+        };
+        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO2));
+        Assert.True(response.IsSuccessStatusCode);
+
+
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)

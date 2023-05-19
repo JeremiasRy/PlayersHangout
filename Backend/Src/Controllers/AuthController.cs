@@ -21,7 +21,14 @@ public class AuthController : ApiControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(AuthSignInDTO request)
     {
-        return Ok(await _service.Login(request));
+        try
+        {
+            return Ok(await _service.Login(request));
+        } catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 
     [AllowAnonymous]
