@@ -19,7 +19,7 @@ public abstract class BaseRepoName<T> : BaseRepo<T>, IBaseRepoName<T>
             return await _context
                 .Set<T>()
                 .AsNoTracking()
-                .Where(item => item.Name == nameFilter.Name)
+                .Where(item => item.Name.Contains(nameFilter.Name))
                 .Skip(nameFilter.Skip)
                 .Take(nameFilter.Limit)
                 .ToListAsync();

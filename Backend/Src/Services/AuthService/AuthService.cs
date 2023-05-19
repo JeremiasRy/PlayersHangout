@@ -1,8 +1,10 @@
 using Backend.Src.Converter;
+using Backend.Src.Db;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Backend.Src.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Src.Services;
 public class AuthService : IAuthService
@@ -24,11 +26,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthReadDTO?> Login(AuthSignInDTO request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user is null)
-        {
-            throw new Exception("The Email is not valid");
-        }
+        var user = await _userManager.FindByEmailAsync(request.Email) ?? throw new Exception("The Email is not valid");
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
@@ -57,7 +55,7 @@ public class AuthService : IAuthService
             }
             else
             {
-                city = await _cityRepo.CreateOneAsync(new City() { Name = request.City }) ?? throw new Exception("Invalid value for city name");
+                city = await _cityRepo.CreateOneAsync(new City() { Name = request.City });
             }
         }
         else if (request.CityId is not null && request.City is null)
@@ -71,35 +69,29 @@ public class AuthService : IAuthService
 
         _converter.CreateModel(new LocationCreateDTO() { CityId = city.Id, Latitude = request.Latitude, Longitude = request.Longitude }, out Location location);
 
-        location = await _locationRepo.CreateOneAsync(location) ?? throw new Exception("Error while processing location data");
+        await _locationRepo.CreateOneAsync(location);
 
         var user = new User
         {
-            UserName = request.Email,
+            UserName = request.Name,
             FirstName = request.Name,
             LastName = request.LastName,
             Email = request.Email,
             LocationId = location.Id,
+            ActiveSession = true
         };
+
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
             throw new Exception(result.Errors.ToList()[0].Description ?? "Error Registering User");
         }
-
-        user.ActiveSession = true;
-        await _userManager.UpdateAsync(user);
         return await _tokenService.GenerateToken(user);
     }
 
     public async Task<bool> Logout(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user is null)
-        {
-            throw new Exception("User is not found");
-        }
-
+        var user = await _userManager.FindByIdAsync(userId) ?? throw new Exception("User is not found"); ;
         user.ActiveSession = false;
         await _userManager.UpdateAsync(user);
         return true;

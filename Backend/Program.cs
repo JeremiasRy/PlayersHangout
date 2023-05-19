@@ -20,10 +20,15 @@ if (builder.Environment.IsDevelopment())
         //To make development a bit easier
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;
-        options.Password.RequiredLength = 6;
+        options.Password.RequiredLength = 12;
         options.Password.RequireUppercase = false;
         options.Password.RequireNonAlphanumeric = false;
     })
+    .AddEntityFrameworkStores<AppDbContext>();
+} else
+{
+    builder.Services
+    .AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>();
 }
 

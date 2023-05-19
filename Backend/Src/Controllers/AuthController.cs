@@ -21,14 +21,28 @@ public class AuthController : ApiControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(AuthSignInDTO request)
     {
-        return Ok(await _service.Login(request));
+        try
+        {
+            return Ok(await _service.Login(request));
+        } catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 
     [AllowAnonymous]
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(AuthSignUpDTO request)
     {
-        return Ok(await _service.SignUp(request));
+        try
+        {
+            return Ok(await _service.SignUp(request));
+        } catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 
     [HttpPost("logout")]

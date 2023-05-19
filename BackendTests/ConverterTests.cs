@@ -203,12 +203,12 @@ public class ConverterTests
         LocationCreateDTO locationCreateDTO = new LocationCreateDTO()
         {
             CityId = Guid.NewGuid(),
-            City = "Initial city",
+            City = null,
             Latitude = 10,
             Longitude = 10,
         };
         converter.CreateModel(locationCreateDTO, out Location model);
-        Assert.Equal(model.City.Name, locationCreateDTO.City);
+        Assert.Equal(model.CityId, locationCreateDTO.CityId);
         Assert.Equal(model.Latitude, locationCreateDTO.Latitude);
         Assert.Equal(model.Longitude, locationCreateDTO.Longitude);
 

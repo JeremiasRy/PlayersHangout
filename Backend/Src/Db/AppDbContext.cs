@@ -4,6 +4,7 @@ using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Npgsql;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
