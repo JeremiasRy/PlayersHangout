@@ -1,5 +1,6 @@
 namespace Backend.Src.Controllers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -7,5 +8,6 @@ using System.Net.Mime;
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 [Route("api/v1/[controller]s")]
+[Authorize]
 public abstract class ApiControllerBase : ControllerBase
 { }

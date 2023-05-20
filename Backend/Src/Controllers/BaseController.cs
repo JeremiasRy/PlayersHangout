@@ -1,5 +1,7 @@
 namespace Backend.Src.Controllers;
 
+using Backend.Src.Common;
+using Backend.Src.Repositories;
 using Backend.Src.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +15,8 @@ public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiC
     [HttpGet]
     public virtual async Task<ICollection<TReadDto>> GetAll()
     {
-        return await _service.GetAllAsync(null);
+        var filter = Request.QueryString.ParseParams<BaseQueryOptions>();
+        return await _service.GetAllAsync(filter);
     }
 
     [HttpPost]
