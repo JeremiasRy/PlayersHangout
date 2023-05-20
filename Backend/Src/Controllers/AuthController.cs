@@ -46,10 +46,14 @@ public class AuthController : ApiControllerBase
     }
 
     [HttpPost("logout")]
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
-        Request.Headers.TryGetValue("Authorization", out var token);
-        var userId = _tokenService.ReadUserIdFromToken(token[0].Replace("Bearer ", string.Empty));
-        return Ok(await _service.Logout(userId));
+        if (Request.Headers.TryGetValue("Authorization", out var token))
+        {
+            var userId = _tokenService.ReadUserIdFromToken(token[0].Replace("Bearer ", string.Empty));
+            return Ok(await _service.Logout(userId));
+        };
+        return BadRequest();   
     }
 }

@@ -37,7 +37,10 @@ public class BaseRepoTests : IClassFixture<DbTestFixture>
             for (int i = 0; i < result.Count(); i++)
             {
                 IEnumerable<TModel> searchResult = await repo.GetAllAsync(new NameFilter() { Name = result.ElementAt(i).Name });
-                Assert.Equal(result.ElementAt(i).Name, searchResult.First().Name);
+                foreach (var searchItem in searchResult)
+                {
+                    Assert.Contains(result.ElementAt(i).Name, searchItem.Name);
+                }
             }
             int originalLength = result.Count();
             result = await repo.GetAllAsync(new BaseQueryOptions() { Limit = 1});

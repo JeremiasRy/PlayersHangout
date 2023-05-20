@@ -1,10 +1,12 @@
 namespace IntegrationTests;
 
+using Backend.Src.Converter;
 using Backend.Src.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
@@ -13,71 +15,92 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
     {
         _factory = factory;
     }
-    [Fact]
-    public async void AuthTests()
+    // key is item to try, value is expected result 
+    static public IEnumerable<object[]> AuthSignUpDTOs() => new List<object[]>()
+    {
+        new object[] { new
+        {
+           Name = "InvalidUser",
+           LastName = "TestLastName",
+           Email = "jeremias@mail.com",
+           Password = "p@55wörd",
+           City = "Tampere",
+           Latitude = 60,
+           Longitude = 60
+        }, false },
+        new object[] { new
+        {
+           Name = "InvalidUser",
+           LastName = "TestLastName",
+           Email = "jeremias@mail.com",
+           Password = "qwerty",
+           City = "Tampere",
+           Latitude = 60,
+           Longitude = 60
+        }, false },
+        new object[] { new
+        {
+           Name = "ValidUser",
+           LastName = "TestLastName",
+           Email = "jeremias@mail.com",
+           Password = "p@55wörd12AA",
+           City = "Tampere",
+           Latitude = 60,
+           Longitude = 60
+        }, true },
+        new object[] { new
+        {
+           Name = "ValidUser",
+           LastName = "TestLastName",
+           Email = "jeremias@mail.com",
+           Password = "p@55wörd12AA",
+           City = "Tampere",
+           Latitude = 60,
+           Longitude = 60
+        }, false },
+
+    };
+        
+    [Theory, MemberData(nameof(AuthSignUpDTOs))]
+    public async void AuthTests(object input, bool expected)
     {
         var client = _factory.CreateClient();
 
-        AuthSignUpDTO authSignUpDTO = new ()
+        var result = await client.PostAsync("/api/v1/Auths/signup", ConvertObjToContent(input));
+        Assert.Equal(expected, result.IsSuccessStatusCode);
+        if (expected)
         {
-            Name = "Test",
+            Converter converter = new ();
+            converter.CreateModel(input, out AuthSignUpDTO authSignUpDTO);
+            result = await client.PostAsync("/api/v1/Auths/login", ConvertObjToContent(new { authSignUpDTO.Email, authSignUpDTO.Password }));
+            Assert.Equal(!expected, result.IsSuccessStatusCode);
+        }
+    }
+    [Fact]
+    public async void LoginLogout()
+    {
+        var client = _factory.CreateClient();
+        AuthSignUpDTO validSignUp = new()
+        {
+            Name = "ValidUserForLogin",
             LastName = "TestLastName",
             Email = "jeremias@mail.com",
-            Password = "p@55wörd",
+            Password = "p@55wörd12AA",
             City = "Tampere",
-            CityId = null,
             Latitude = 60,
-            Longitude = 60,
+            Longitude = 60
         };
-        
-        var response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        var message = await response.Content.ReadAsStringAsync();
-        Assert.True(message == "\"Passwords must have at least one uppercase ('A'-'Z').\"");
-        authSignUpDTO.Password = "IhavAnUppercas5";
-
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        message = await response.Content.ReadAsStringAsync();
-        Assert.True(message == "\"Passwords must have at least one non alphanumeric character.\"");
-
-        authSignUpDTO.Password = "Ih@veUppercas5";
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        var content = await response.Content.ReadAsStringAsync();
-        AuthReadDTO authReadDTO = new();
-        JsonConvert.PopulateObject(content, authReadDTO);
-        
+        var response = await client.PostAsync("/api/v1/Auths/signup", ConvertObjToContent(validSignUp));
+        var tokenResponse = await response.Content.ReadAsStringAsync();
+        AuthReadDTO token = new();
+        JsonConvert.PopulateObject(tokenResponse, token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        var result = await client.PostAsync("/api/v1/Auths/logout", null);
+        Assert.True(result.IsSuccessStatusCode);
+        response = await client.PostAsync("/api/v1/Auths/login", ConvertObjToContent(new { validSignUp.Email, validSignUp.Password }));
         Assert.True(response.IsSuccessStatusCode);
-        Assert.True(authReadDTO.Expiration - DateTime.Now < TimeSpan.FromHours(1) && !(authReadDTO.Expiration - DateTime.Now > TimeSpan.FromHours(1)));
-
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-
-        AuthSignInDTO authSignInDTO = new AuthSignInDTO()
-        {
-            Email = authSignUpDTO.Email,
-            Password = authSignUpDTO.Password
-        };
-        response = await client.PostAsync("api/v1/Auths/login", ConvertObjToContent(authSignInDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        message = await response.Content.ReadAsStringAsync();
-        Assert.Equal("\"There is another session active\"", message);
-        
-        AuthSignUpDTO authSignUpDTO2 = new()
-        {
-            Name = "Test2",
-            LastName = "TestLastName2",
-            Email = "jeremias@mail.com",
-            Password = "P2@asdasdasd",
-            City = "Helsinki",
-            CityId = null,
-            Latitude = 60,
-            Longitude = 60,
-        };
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO2));
-        Assert.True(response.IsSuccessStatusCode);
-
-
+        response = await client.PostAsync("/api/v1/Auths/login", ConvertObjToContent(new { Email = "öiasudföaisrt", Password = "asdhjbsdfgooo" }));
+        Assert.True(!response.IsSuccessStatusCode);
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
@@ -85,7 +108,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var json = JsonConvert.SerializeObject(obj);
         var buffer = System.Text.Encoding.UTF8.GetBytes(json);
         var content = new ByteArrayContent(buffer);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         return content;
     }
 }

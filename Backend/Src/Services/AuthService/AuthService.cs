@@ -84,6 +84,7 @@ public class AuthService : IAuthService
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
+            await _locationRepo.DeleteOneAsync(location);
             throw new Exception(result.Errors.ToList()[0].Description ?? "Error Registering User");
         }
         return await _tokenService.GenerateToken(user);
