@@ -8,6 +8,5 @@ using System.Net.Mime;
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 [Route("api/v1/[controller]s")]
-[Authorize]
 public abstract class ApiControllerBase : ControllerBase
 { }

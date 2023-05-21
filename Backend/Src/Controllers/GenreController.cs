@@ -3,7 +3,6 @@ namespace Backend.Src.Controllers;
 using Backend.Src.Common;
 using Backend.Src.DTOs;
 using Backend.Src.Models;
-using Backend.Src.Repositories;
 using Backend.Src.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 public class GenreController : BaseController<Genre, GenreDTO, GenreDTO, GenreDTO>
 {
-    public GenreController(IBaseService<Genre, GenreDTO, GenreDTO, GenreDTO> service) : base(service)
+    public GenreController(IGenreService service) : base(service)
     {
     }
     [AllowAnonymous]

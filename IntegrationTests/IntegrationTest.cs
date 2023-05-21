@@ -2,15 +2,14 @@ namespace IntegrationTests;
 
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 
 public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly string BaseUrl = "/api/v1";
     public IntegrationTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
@@ -80,13 +79,13 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
     {
         var client = _factory.CreateClient();
 
-        var result = await client.PostAsync("/api/v1/Auth/signup", ConvertObjToContent(input));
+        var result = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(input));
         Assert.Equal(expected, result.IsSuccessStatusCode);
         if (expected)
         {
             Converter converter = new ();
             converter.CreateModel(input, out AuthSignUpDTO authSignUpDTO);
-            result = await client.PostAsync("/api/v1/Auth/login", ConvertObjToContent(new { authSignUpDTO.Email, authSignUpDTO.Password }));
+            result = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { authSignUpDTO.Email, authSignUpDTO.Password }));
             Assert.Equal(!expected, result.IsSuccessStatusCode);
         }
     }
@@ -95,24 +94,41 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
     {
         var client = _factory.CreateClient();
         var validSignUp = ValidSignUpDTO();
-        var response = await client.PostAsync("/api/v1/Auth/signup", ConvertObjToContent(validSignUp));
-        var tokenResponse = await response.Content.ReadAsStringAsync();
+        var response = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
+        
         AuthReadDTO token = new();
-        JsonConvert.PopulateObject(tokenResponse, token);
+        JsonConvert.PopulateObject(await response.Content.ReadAsStringAsync(), token);
+        
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
-        var result = await client.PostAsync("/api/v1/Auth/logout", null);
+        
+        var result = await client.PostAsync($"{BaseUrl}/Auth/logout", null);
         Assert.True(result.IsSuccessStatusCode);
-        response = await client.PostAsync("/api/v1/Auth/login", ConvertObjToContent(new { validSignUp.Email, validSignUp.Password }));
+        response = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { validSignUp.Email, validSignUp.Password }));
         Assert.True(response.IsSuccessStatusCode);
-        response = await client.PostAsync("/api/v1/Auth/login", ConvertObjToContent(new { Email = "öiasudföaisrt", Password = "asdhjbsdfgooo" }));
+        response = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { Email = "öiasudföaisrt", Password = "asdhjbsdfgooo" }));
         Assert.True(!response.IsSuccessStatusCode);
     }
     [Fact]
-    public async void GetAlls()
+    public async void AuthorizedEndointsRequireAuthorization()
     {
         var client = _factory.CreateClient();
-        
-        
+        var validSignUp = ValidSignUpDTO();
+        var signUpResponse = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
+
+        AuthReadDTO token = new();
+        JsonConvert.PopulateObject(await signUpResponse.Content.ReadAsStringAsync(), token);
+
+        var response = await client.GetAsync($"{BaseUrl}/Genres");
+        Assert.True(response.IsSuccessStatusCode);
+        response = await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = "GenreToAdd" }));
+
+        Assert.True(!response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        response = await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = "GenreToAdd" }));
+
+        Assert.True(response.IsSuccessStatusCode);
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
