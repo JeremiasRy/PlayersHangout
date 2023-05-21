@@ -2,6 +2,8 @@ namespace IntegrationTests;
 
 using Backend.Src.Converter;
 using Backend.Src.DTOs;
+using Backend.Src.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
@@ -129,6 +131,40 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         response = await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = "GenreToAdd" }));
 
         Assert.True(response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void InsertDataAndQueryStrings()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("InitValues/city.json")
+            .AddJsonFile("InitValues/genres.json")
+            .AddJsonFile("InitValues/instruments.json")
+            .Build();
+
+        var client = _factory.CreateClient();
+        var validSignUp = ValidSignUpDTO(); 
+
+        var cities = configuration.GetSection("cities").Get<string[]>();
+        var instruments = configuration.GetSection("instruments").Get<string[]>();
+        var genres = configuration.GetSection("genres").Get<string[]>();
+
+        var signUpResponse = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
+        AuthReadDTO token = new();
+        JsonConvert.PopulateObject(await signUpResponse.Content.ReadAsStringAsync(), token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+
+        foreach (string city in cities)
+        {
+            await client.PostAsync($"{BaseUrl}/Cities", ConvertObjToContent(new { Name = city }));
+        }
+        foreach (string instrument in instruments)
+        {
+            await client.PostAsync($"{BaseUrl}/Instruments", ConvertObjToContent(new { Name = instrument }));
+        }
+        foreach (string genre in genres)
+        {
+            await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = genre }));
+        }
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)

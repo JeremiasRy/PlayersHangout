@@ -8,7 +8,7 @@ namespace Backend.Src.Controllers;
 
 public class InstrumentController : BaseController<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO>
 {
-    public InstrumentController(IBaseService<Instrument, InstrumentDTO, InstrumentDTO, InstrumentDTO> service) : base(service)
+    public InstrumentController(IInstrumentService service) : base(service)
     {
     }
     [AllowAnonymous]
