@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
@@ -97,9 +98,9 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var client = _factory.CreateClient();
         var validSignUp = ValidSignUpDTO();
         var response = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
-        
-        AuthReadDTO token = new();
-        JsonConvert.PopulateObject(await response.Content.ReadAsStringAsync(), token);
+
+        AuthReadDTO? token = await response.Content.ReadFromJsonAsync<AuthReadDTO>();
+        Assert.NotNull(token);
         
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
         
@@ -117,8 +118,8 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var validSignUp = ValidSignUpDTO();
         var signUpResponse = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
 
-        AuthReadDTO token = new();
-        JsonConvert.PopulateObject(await signUpResponse.Content.ReadAsStringAsync(), token);
+        AuthReadDTO? token = await signUpResponse.Content.ReadFromJsonAsync<AuthReadDTO>();
+        Assert.NotNull(token);
 
         var response = await client.GetAsync($"{BaseUrl}/Genres");
         Assert.True(response.IsSuccessStatusCode);
@@ -165,6 +166,22 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         {
             await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = genre }));
         }
+
+        var result = await client.GetAsync($"{BaseUrl}/Genres?name=metal&limit=4");
+        var content = await result.Content.ReadFromJsonAsync<ICollection<GenreDTO>>();
+        Assert.NotNull(content);
+        Assert.Equal(4, content.Count);
+        Assert.All(content, item => item.Name.Contains("Metal"));
+
+        result = await client.GetAsync($"{BaseUrl}/Cities?name=ki");
+        var cityContent = await result.Content.ReadFromJsonAsync<ICollection<CityDTO>>();
+        Assert.NotNull(cityContent);
+        Assert.All(cityContent, item => item.Name.ToUpperInvariant().Contains("KI"));
+
+        result = await client.GetAsync($"{BaseUrl}/Instruments?name=guitar");
+        var instrumentContent = await result.Content.ReadFromJsonAsync<ICollection<InstrumentDTO>>();
+        Assert.NotNull(instrumentContent);
+        Assert.All(instrumentContent, item => item.Name.ToLower().Contains("guitar"));
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)

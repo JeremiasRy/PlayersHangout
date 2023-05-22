@@ -23,7 +23,7 @@ public static class QueryStringExtension
                 }
                 else
                 {
-                    property.SetValue(instance, value);
+                    property.SetValue(instance, Convert.ChangeType(value.ToString(), property.PropertyType));
                 }
             }
         }
