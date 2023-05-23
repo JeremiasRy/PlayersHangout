@@ -36,43 +36,100 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
     {
         new object[] { new
         {
-           Name = "InvalidUser",
-           LastName = "TestLastName",
-           Email = "jeremias@mail.com",
-           Password = "p@55wörd",
-           City = "Tampere",
-           Latitude = 60,
-           Longitude = 60
+            Name = "InvalidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "p@55wörd",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60,
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO() 
+                {
+                    Instrument = "Mandolin",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = false
+                },
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Guitar",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = true
+                }
+            }, 
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = "Blackened Crust"
+                },
+                new GenreDTO()
+                {
+                    Name = "Celtic Folk Punk"
+                }
+            }
+           
         }, false },
         new object[] { new
         {
-           Name = "InvalidUser",
-           LastName = "TestLastName",
-           Email = "jeremias@mail.com",
-           Password = "qwerty",
-           City = "Tampere",
-           Latitude = 60,
-           Longitude = 60
+            Name = "InvalidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "qwerty",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60
         }, false },
         new object[] { new
         {
-           Name = "ValidUser",
-           LastName = "TestLastName",
-           Email = "jeremias@mail.com",
-           Password = "p@55wörd12AA",
-           City = "Tampere",
-           Latitude = 60,
-           Longitude = 60
+            Name = "ValidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "p-55wörd12AA",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60,
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Mandolin",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = false
+                },
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Guitar",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = true
+                }
+            },
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = "Blackened Crust"
+                },
+                new GenreDTO()
+                {
+                    Name = "Celtic Folk Punk"
+                }
+            }
         }, true },
         new object[] { new
         {
-           Name = "ValidUser",
-           LastName = "TestLastName",
-           Email = "jeremias@mail.com",
-           Password = "p@55wörd12AA",
-           City = "Tampere",
-           Latitude = 60,
-           Longitude = 60
+            Name = "ValidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "p@55wörd12AA",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60
         }, false },
 
     };
@@ -182,6 +239,11 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var instrumentContent = await result.Content.ReadFromJsonAsync<ICollection<InstrumentDTO>>();
         Assert.NotNull(instrumentContent);
         Assert.All(instrumentContent, item => item.Name.ToLower().Contains("guitar"));
+    }
+    [Fact]
+    public void CreatingUsersAndWanteds()
+    {
+
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)

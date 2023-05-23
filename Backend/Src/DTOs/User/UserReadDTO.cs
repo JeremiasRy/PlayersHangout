@@ -9,5 +9,4 @@ public class UserReadDTO
     public string FullName { get => $"{FirstName} {LastName}"; }
     public string? City { get; set; }
     public ICollection<UserInstrument>? Instruments { get; set; }
-    public Instrument? MainInstrument { get; set; }
 }

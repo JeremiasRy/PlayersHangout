@@ -1,5 +1,6 @@
 namespace Backend.Src.DTOs;
 
+using Backend.Src.Models;
 using System.ComponentModel.DataAnnotations;
 
 public class AuthSignUpDTO
@@ -17,5 +18,6 @@ public class AuthSignUpDTO
     public string? City { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-
+    public ICollection<GenreDTO>? Genres { get; set; }
+    public ICollection<UserInstrumentDTO>? Instruments { get; set; }
 }

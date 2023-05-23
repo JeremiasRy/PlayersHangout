@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class User : IdentityUser<Guid>
 {
@@ -13,7 +14,7 @@ public class User : IdentityUser<Guid>
     public Guid LocationId { get; set; }
     public ICollection<Wanted> Wanteds { get; set; } = null!;
     public ICollection<UserInstrument> Instruments { get; set; } = null!;
-    public ICollection<Genre>? Genres { get; set; }
-    public Instrument? MainInstrument { get; set; }
+    public Instrument MainInstrument() => Instruments.Single(instrument => instrument.IsMain).Instrument;
+    public ICollection<Genre> Genres { get; set; } = null!;
     public bool ActiveSession { get; set; } = false;
 }
