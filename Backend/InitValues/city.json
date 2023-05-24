@@ -1,6 +1,16 @@
 {
     "cities": [
-        "Helsinki",
-        "Tampere"
+      "Helsinki",
+      "Tampere",
+      "Turku",
+      "Vantaa",
+      "Espoo",
+      "Vaasa",
+      "Oulu",
+      "Kuusamo",
+      "Kuopio",
+      "Inari",
+      "Rovaniemi",
+      "Lappeenranta"
     ]
 }

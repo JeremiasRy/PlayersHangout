@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Src.Controllers;
 
-
+[Route("api/v1/Users")]
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;

@@ -25,29 +25,29 @@ public class DbTestFixture
 
                     // Genres
                     context.AddRange(
-                        new Genre() { Name = "Metal" },
-                        new Genre() { Name = "Rock" },
-                        new Genre() { Name = "Pop" },
-                        new Genre() { Name = "Punk" },
-                        new Genre() { Name = "Death Metal" }
+                        new Genre() { Name = "Metal", NameNormalized = "METAL" },
+                        new Genre() { Name = "Rock", NameNormalized = "ROCK" },
+                        new Genre() { Name = "Pop", NameNormalized = "POP" },
+                        new Genre() { Name = "Punk", NameNormalized = "PUNK" },
+                        new Genre() { Name = "Death Metal", NameNormalized = "DEATH METAL" }
                         );
 
                     // Instruments
                     context.AddRange(
-                        new Instrument() { Name = "Guitar" },
-                        new Instrument() { Name = "Bass" },
-                        new Instrument() { Name = "Drums" },
-                        new Instrument() { Name = "Vocals" },
-                        new Instrument() { Name = "Background vocals" },
-                        new Instrument() { Name = "Keyboard" },
-                        new Instrument() { Name = "Piano" },
-                        new Instrument() { Name = "Saxophone" }
+                        new Instrument() { Name = "Guitar", NameNormalized = "GUITAR" },
+                        new Instrument() { Name = "Bass", NameNormalized = "BASS" },
+                        new Instrument() { Name = "Drums", NameNormalized = "DRUMS" },
+                        new Instrument() { Name = "Vocals", NameNormalized = "VOCALS" },
+                        new Instrument() { Name = "Background Vocals", NameNormalized = "BACKGROUND VOCALS" },
+                        new Instrument() { Name = "Keyboard", NameNormalized = "KEYBOARD" },
+                        new Instrument() { Name = "Piano", NameNormalized = "PIANO" },
+                        new Instrument() { Name = "Saxophone", NameNormalized = "SAXOPHONE" }
                         );
 
                     // Cities
                     context.AddRange(
-                        new City() { Name = "Helsinki" },
-                        new City() { Name = "Tampere" }
+                        new City() { Name = "Helsinki", NameNormalized = "HELSINKI" },
+                        new City() { Name = "Tampere", NameNormalized = "TAMPERE" }
                         );
                     context.SaveChanges();
                 }

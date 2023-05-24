@@ -1,83 +1,287 @@
 namespace IntegrationTests;
 
+using Backend.Src.Converter;
 using Backend.Src.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.IdentityModel.Tokens;
+using Backend.Src.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly string BaseUrl = "/api/v1";
+    private readonly IConfiguration _configuration;
     public IntegrationTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        _configuration = new ConfigurationBuilder()
+            .AddJsonFile("InitValues/TestData.json")
+            .AddJsonFile("InitValues/city.json")
+            .AddJsonFile("InitValues/genres.json")
+            .AddJsonFile("InitValues/instruments.json")
+            .Build();
     }
-    [Fact]
-    public async void AuthTests()
+    static int _initValuesCount = 0;
+    static int _signUpCount = 0;
+    AuthSignUpDTO ValidSignUpDTO() 
     {
-        var client = _factory.CreateClient();
+        var firstname = _configuration.GetSection("Firstnames").Get<string[]>()[_initValuesCount];
+        var lastname = _configuration.GetSection("Lastnames").Get<string[]>()[_initValuesCount];
+        var city = _configuration.GetSection("cities").Get<string[]>()[_initValuesCount];
+        var coordinates = _configuration.GetSection($"Coordinates:{city}").GetChildren();
+        var instrument = _configuration.GetSection("instruments").Get<string[]>()[_initValuesCount];
+        var passSeed = _configuration.GetValue<string>("PassSeed");
+        var genre = _configuration.GetSection("genres").Get<string[]>()[_initValuesCount];
 
-        AuthSignUpDTO authSignUpDTO = new ()
+        var auth = new AuthSignUpDTO()
         {
-            Name = "Test",
+            Name = firstname + _signUpCount,
+            LastName = lastname + _signUpCount,
+            City = city,
+            Password = passSeed + _signUpCount,
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO()
+                {
+                    Instrument = instrument,
+                    LookingToPlay = true,
+                    IsMain = true,
+                    SkillLevel = UserInstrument.SkillLevel.Beginner,
+                },
+            },
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = genre
+                }
+            },
+            Email = $"mail{_signUpCount}@mail.com",
+            Latitude = double.Parse(coordinates.ElementAt(0).Value, CultureInfo.InvariantCulture),
+            Longitude = double.Parse(coordinates.ElementAt(1).Value, CultureInfo.InvariantCulture)
+        };
+        _signUpCount++;
+        _initValuesCount = _initValuesCount + 1 > 12 ? 0 : _initValuesCount + 1;
+        return auth;
+
+    }
+    // key is item to try, value is expected result 
+    static public IEnumerable<object[]> AuthSignUpDTOs() => new List<object[]>()
+    {
+        new object[] { new
+        {
+            Name = "InvalidUser",
             LastName = "TestLastName",
             Email = "jeremias@mail.com",
             Password = "p@55wörd",
             City = "Tampere",
-            CityId = null,
             Latitude = 60,
             Longitude = 60,
-        };
-        
-        var response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        var message = await response.Content.ReadAsStringAsync();
-        Assert.True(message == "\"Passwords must have at least one uppercase ('A'-'Z').\"");
-        authSignUpDTO.Password = "IhavAnUppercas5";
-
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        message = await response.Content.ReadAsStringAsync();
-        Assert.True(message == "\"Passwords must have at least one non alphanumeric character.\"");
-
-        authSignUpDTO.Password = "Ih@veUppercas5";
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        var content = await response.Content.ReadAsStringAsync();
-        AuthReadDTO authReadDTO = new();
-        JsonConvert.PopulateObject(content, authReadDTO);
-        
-        Assert.True(response.IsSuccessStatusCode);
-        Assert.True(authReadDTO.Expiration - DateTime.Now < TimeSpan.FromHours(1) && !(authReadDTO.Expiration - DateTime.Now > TimeSpan.FromHours(1)));
-
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO));
-        Assert.False(response.IsSuccessStatusCode);
-
-        AuthSignInDTO authSignInDTO = new AuthSignInDTO()
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO() 
+                {
+                    Instrument = "Mandolin",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = false
+                },
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Guitar",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = true
+                }
+            }, 
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = "Blackened Crust"
+                },
+                new GenreDTO()
+                {
+                    Name = "Celtic Folk Punk"
+                }
+            }
+           
+        }, false },
+        new object[] { new
         {
-            Email = authSignUpDTO.Email,
-            Password = authSignUpDTO.Password
-        };
-        response = await client.PostAsync("api/v1/Auths/login", ConvertObjToContent(authSignInDTO));
-        Assert.False(response.IsSuccessStatusCode);
-        message = await response.Content.ReadAsStringAsync();
-        Assert.Equal("\"There is another session active\"", message);
-        
-        AuthSignUpDTO authSignUpDTO2 = new()
-        {
-            Name = "Test2",
-            LastName = "TestLastName2",
+            Name = "InvalidUser",
+            LastName = "TestLastName",
             Email = "jeremias@mail.com",
-            Password = "P2@asdasdasd",
-            City = "Helsinki",
-            CityId = null,
+            Password = "qwerty",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60
+        }, false },
+        new object[] { new
+        {
+            Name = "ValidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "p-55wörd12AA",
+            City = "Tampere",
             Latitude = 60,
             Longitude = 60,
-        };
-        response = await client.PostAsync("api/v1/Auths/signup", ConvertObjToContent(authSignUpDTO2));
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Mandolin",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = false
+                },
+                new UserInstrumentDTO()
+                {
+                    Instrument = "Guitar",
+                    SkillLevel = UserInstrument.SkillLevel.Experienced,
+                    LookingToPlay = true,
+                    IsMain = true
+                }
+            },
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = "Blackened Crust"
+                },
+                new GenreDTO()
+                {
+                    Name = "Celtic Folk Punk"
+                }
+            }
+        }, true },
+        new object[] { new
+        {
+            Name = "ValidUser",
+            LastName = "TestLastName",
+            Email = "jeremias@mail.com",
+            Password = "p@55wörd12AA",
+            City = "Tampere",
+            Latitude = 60,
+            Longitude = 60
+        }, false },
+
+    };
+        
+    [Theory, MemberData(nameof(AuthSignUpDTOs))]
+    public async void SignUp(object input, bool expected)
+    {
+        var client = _factory.CreateClient();
+
+        var result = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(input));
+        Assert.Equal(expected, result.IsSuccessStatusCode);
+        if (expected)
+        {
+            Converter converter = new ();
+            converter.CreateModel(input, out AuthSignUpDTO authSignUpDTO);
+            result = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { authSignUpDTO.Email, authSignUpDTO.Password }));
+            Assert.Equal(!expected, result.IsSuccessStatusCode);
+        }
+    }
+    [Fact]
+    public async void LoginLogout()
+    {
+        var client = _factory.CreateClient();
+        var validSignUp = ValidSignUpDTO();
+        var response = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
+
+        AuthReadDTO? token = await response.Content.ReadFromJsonAsync<AuthReadDTO>();
+        Assert.NotNull(token);
+        
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        
+        var result = await client.PostAsync($"{BaseUrl}/Auth/logout", null);
+        Assert.True(result.IsSuccessStatusCode);
+        response = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { validSignUp.Email, validSignUp.Password }));
         Assert.True(response.IsSuccessStatusCode);
+        response = await client.PostAsync($"{BaseUrl}/Auth/login", ConvertObjToContent(new { Email = "öiasudföaisrt", Password = "asdhjbsdfgooo" }));
+        Assert.True(!response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void AuthorizedEndointsRequireAuthorization()
+    {
+        var client = _factory.CreateClient();
+        var validSignUp = ValidSignUpDTO();
+        var signUpResponse = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
 
+        AuthReadDTO? token = await signUpResponse.Content.ReadFromJsonAsync<AuthReadDTO>();
+        Assert.NotNull(token);
 
+        var response = await client.GetAsync($"{BaseUrl}/Genres");
+        Assert.True(response.IsSuccessStatusCode);
+        response = await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = "GenreToAdd" }));
+
+        Assert.True(!response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        response = await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = "GenreToAdd" }));
+
+        Assert.True(response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void InsertDataAndQueryStrings()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("InitValues/city.json")
+            .AddJsonFile("InitValues/genres.json")
+            .AddJsonFile("InitValues/instruments.json")
+            .Build();
+
+        var client = _factory.CreateClient();
+        var validSignUp = ValidSignUpDTO(); 
+
+        var cities = configuration.GetSection("cities").Get<string[]>();
+        var instruments = configuration.GetSection("instruments").Get<string[]>();
+        var genres = configuration.GetSection("genres").Get<string[]>();
+
+        var signUpResponse = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(validSignUp));
+        AuthReadDTO token = new();
+        JsonConvert.PopulateObject(await signUpResponse.Content.ReadAsStringAsync(), token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+
+        foreach (string city in cities)
+        {
+            await client.PostAsync($"{BaseUrl}/Cities", ConvertObjToContent(new { Name = city }));
+        }
+        foreach (string instrument in instruments)
+        {
+            await client.PostAsync($"{BaseUrl}/Instruments", ConvertObjToContent(new { Name = instrument }));
+        }
+        foreach (string genre in genres)
+        {
+            await client.PostAsync($"{BaseUrl}/Genres", ConvertObjToContent(new { Name = genre }));
+        }
+
+        var result = await client.GetAsync($"{BaseUrl}/Genres?name=metal&limit=4");
+        var content = await result.Content.ReadFromJsonAsync<ICollection<GenreDTO>>();
+        Assert.NotNull(content);
+        Assert.Equal(4, content.Count);
+        Assert.All(content, item => item.Name.Contains("Metal"));
+
+        result = await client.GetAsync($"{BaseUrl}/Cities?name=ki");
+        var cityContent = await result.Content.ReadFromJsonAsync<ICollection<CityDTO>>();
+        Assert.NotNull(cityContent);
+        Assert.All(cityContent, item => item.Name.ToUpperInvariant().Contains("KI"));
+
+        result = await client.GetAsync($"{BaseUrl}/Instruments?name=guitar");
+        var instrumentContent = await result.Content.ReadFromJsonAsync<ICollection<InstrumentDTO>>();
+        Assert.NotNull(instrumentContent);
+        Assert.All(instrumentContent, item => item.Name.ToLower().Contains("guitar"));
+    }
+    [Fact]
+    public void CreatingUsersAndWanteds()
+    {
+        var client = _factory.CreateClient();
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
@@ -85,7 +289,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         var json = JsonConvert.SerializeObject(obj);
         var buffer = System.Text.Encoding.UTF8.GetBytes(json);
         var content = new ByteArrayContent(buffer);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         return content;
     }
 }

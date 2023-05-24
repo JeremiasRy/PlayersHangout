@@ -1,8 +1,11 @@
 namespace Backend.Src.Controllers;
 
+using Backend.Src.Common;
+using Backend.Src.Repositories;
 using Backend.Src.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+[Authorize]
 public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiControllerBase
 {
     protected readonly IBaseService<T, TReadDto, TCreateDto, TUpdateDto> _service;
@@ -13,7 +16,8 @@ public abstract class BaseController<T, TReadDto, TCreateDto, TUpdateDto> : ApiC
     [HttpGet]
     public virtual async Task<ICollection<TReadDto>> GetAll()
     {
-        return await _service.GetAllAsync(null);
+        var filter = Request.QueryString.ParseParams<BaseQueryOptions>();
+        return await _service.GetAllAsync(filter);
     }
 
     [HttpPost]

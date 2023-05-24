@@ -4,7 +4,6 @@ using Backend.Src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Npgsql;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
@@ -65,7 +64,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.InsertGenres();
 
     }
-    public DbSet<UserInstrument> UserInstruments { get; set; } = null!; 
     public DbSet<Instrument> Instruments { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Wanted> Wanteds { get; set; } = null!;

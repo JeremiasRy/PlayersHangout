@@ -52,7 +52,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T>
             .SingleOrDefaultAsync(model => model.Id == id);
     }
 
-    public async Task<T> UpdateOneAsync(T update)
+    public virtual async Task<T> UpdateOneAsync(T update)
     {
         _context.Update(update);
         await _context.SaveChangesAsync();

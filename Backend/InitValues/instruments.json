@@ -2,14 +2,16 @@
     "instruments": [
       "Electric guitar",
       "Bass guitar",
-      "Drum kit",
+      "Drums",
       "Keyboard",
       "Piano",
       "Acoustic guitar",
       "Synthesizers",
       "Singer",
       "Percussion",
-      "Wind instruments"
+      "Wind instruments",
+      "Mandolin",
+      "Harmonica"
     ]
   }
   

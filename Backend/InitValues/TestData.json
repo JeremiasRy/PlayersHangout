@@ -1,0 +1,83 @@
+{
+  "Firstnames": [
+    "Jeremias",
+    "Daniel",
+    "Lennon",
+    "James",
+    "Timo",
+    "Piia",
+    "Tuomo",
+    "Alexander",
+    "Mr. Paprika",
+    "Juuso",
+    "Tiina",
+    "Johanna"
+  ],
+  "Lastnames": [
+    "Ryttäri",
+    "Virtanen",
+    "Pitkänen",
+    "Moilanen",
+    "Lampinen",
+    "Mäkinen",
+    "Järvinen",
+    "Koskinen",
+    "Laine",
+    "Hämäläinen",
+    "Korhonen",
+    "Moreno"
+  ],
+  "PassSeed": "1234uhsdfAA@",
+  "Coordinates": {
+    "Tampere": {
+      "Lat": 61.57209901820604,
+      "Lng": 23.791215597222592
+    },
+    "Helsinki": {
+      "Lat": 60.20891745477796,
+      "Lng": 25.027667596939384
+    },
+    "Turku": {
+      "Lat": 60.58893812145798,
+      "Lng": 22.637193730820247
+    },
+    "Vantaa": {
+      "Lat": 60.30271243270747,
+      "Lng": 25.03438582450559
+    },
+    "Espoo": {
+      "Lat": 60.193573813105225,
+      "Lng": 24.603690963571374
+    },
+    "Vaasa": {
+      "Lat": 63.10765616486236,
+      "Lng": 21.58600375070219
+    },
+    "Oulu": {
+      "Lat": 65.05425324935844,
+      "Lng": 25.459645434729527
+    },
+    "Kuusamo": {
+      "Lat": 65.98697112016687,
+      "Lng": 29.19397075258799
+    },
+    "Kuopio": {
+      "Lat": 62.920014745278934,
+      "Lng": 27.650305522513822
+    },
+    "Inari": {
+      "Lat": 68.95032804689141,
+      "Lng": 26.99495054362491
+    },
+    "Rovaniemi": {
+      "Lat": 66.56747412308133,
+      "Lng": 25.840520937659182
+    },
+    "Lappeenranta": {
+      "Lat": 60.945853738758395,
+      "Lng": 27.893871402942636
+    }
+  }
+
+
+}

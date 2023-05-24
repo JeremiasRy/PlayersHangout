@@ -152,7 +152,6 @@ public class ConverterTests
             SecurityStamp = "security_stamp",
             TwoFactorEnabled = false,
             UserName = "So Nice",
-            MainInstrument = instrument,
             Instruments = new List<UserInstrument>(),
             Wanteds = new List<Wanted>(),
         };

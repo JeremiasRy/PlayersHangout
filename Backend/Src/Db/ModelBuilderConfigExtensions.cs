@@ -40,20 +40,7 @@ public static class ModelBuilderConfigExtensions
             .WithOne();
 
         modelBuilder.Entity<User>()
-            .HasOne(user => user.MainInstrument)
-            .WithMany();
-
-        modelBuilder.Entity<User>()
-            .HasMany(user => user.Instruments)
-            .WithOne()
-            .HasForeignKey(userInstrument => userInstrument.InstrumentId);
-
-        modelBuilder.Entity<User>()
             .Navigation(user => user.Instruments)
-            .AutoInclude();
-
-        modelBuilder.Entity<User>()
-            .Navigation(user => user.MainInstrument)
             .AutoInclude();
 
         modelBuilder.Entity<User>()

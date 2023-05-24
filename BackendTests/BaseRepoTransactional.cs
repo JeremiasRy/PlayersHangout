@@ -9,6 +9,7 @@ namespace BackendTests;
 public class TransactionalTestCollection : ICollectionFixture<TransactionalDbTestFixture>
 {
 }
+// These do fail sometimes for currently unknown reason
 [Collection("TransactionalTests")]
 public class TransactionalRepoTests : IDisposable
 {
