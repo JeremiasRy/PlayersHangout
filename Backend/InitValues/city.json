@@ -2,6 +2,7 @@
     "cities": [
       "Helsinki",
       "Tampere",
+      "Turku",
       "Vantaa",
       "Espoo",
       "Vaasa",
@@ -10,7 +11,6 @@
       "Kuopio",
       "Inari",
       "Rovaniemi",
-      "Lappeenranta",
-      "Kihniö"
+      "Lappeenranta"
     ]
 }

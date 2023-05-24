@@ -5,6 +5,7 @@ using Backend.Src.DTOs;
 using Backend.Src.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -13,23 +14,60 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
     private readonly string BaseUrl = "/api/v1";
+    private readonly IConfiguration _configuration;
     public IntegrationTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        _configuration = new ConfigurationBuilder()
+            .AddJsonFile("InitValues/TestData.json")
+            .AddJsonFile("InitValues/city.json")
+            .AddJsonFile("InitValues/genres.json")
+            .AddJsonFile("InitValues/instruments.json")
+            .Build();
     }
-    static int count = 0;
-    static AuthSignUpDTO ValidSignUpDTO() 
+    static int _initValuesCount = 0;
+    static int _signUpCount = 0;
+    AuthSignUpDTO ValidSignUpDTO() 
     {
-        return new AuthSignUpDTO()
+        var firstname = _configuration.GetSection("Firstnames").Get<string[]>()[_initValuesCount];
+        var lastname = _configuration.GetSection("Lastnames").Get<string[]>()[_initValuesCount];
+        var city = _configuration.GetSection("cities").Get<string[]>()[_initValuesCount];
+        var coordinates = _configuration.GetSection($"Coordinates:{city}").GetChildren();
+        var instrument = _configuration.GetSection("instruments").Get<string[]>()[_initValuesCount];
+        var passSeed = _configuration.GetValue<string>("PassSeed");
+        var genre = _configuration.GetSection("genres").Get<string[]>()[_initValuesCount];
+
+        var auth = new AuthSignUpDTO()
         {
-            Name = "ValidUserForLogin" + count++,
-            LastName = "TestLastName",
-            Email = "jeremias@mail.com" + count++,
-            Password = "p@55wörd12AA",
-            City = "Tampere",
-            Latitude = 60,
-            Longitude = 60
+            Name = firstname + _signUpCount,
+            LastName = lastname + _signUpCount,
+            City = city,
+            Password = passSeed + _signUpCount,
+            Instruments = new List<UserInstrumentDTO>()
+            {
+                new UserInstrumentDTO()
+                {
+                    Instrument = instrument,
+                    LookingToPlay = true,
+                    IsMain = true,
+                    SkillLevel = UserInstrument.SkillLevel.Beginner,
+                },
+            },
+            Genres = new List<GenreDTO>()
+            {
+                new GenreDTO()
+                {
+                    Name = genre
+                }
+            },
+            Email = $"mail{_signUpCount}@mail.com",
+            Latitude = double.Parse(coordinates.ElementAt(0).Value, CultureInfo.InvariantCulture),
+            Longitude = double.Parse(coordinates.ElementAt(1).Value, CultureInfo.InvariantCulture)
         };
+        _signUpCount++;
+        _initValuesCount = _initValuesCount + 1 > 12 ? 0 : _initValuesCount + 1;
+        return auth;
+
     }
     // key is item to try, value is expected result 
     static public IEnumerable<object[]> AuthSignUpDTOs() => new List<object[]>()
@@ -243,7 +281,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
     [Fact]
     public void CreatingUsersAndWanteds()
     {
-
+        var client = _factory.CreateClient();
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
