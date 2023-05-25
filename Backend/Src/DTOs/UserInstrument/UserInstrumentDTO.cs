@@ -9,5 +9,4 @@ public class UserInstrumentDTO
     public string? Instrument { get; set; }
     public bool LookingToPlay { get; set; }
     public bool IsMain { get; set; }
-    public UserInstrument.SkillLevel SkillLevel { get; set; }
 }

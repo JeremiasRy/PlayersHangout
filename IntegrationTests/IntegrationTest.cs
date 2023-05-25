@@ -43,6 +43,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             LastName = lastname + _signUpCount,
             City = city,
             Password = passSeed + _signUpCount,
+            Level = User.LevelOfCommitment.SemiPro,
             Instruments = new List<UserInstrumentDTO>()
             {
                 new UserInstrumentDTO()
@@ -50,7 +51,6 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
                     Instrument = instrument,
                     LookingToPlay = true,
                     IsMain = true,
-                    SkillLevel = UserInstrument.SkillLevel.Beginner,
                 },
             },
             Genres = new List<GenreDTO>()
@@ -81,19 +81,18 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             City = "Tampere",
             Latitude = 60,
             Longitude = 60,
+            Level = User.LevelOfCommitment.Amateur,
             Instruments = new List<UserInstrumentDTO>()
             {
                 new UserInstrumentDTO() 
                 {
                     Instrument = "Mandolin",
-                    SkillLevel = UserInstrument.SkillLevel.Experienced,
                     LookingToPlay = true,
                     IsMain = false
                 },
                 new UserInstrumentDTO()
                 {
                     Instrument = "Guitar",
-                    SkillLevel = UserInstrument.SkillLevel.Experienced,
                     LookingToPlay = true,
                     IsMain = true
                 }
@@ -118,6 +117,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             Email = "jeremias@mail.com",
             Password = "qwerty",
             City = "Tampere",
+            Level = User.LevelOfCommitment.Amateur,
             Latitude = 60,
             Longitude = 60
         }, false },
@@ -128,6 +128,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             Email = "jeremias@mail.com",
             Password = "p-55wörd12AA",
             City = "Tampere",
+            Level = User.LevelOfCommitment.Amateur,
             Latitude = 60,
             Longitude = 60,
             Instruments = new List<UserInstrumentDTO>()
@@ -135,14 +136,12 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
                 new UserInstrumentDTO()
                 {
                     Instrument = "Mandolin",
-                    SkillLevel = UserInstrument.SkillLevel.Experienced,
                     LookingToPlay = true,
                     IsMain = false
                 },
                 new UserInstrumentDTO()
                 {
                     Instrument = "Guitar",
-                    SkillLevel = UserInstrument.SkillLevel.Experienced,
                     LookingToPlay = true,
                     IsMain = true
                 }
@@ -165,6 +164,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             LastName = "TestLastName",
             Email = "jeremias@mail.com",
             Password = "p@55wörd12AA",
+            Level = User.LevelOfCommitment.Amateur,
             City = "Tampere",
             Latitude = 60,
             Longitude = 60

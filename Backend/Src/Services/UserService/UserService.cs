@@ -35,16 +35,16 @@ public class UserService : IUserService
         }
         if (filter is MatchDTO matchDTO)
         {
-            var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City);
+            var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City && user.Level == matchDTO.Level);
             if (!query.Any())
             {
-                throw new Exception("No users in this location!");
+                throw new Exception("No users match location and level of commitment!");
             }
             if (matchDTO.Instrument is not null)
             {
                 query = query.Where(user => user.Instruments
-                    .Select(instrument => new { Instrument = instrument.Instrument.Name, SkillLevel = instrument.Skill, instrument.LookingToPlay })
-                    .Any(instrument => instrument.Instrument.Contains(matchDTO.Instrument) && instrument.SkillLevel == matchDTO.SkillLevel && instrument.LookingToPlay));
+                    .Select(instrument => new { Instrument = instrument.Instrument.Name, instrument.LookingToPlay })
+                    .Any(instrument => instrument.Instrument.Contains(matchDTO.Instrument) && instrument.LookingToPlay));
             }
             if (matchDTO.Genre is not null)
             {
