@@ -62,6 +62,7 @@ public class AuthService : IAuthService
             FirstName = request.Name,
             LastName = request.LastName,
             Email = request.Email,
+            Level = request.Level,
             LocationId = location.Id,
             ActiveSession = true
         };
@@ -89,7 +90,7 @@ public class AuthService : IAuthService
                     await _userManager.DeleteAsync(user);
                     throw new Exception($"There was an error with instrument, Check your sign up form, Name: {userInstrumentDto.Instrument}, Id: {userInstrumentDto.InstrumentId}");
                 }    
-                _converter.CreateModel(new UserInstrumentDTO() { InstrumentId = instrument.Id, IsMain = userInstrumentDto.IsMain, UserId = user.Id, LookingToPlay = userInstrumentDto.LookingToPlay, SkillLevel = userInstrumentDto.SkillLevel }, out UserInstrument userInstrument);
+                _converter.CreateModel(new UserInstrumentDTO() { InstrumentId = instrument.Id, IsMain = userInstrumentDto.IsMain, UserId = user.Id, LookingToPlay = userInstrumentDto.LookingToPlay }, out UserInstrument userInstrument);
                 user.Instruments.Add(userInstrument);
             }
         }

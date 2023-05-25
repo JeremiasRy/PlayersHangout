@@ -21,7 +21,7 @@ public class ConverterTests
                 UpdatedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
             },
-            SkillLevel = UserInstrument.SkillLevel.Intermediate,
+            Level = User.LevelOfCommitment.SemiPro,
             Description = "I am initial description",
             User = new User()
             {
@@ -72,7 +72,7 @@ public class ConverterTests
         Assert.Equal(model.User.Location.City.Name, wantedReadDTO.City);
         Assert.Equal(model.Instrument.Name, wantedReadDTO.Instrument);
         Assert.Equal(model.Description, wantedReadDTO.Description);
-        Assert.Equal(model.SkillLevel, wantedReadDTO.SkillLevel);
+        Assert.Equal(model.Level, wantedReadDTO.Level);
         if (model.Genres is not null && wantedReadDTO.Genres is not null)
         {
             foreach (var genre in model.Genres)
@@ -162,7 +162,6 @@ public class ConverterTests
             InstrumentId = instrument.Id,
             Instrument = instrument,
             LookingToPlay = true,
-            Skill = UserInstrument.SkillLevel.Experienced
         };
         Wanted wanted = new Wanted()
         {

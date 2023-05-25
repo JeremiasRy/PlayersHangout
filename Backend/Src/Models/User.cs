@@ -17,4 +17,12 @@ public class User : IdentityUser<Guid>
     public Instrument MainInstrument() => Instruments.Single(instrument => instrument.IsMain).Instrument;
     public ICollection<Genre> Genres { get; set; } = null!;
     public bool ActiveSession { get; set; } = false;
+    public LevelOfCommitment Level { get; set; }
+    public enum LevelOfCommitment
+    {
+        Hobby,
+        Amateur,
+        SemiPro,
+        Professional
+    }
 }

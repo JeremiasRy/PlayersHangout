@@ -8,5 +8,5 @@ public class WantedReadDTO
     public string Description { get; set; } = null!;
     public string Instrument { get; set; } = null!;
     public ICollection<Genre> Genres { get; set; } = null!;
-    public UserInstrument.SkillLevel SkillLevel { get; set; }
+    public User.LevelOfCommitment Level { get; set; }
 }
