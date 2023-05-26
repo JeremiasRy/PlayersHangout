@@ -69,6 +69,10 @@ public static class ModelBuilderConfigExtensions
     {
         modelBuilder.Entity<UserInstrument>()
             .HasKey(userInstrument => new { userInstrument.InstrumentId, userInstrument.UserId });
+
+        modelBuilder.Entity<UserInstrument>()
+            .Navigation(userInstrument => userInstrument.Instrument)
+            .AutoInclude();
     }
 
     public static void AddGenresConfig(this ModelBuilder modelBuilder)
@@ -97,5 +101,9 @@ public static class ModelBuilderConfigExtensions
         modelBuilder.Entity<Location>()
             .HasOne(location => location.City)
             .WithMany();
+
+        modelBuilder.Entity<Location>()
+            .Navigation(location => location.City)
+            .AutoInclude();
     }
 }

@@ -9,4 +9,6 @@ public class UserReadDTO
     public string FullName { get => $"{FirstName} {LastName}"; }
     public string? City { get; set; }
     public ICollection<UserInstrument>? Instruments { get; set; }
+    public ICollection<Genre>? Genres { get; set; }
+    public ICollection<WantedReadDTO>? Wanteds { get; set; }
 }

@@ -3,6 +3,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections;
 
 namespace Backend.Src.Converter;
 
@@ -29,7 +30,7 @@ public class Converter : IConverter
             } 
             object? value = modelProperty.GetValue(model);
 
-            if (modelProperty.PropertyType.Name != property.PropertyType.Name && modelProperty.PropertyType.FullName is not null)
+            if (modelProperty.PropertyType.Name != property.PropertyType.Name)
             {
                 if (modelProperty.PropertyType.FullName.Contains("Backend.Src.Models") && property.PropertyType.Name == "String" && value is not null)
                 {
@@ -84,7 +85,6 @@ public class Converter : IConverter
 
         }
     }
-
     public void UpdateModel<T, TUpdateDTO>(T model, TUpdateDTO update)
     {
         if (model is null)

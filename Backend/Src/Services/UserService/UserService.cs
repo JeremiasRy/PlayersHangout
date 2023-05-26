@@ -15,27 +15,34 @@ public class UserService : IUserService
     public UserService(
         IGenreRepo genreRepo,
         UserManager<User> userManager,
-        IConverter converter
+        IConverter converter,
+        PasswordHasher<User> passwordHasher
         )
     {
         _genreRepo = genreRepo;
         _userManager = userManager;
-        _converter = converter;            
+        _converter = converter;    
     }
 
     public async Task<ICollection<UserReadDTO>> GetAllUsersAsync(IFilterOptions? filter)
     {
+        var query = _userManager.Users
+                .Include(user => user.Location.City)
+                .Include(user => user.Instruments)
+                .Include(user => user.Genres)
+                .Where(user => true);
+
         if (filter is BaseQueryOptions optionsFilter)
         {
-            return await _userManager.Users
+            return await query
+                .Select(user => _converter.ConvertReadDTO(user, default(UserReadDTO)))
                 .Skip(optionsFilter.Skip)
                 .Take(optionsFilter.Limit)
-                .Select(user => _converter.ConvertReadDTO(user, default(UserReadDTO)))
                 .ToListAsync();
         }
         if (filter is MatchDTO matchDTO)
         {
-            var query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City && user.Level == matchDTO.Level);
+            query = _userManager.Users.Where(user => user.Location.City.Name == matchDTO.City && user.Level == matchDTO.Level);
             if (!query.Any())
             {
                 throw new Exception("No users match location and level of commitment!");

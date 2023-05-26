@@ -8,7 +8,6 @@ public class UserInstrument
     public User User { get; set; } = null!;
     [JsonIgnore]
     public Guid UserId { get; set; }
-    [JsonIgnore]
     public Instrument Instrument { get; set; } = null!;
     [JsonIgnore]
     public Guid InstrumentId { get; set; }

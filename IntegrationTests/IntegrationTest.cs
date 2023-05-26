@@ -65,7 +65,7 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
             Longitude = double.Parse(coordinates.ElementAt(1).Value, CultureInfo.InvariantCulture)
         };
         _signUpCount++;
-        _initValuesCount = _initValuesCount + 1 > 12 ? 0 : _initValuesCount + 1;
+        _initValuesCount = _initValuesCount + 1 > 11 ? 0 : _initValuesCount + 1;
         return auth;
 
     }
@@ -279,9 +279,26 @@ public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program
         Assert.All(instrumentContent, item => item.Name.ToLower().Contains("guitar"));
     }
     [Fact]
-    public void CreatingUsersAndWanteds()
+    public async void CreatingUsersAndWanteds()
     {
         var client = _factory.CreateClient();
+        
+
+        for (int i = 0; i < 1000; i++)
+        {
+            if (i == 999)
+            {
+                var result = await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(ValidSignUpDTO()));
+                var token = await result.Content.ReadFromJsonAsync<AuthReadDTO>();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token?.Token);
+                continue;
+            }
+            await client.PostAsync($"{BaseUrl}/Auth/signup", ConvertObjToContent(ValidSignUpDTO()));
+        }
+        var response = await client.GetAsync($"{BaseUrl}/Users");
+        var users = await response.Content.ReadFromJsonAsync<ICollection<UserReadDTO>>();
+
+        Assert.Equal(50, users?.Count);
     }
 
     static ByteArrayContent ConvertObjToContent(object obj)
